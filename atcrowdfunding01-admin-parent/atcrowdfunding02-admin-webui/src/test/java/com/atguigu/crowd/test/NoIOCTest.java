@@ -26,4 +26,9 @@ public class NoIOCTest {
         System.out.println(bCryptPasswordEncoder.matches(pswd,"$2a$10$.Qxamk1sKaFgwsNjI14mMuf0WdsIHUoogZMvo.8lycfoexeHqZLOK"));
     }
 
+    @Test
+    public void getCode() {
+        String string = "{\"msg\":\"手机号码不正确\",\"code\":\"1403\"}";
+        System.out.println(string.contains("1403"));
+    }
 }

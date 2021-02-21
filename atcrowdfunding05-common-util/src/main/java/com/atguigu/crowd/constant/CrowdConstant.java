@@ -25,4 +25,5 @@ public class CrowdConstant {
     public static final String ATTR_NAME_TRY_LOGIN_ACCT = "tryLoginAcct";
     public static final String ATTR_NAME_TRY_USER_PSWD = "tryUserPswd";
     public static final String MESSAGE_ACCESS_DENIED = "抱歉！您无权访问这些资源！请联系管理员授予权限";
+    public static final String REDIS_CODE_PREFIX = "REDIS_CODE_PREFIX_";
 }
