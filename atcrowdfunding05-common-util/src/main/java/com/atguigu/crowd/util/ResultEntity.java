@@ -7,6 +7,8 @@ package com.atguigu.crowd.util;
  * @version 1.0 2021-02-15 下午 08:50
  */
 
+import java.security.interfaces.DSAPrivateKey;
+
 /**
  * 该类主要是用来封装AJAX请求返回的数据
  * @param <T>
@@ -17,6 +19,8 @@ public class ResultEntity<T> {
     public static final String FAILED = "FAILED";
 
     private String result;
+
+    private String Code = "100";
 
     private String message;
 
@@ -42,6 +46,20 @@ public class ResultEntity<T> {
         this.message = message;
         this.data = data;
     }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
+
+    public <E>  ResultEntity<E> setCodeWithRe(String code) {
+        this.setCode(code);
+        return (ResultEntity<E>)this;
+    }
+
 
     public String getResult() {
         return result;

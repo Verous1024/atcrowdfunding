@@ -13,7 +13,7 @@ package com.atguigu.crowd.constant;
 public class CrowdConstant {
 
     public static final String MESSAGE_LOGIN_FAILED = "抱歉！密码错误！请重新输入密码！";
-    public static final String MESSAGE_LOGIN_FAILED_WITHOUT_ACCT = "抱歉！用户不存在！";
+    public static final String MESSAGE_LOGIN_FAILED_WITHOUT_ACCT = "抱歉！用户名不存在！";
     public static final String MESSAGE_LOGIN_ACCT_ALREADY_IN_USE = "抱歉！这个账号已经被使用了!";
     public static final String MESSAGE_ACCESS_FORBIDEN = "请登陆以后再访问！";
     public static final String MESSAGE_STRING_INVALIDATE = "请不要传入空字符串！";
@@ -28,7 +28,11 @@ public class CrowdConstant {
     public static final String ATTR_NAME_TRY_LOGIN_ACCT = "tryLoginAcct";
     public static final String ATTR_NAME_TRY_USER_PSWD = "tryUserPswd";
     public static final String ATTR_NAME_MESSAGE = "message";
+    public static final String ATTR_NAME_MESSAGE_WITH_LOGIN = "loginmessage";
+    public static final String ATTR_NAME_LOGIN_MEMBER = "loginMember";
 
     public static final String REDIS_CODE_PREFIX = "REDIS_CODE_PREFIX_";
 
+
+    public static final String MESSAGE_UNIVERSAL_ERROR_INFORMATION = "服务器出现故障！维修小哥正在抢修中！";
 }

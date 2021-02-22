@@ -24,7 +24,6 @@
 
                 //1、获取手机号
                 var phoneNum = $.trim($("#add_phone").val());
-                alert(phoneNum);
 
                 //2、发送ajxa请求
                 $.ajax({
@@ -37,18 +36,22 @@
                     success: function (response) {
                         var result = response.result;
                         if (result == "SUCCESS") {
-                            layer.msg("发送验证码成功，请在1分钟内完成注册！",{icon:1,time:3000,btn:['知道了', '关闭']});
+                            layer.msg("发送验证码成功，请在1分钟内完成注册！", {icon: 1, time: 3000, btn: ['知道了', '关闭']});
                         }
                         if (result == "FAILED") {
                             if (/^1403$/.test(response.data)) {
                                 showInformateForPhoneNumNotExist("手机号码不存在！");
-                            }else{
+                            } else {
                                 showInformateForPhoneNumNotExist("后台出现故障，请停止注册！");
                             }
                         }
                     },
                     error: function (response) {
-                        layer.msg("错误状态码：" + response.status + " ；错误信息：" + response.statusText,{icon:6,time:4000,btn:['知道了', '关闭']});
+                        layer.msg("错误状态码：" + response.status + " ；错误信息：" + response.statusText, {
+                            icon: 6,
+                            time: 4000,
+                            btn: ['知道了', '关闭']
+                        });
                     }
                 });
             });
@@ -60,46 +63,80 @@
             }
 
             //绑定改变事件的通用函数
-            function bingChange(input,reminder,div,regex,successMessage,errorMessage) {
+            function bingChange(input, reminder, div, regex, successMessage, errorMessage) {
                 input.change(function () {
                     reminder.empty();
                     var inputVal = input.val();
                     if (regex.test(inputVal)) {
                         div.removeClass("has-error").addClass("has-success");
                         // reminder.removeAttr("hidden").append(successMessage); //不提示信息，仅仅改变框的颜色
-                    }else {
+                    } else {
                         div.removeClass("has-success").addClass("has-error");
                         reminder.removeAttr("hidden").append(errorMessage);
                     }
                 });
             }
+
             //给邮箱、密码、手机、用户名进行正则表达式匹配
             var regexAcct = /^(([a-z0-9_-])|([\u2E80-\u9FFF])){2,16}$/;
-            bingChange($("#add_acct"),$("#acct_reminder"),$("#add_acct_div"),regexAcct,"用户名格式正确！","至少两个字符，可以是汉字、数字、字母、_");
+            bingChange($("#add_acct"), $("#acct_reminder"), $("#add_acct_div"), regexAcct, "用户名格式正确！", "至少两个字符，可以是汉字、数字、字母、_");
             var regexUsert = /^(([a-z0-9_-])|([\u2E80-\u9FFF])){2,16}$/;
-            bingChange($("#add_user"),$("#user_reminder"),$("#add_user_div"),regexUsert,"用户昵称格式正确！","至少两个字符，可以是汉字、数字、字母、_");
-            var regexPswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/ ;
-            bingChange($("#add_pswd"),$("#pswd_reminder"),$("#add_pswd_div"),regexPswd,"密码格式正确！","至少8个字符，必须包含数字、大小字母");
+            bingChange($("#add_user"), $("#user_reminder"), $("#add_user_div"), regexUsert, "用户昵称格式正确！", "至少两个字符，可以是汉字、数字、字母、_");
+            var regexPswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+            bingChange($("#add_pswd"), $("#pswd_reminder"), $("#add_pswd_div"), regexPswd, "密码格式正确！", "至少8个字符，必须包含数字、大小字母");
             var regexEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-            bingChange($("#add_email"),$("#email_reminder"),$("#add_email_div"),regexEmail,"邮箱格式正确！","请使用正确的邮箱格式，例如：xxx@qq.com ");
+            bingChange($("#add_email"), $("#email_reminder"), $("#add_email_div"), regexEmail, "邮箱格式正确！", "请使用正确的邮箱格式，例如：xxx@qq.com ");
             var regexPhone = /^1[0-9]{10}$/;
-            bingChange($("#add_phone"),$("#phoneNum_reminder"),$("#add_phone_div"),regexPhone,"手机格式正确！","请填写正确的手机号码");
+            bingChange($("#add_phone"), $("#phoneNum_reminder"), $("#add_phone_div"), regexPhone, "手机格式正确！", "请填写正确的手机号码");
             var regexCode = /^[0-9]{6,}$/;
-            bingChange($("#add_code"),$("#code_reminder"),$("#add_code_div"),regexCode,"","验证码格式错误！");
+            bingChange($("#add_code"), $("#code_reminder"), $("#add_code_div"), regexCode, "", "验证码格式错误！");
 
+            //发送请求进行注册
             $("#regBtn").click(function () {
+
+                //判断是否可以发送请求，要求：所有项都填写且格式正确
                 var flag = true;
-                alert($(".form-group").length);
                 $(".form-group").each(function () {
-                    if (! $(this).hasClass("has-success")) {
+                    if (!$(this).hasClass("has-success")) {
                         flag = false;
-                        if (! $(this).hasClass("has-error")) {
+                        if (!$(this).hasClass("has-error")) {
                             $(this).removeClass("has-success").addClass("has-error");
                             $(this).find("label").removeAttr("hidden").append("请填写此项！");
                         }
                     }
                 });
-                return flag;
+                //根据结果flag进行判断
+                if (!flag) {
+                    return false;
+                }
+                alert("发送ajxa请求");
+                //正确就发送ajax请求
+                $.ajax({
+                    url: "auth/do/member/register",
+                    type: "POST",
+                    data: $("#form1").serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        var result = response.result;
+                        var code = response.code;
+                        if (result == "SUCCESS") {
+                            window.location.href = "auth/member/to/login/page.html";
+                        } else {
+                            if (code == "100") { //验证码的错误
+                                $("#add_code_div").removeClass("has-success").addClass("has-error");
+                                $("#code_reminder").removeAttr("hidden").append(response.message);
+                            }
+                        }
+                    },
+                    error: function (response) {
+                        alert("走不通！");
+                        layer.msg("错误状态码：" + response.status + " ；错误信息：" + response.statusText, {
+                            icon: 6,
+                            time: 4000,
+                            btn: ['知道了', '关闭']
+                        });
+                    }
+                });
             });
 
         })
@@ -116,46 +153,53 @@
 
 <div class="container">
 
-    <form action="auth/do/member/register" method="post" class="form-signin" role="form">
+    <!-- action="auth/do/member/register" method="post" -->
+    <form id="form1" class="form-signin" role="form">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户注册</h2>
-       <p th:text="${message}"></p>
         <div id="add_acct_div" class="form-group  has-feedback">
             <input type="text" name="loginacct" class="form-control" id="add_acct" placeholder="请输入登录账号" autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            <label id="acct_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
+            <label id="acct_reminder" class="control-label" for="add_email" hidden="hidden"
+                   style="margin-top:5px"></label>
         </div>
         <div id="add_user_div" class="form-group  has-feedback">
-            <input type="text" name="username" class="form-control" id="add_user" placeholder="请输入用户昵称" >
+            <input type="text" name="username" class="form-control" id="add_user" placeholder="请输入用户昵称">
             <span class="glyphicon glyphicon-tag form-control-feedback"></span>
-            <label id="user_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
+            <label id="user_reminder" class="control-label" for="add_email" hidden="hidden"
+                   style="margin-top:10px"></label>
         </div>
         <div id="add_pswd_div" class="form-group  has-feedback">
-            <input type="text" name="userpswd" class="form-control" id="add_pswd" placeholder="请输入登录密码" >
+            <input type="password" name="userpswd" class="form-control" id="add_pswd" placeholder="请输入登录密码">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            <label id="pswd_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
+            <label id="pswd_reminder" class="control-label" for="add_email" hidden="hidden"
+                   style="margin-top:5px"></label>
         </div>
         <div id="add_email_div" class="form-group has-feedback">
-            <input type="text" name="email" class="form-control" id="add_email" placeholder="请输入邮箱地址"  >
+            <input type="text" name="email" class="form-control" id="add_email" placeholder="请输入邮箱地址">
             <span class="glyphicon glyphicon glyphicon-envelope form-control-feedback"></span>
-            <label id="email_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
+            <label id="email_reminder" class="control-label" for="add_email" hidden="hidden"
+                   style="margin-top:5px"></label>
         </div>
-        <div id="add_phone_div"  class="form-group  has-feedback">
-            <input id="add_phone" name="phonenum" type="text" class="form-control"  placeholder="请输入手机号"
+        <div id="add_phone_div" class="form-group  has-feedback">
+            <input id="add_phone" name="phonenum" type="text" class="form-control" placeholder="请输入手机号"
                    style="margin-top:10px;">
             <span class="glyphicon glyphicon glyphicon-earphone form-control-feedback"></span>
-            <label id="phoneNum_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
+            <label id="phoneNum_reminder" class="control-label" for="add_email" hidden="hidden"
+                   style="margin-top:5px"></label>
         </div>
         <div id="add_code_div" class="form-group has-feedback">
             <div class="input-group">
-                <input type="text" name="code" class="form-control" id="add_code" placeholder="请输入验证码" >
+                <input type="text" name="code" class="form-control" id="add_code" placeholder="请输入验证码">
                 <span class="input-group-btn">
                     <button type="button" id="sendBtn" class="btn  btn-success" style="margin-left:10px">获取验证码</button>
-                    <label id="code_reminder"  class="control-label" for="add_email" hidden="hidden" style="margin-top:10px"></label>
                  </span>
             </div>
-
+            <div>
+                <label id="code_reminder" class="control-label" style="margin-top:5px"></label>
+            </div>
         </div>
-        <button id="regBtn" type="submit" class="btn btn-lg btn-success btn-block" href="login.html"> 注册</button>
+        <button id="regBtn" type="button" class="btn btn-lg btn-success btn-block" href="login.html"> 注册
+        </button>
     </form>
 </div>
 

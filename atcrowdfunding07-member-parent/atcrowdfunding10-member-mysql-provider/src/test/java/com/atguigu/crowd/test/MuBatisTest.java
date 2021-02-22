@@ -50,4 +50,11 @@ public class MuBatisTest {
         memberPOMapper.insert(memberPO);
 
     }
+
+    @Test
+    public void test3() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encode = passwordEncoder.encode("123123");
+        System.out.println(encode);
+    }
 }

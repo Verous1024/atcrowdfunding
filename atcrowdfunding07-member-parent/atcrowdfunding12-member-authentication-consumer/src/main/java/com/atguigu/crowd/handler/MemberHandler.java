@@ -4,6 +4,7 @@ import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.api.RedisRemoteService;
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.entity.po.MemberPO;
+import com.atguigu.crowd.entity.vo.MemberLoginVO;
 import com.atguigu.crowd.entity.vo.MemberVO;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * Descriptions:
@@ -34,8 +36,55 @@ public class MemberHandler {
     @Autowired
     private MySQLRemoteService  mySQLRemoteService;
 
+
+    @RequestMapping("/auth/member/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+
+        return "portal";
+
+    }
+
+    @ResponseBody
+    @RequestMapping("/auth/member/do/login")
+    public ResultEntity<String> login(@RequestParam("loginacct") String loginacct,
+                        @RequestParam("userpswd") String userpswd,
+                        HttpSession session) {
+
+        ResultEntity<MemberPO> memberPOByLoginAcctRemote = mySQLRemoteService.getMemberPOByLoginAcctRemote(loginacct);
+
+        //获取失败，mysql工程出现错误
+        if (ResultEntity.FAILED.equals(memberPOByLoginAcctRemote.getResult())) {
+            //300属于服务器的问题，不归属用户
+           return ResultEntity.failed(CrowdConstant.MESSAGE_UNIVERSAL_ERROR_INFORMATION).setCodeWithRe("300");
+        }
+
+        MemberPO memberPO = memberPOByLoginAcctRemote.getData();
+
+        //获取到的对象是一个空的值。即用户不存在
+        if (memberPO == null) {
+            return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED_WITHOUT_ACCT).setCodeWithRe("100");
+            //100:表示用户不存在
+        }
+
+        String dbpswd = memberPO.getUserpswd();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        //有有户名，但密码不争取
+        if (! passwordEncoder.matches(userpswd, dbpswd)) {
+            return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED).setCodeWithRe("200");
+            //200表示密码错误
+        }
+
+        MemberLoginVO memberLoginVO = new MemberLoginVO(memberPO.getId(), memberPO.getUsername(), memberPO.getEmail());
+
+        session.setAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER,memberLoginVO);
+
+        return ResultEntity.successWithoutData();
+    }
+
+    @ResponseBody
     @RequestMapping("/auth/do/member/register")
-    public String register(MemberVO memberVO,Model model) {
+    public ResultEntity<String> register(MemberVO memberVO) {
         System.out.println(memberVO.toString());
         //1、获取注册的手机号
         String phonenum = memberVO.getPhonenum();
@@ -47,24 +96,21 @@ public class MemberHandler {
         //4、检查结果是否有效
         String result = resultEntity.getResult();
         if(ResultEntity.FAILED.equals(result)){
-            //操作失败，Redis工程操作读取key值失败；
-            model.addAttribute(CrowdConstant.ATTR_NAME_MESSAGE, resultEntity.getMessage());
-            return "member-reg";
+            //redis中没有获取到对应key,认为没有获取验证码
+            return ResultEntity.failed("请获取验证码后再输入！"); //默认状态码100
         }
         String redisCode = resultEntity.getData();
 
         if (redisCode == null) {
             //操作成功，Redis工程操作读取key值成功,但验证码不存在，过期了
-            model.addAttribute(CrowdConstant.ATTR_NAME_MESSAGE, CrowdConstant.MESSAGE_CODE_NOT_EXISTS);
-            return "member-reg";
+            return ResultEntity.failed(CrowdConstant.MESSAGE_CODE_NOT_EXISTS); //默认状态码100
         }
         //获取表单中的验证码
         String formCode = memberVO.getCode();
         //校验验证码是否一致
         if (!Objects.equals(formCode, redisCode)) {
             //验证码不一致
-            model.addAttribute(CrowdConstant.ATTR_NAME_MESSAGE, CrowdConstant.MESSAGE_CODE_INVALID);
-            return "member-reg";
+            return ResultEntity.failed(CrowdConstant.MESSAGE_CODE_INVALID); //默认状态码100
         }
         //验证码一致，删除Redis中的校验码
         ResultEntity<String> removeResultEntity = redisRemoteService.removeRedisKeyRemote(key);
@@ -81,10 +127,9 @@ public class MemberHandler {
         ResultEntity<String> saveResultEntity = mySQLRemoteService.saveMember(memberPO);
         if (ResultEntity.FAILED.equals(saveResultEntity.getResult())) {
             //保存用户信息失败
-            model.addAttribute(CrowdConstant.ATTR_NAME_MESSAGE, saveResultEntity.getMessage());
-            return "member-reg";
+            return ResultEntity.failed("数据库保存用户信息失败！").setCodeWithRe("200");
         }
-        return "member-login";
+        return ResultEntity.successWithoutData();
     }
 
     @ResponseBody

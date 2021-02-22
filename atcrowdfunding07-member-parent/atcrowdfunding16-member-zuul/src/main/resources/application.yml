@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: atguigu-crowd-zuul
+  redis:
+    host: 127.0.0.1 #redis的主机，端口使用默认的即可
+  session:
+    store-type: redis  #使用redis中间件作为最终保存session的工具
 eureka:
   client:
     service-url:
@@ -10,8 +14,7 @@ eureka:
 zuul:
   ignored-services: "*"  #忽略原本的微服务名字
   sensitive-headers: "*" #在Zuul项其他微服务重定向时保持原本头信息
-  routes: #自定义路由规则
+  routes: #自定义该微服务的路由规则
     crowd-potal: #自定义路由规则名称
-      service-id: atguigu-crowd-auth #针对的微服务路由设置
-      path: /** #通过 /** 访问potal-view微服务，当网址请求通过 80端口发送任何请求，都被重定向给 atguigu-crowd-auth微服务
-
+      service-id: atguigu-crowd-auth #针对目的地的微服务路由设置
+      path: /** # 通过 /** 访问potal-view微服务， 【【当网址请求通过 80端口发送任何请求，都被重定向给 atguigu-crowd-auth微服务】】
