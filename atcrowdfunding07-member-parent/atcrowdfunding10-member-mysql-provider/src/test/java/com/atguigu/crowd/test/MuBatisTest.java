@@ -2,7 +2,6 @@ package com.atguigu.crowd.test;
 
 import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.mapper.MemberPOMapper;
-import org.apache.commons.codec.StringEncoder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class MuBatisTest {
         String source = "123123";
         String encoder = passwordEncoder.encode(source);
 
-        MemberPO memberPO = new MemberPO(null, "jack", encoder, "杰克", "jack@qq.com", 1, 1, "杰克", "123123", 2);
+        MemberPO memberPO = new MemberPO(null, "jack", encoder, "杰克", "jack@qq.com","19821312322", 1, 1, "杰克", "123123", 2);
 
         memberPOMapper.insert(memberPO);
 

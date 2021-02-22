@@ -23,8 +23,8 @@ public interface RedisRemoteService {
     ResultEntity<String> setRedisKeyValueRemoteWithTimeout(
             @RequestParam("key") String key,
             @RequestParam("value") String value,
-            @RequestParam("time") long time,
-            @RequestParam("timeUnit")TimeUnit timeUnit);
+            @RequestParam("time") Integer time
+            /*@RequestParam("timeUnit") TimeUnit timeUnit*/);
 
     @RequestMapping("/get/redis/string/value/by/key")
     ResultEntity<String> getRedisStringValueByKeyRemote(@RequestParam("key") String key);

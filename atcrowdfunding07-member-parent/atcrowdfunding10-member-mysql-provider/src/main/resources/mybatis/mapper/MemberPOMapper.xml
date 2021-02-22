@@ -7,6 +7,7 @@
     <result column="userpswd" property="userpswd" jdbcType="CHAR" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phoneNum" property="phonenum" jdbcType="VARCHAR" />
     <result column="authstatus" property="authstatus" jdbcType="INTEGER" />
     <result column="usertype" property="usertype" jdbcType="INTEGER" />
     <result column="realname" property="realname" jdbcType="VARCHAR" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, loginacct, userpswd, username, email, authstatus, usertype, realname, cardnum, 
-    accttype
+    id, loginacct, userpswd, username, email, phoneNum, authstatus, usertype, realname, 
+    cardnum, accttype
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.po.MemberPOExample" >
     select
@@ -107,13 +108,13 @@
   </delete>
   <insert id="insert" parameterType="com.atguigu.crowd.entity.po.MemberPO" >
     insert into t_member (id, loginacct, userpswd, 
-      username, email, authstatus, 
-      usertype, realname, cardnum, 
-      accttype)
+      username, email, phoneNum, 
+      authstatus, usertype, realname, 
+      cardnum, accttype)
     values (#{id,jdbcType=INTEGER}, #{loginacct,jdbcType=VARCHAR}, #{userpswd,jdbcType=CHAR}, 
-      #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{authstatus,jdbcType=INTEGER}, 
-      #{usertype,jdbcType=INTEGER}, #{realname,jdbcType=VARCHAR}, #{cardnum,jdbcType=VARCHAR}, 
-      #{accttype,jdbcType=INTEGER})
+      #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, 
+      #{authstatus,jdbcType=INTEGER}, #{usertype,jdbcType=INTEGER}, #{realname,jdbcType=VARCHAR}, 
+      #{cardnum,jdbcType=VARCHAR}, #{accttype,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.atguigu.crowd.entity.po.MemberPO" >
     insert into t_member
@@ -132,6 +133,9 @@
       </if>
       <if test="email != null" >
         email,
+      </if>
+      <if test="phonenum != null" >
+        phoneNum,
       </if>
       <if test="authstatus != null" >
         authstatus,
@@ -164,6 +168,9 @@
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null" >
+        #{phonenum,jdbcType=VARCHAR},
       </if>
       <if test="authstatus != null" >
         #{authstatus,jdbcType=INTEGER},
@@ -206,6 +213,9 @@
       <if test="record.email != null" >
         email = #{record.email,jdbcType=VARCHAR},
       </if>
+      <if test="record.phonenum != null" >
+        phoneNum = #{record.phonenum,jdbcType=VARCHAR},
+      </if>
       <if test="record.authstatus != null" >
         authstatus = #{record.authstatus,jdbcType=INTEGER},
       </if>
@@ -233,6 +243,7 @@
       userpswd = #{record.userpswd,jdbcType=CHAR},
       username = #{record.username,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
+      phoneNum = #{record.phonenum,jdbcType=VARCHAR},
       authstatus = #{record.authstatus,jdbcType=INTEGER},
       usertype = #{record.usertype,jdbcType=INTEGER},
       realname = #{record.realname,jdbcType=VARCHAR},
@@ -256,6 +267,9 @@
       </if>
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null" >
+        phoneNum = #{phonenum,jdbcType=VARCHAR},
       </if>
       <if test="authstatus != null" >
         authstatus = #{authstatus,jdbcType=INTEGER},
@@ -281,6 +295,7 @@
       userpswd = #{userpswd,jdbcType=CHAR},
       username = #{username,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR},
       authstatus = #{authstatus,jdbcType=INTEGER},
       usertype = #{usertype,jdbcType=INTEGER},
       realname = #{realname,jdbcType=VARCHAR},

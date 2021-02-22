@@ -11,6 +11,8 @@ public class MemberPO {
 
     private String email;
 
+    private String phonenum;
+
     private Integer authstatus;
 
     private Integer usertype;
@@ -24,33 +26,18 @@ public class MemberPO {
     public MemberPO() {
     }
 
-    public MemberPO(Integer id, String loginacct, String userpswd, String username, String email, Integer authstatus, Integer usertype, String realname, String cardnum, Integer accttype) {
+    public MemberPO(Integer id, String loginacct, String userpswd, String username, String email, String phonenum, Integer authstatus, Integer usertype, String realname, String cardnum, Integer accttype) {
         this.id = id;
         this.loginacct = loginacct;
         this.userpswd = userpswd;
         this.username = username;
         this.email = email;
+        this.phonenum = phonenum;
         this.authstatus = authstatus;
         this.usertype = usertype;
         this.realname = realname;
         this.cardnum = cardnum;
         this.accttype = accttype;
-    }
-
-    @Override
-    public String toString() {
-        return "MemberPO{" +
-                "id=" + id +
-                ", loginacct='" + loginacct + '\'' +
-                ", userpswd='" + userpswd + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", authstatus=" + authstatus +
-                ", usertype=" + usertype +
-                ", realname='" + realname + '\'' +
-                ", cardnum='" + cardnum + '\'' +
-                ", accttype=" + accttype +
-                '}';
     }
 
     public Integer getId() {
@@ -91,6 +78,14 @@ public class MemberPO {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public String getPhonenum() {
+        return phonenum;
+    }
+
+    public void setPhonenum(String phonenum) {
+        this.phonenum = phonenum == null ? null : phonenum.trim();
     }
 
     public Integer getAuthstatus() {

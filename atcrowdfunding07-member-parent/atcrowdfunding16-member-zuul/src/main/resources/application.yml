@@ -14,3 +14,4 @@ zuul:
     crowd-potal: #自定义路由规则名称
       service-id: atguigu-crowd-auth #针对的微服务路由设置
       path: /** #通过 /** 访问potal-view微服务，当网址请求通过 80端口发送任何请求，都被重定向给 atguigu-crowd-auth微服务
+

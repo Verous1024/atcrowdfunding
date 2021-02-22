@@ -28,7 +28,6 @@ public class RedisHandler {
             ValueOperations<String, String> operations = redisTemplate.opsForValue();
 
             operations.set(key,value);
-
             return ResultEntity.successWithoutData();
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,11 +39,11 @@ public class RedisHandler {
     public ResultEntity<String> setRedisKeyValueRemoteWithTimeout(
             @RequestParam("key") String key,
             @RequestParam("value") String value,
-            @RequestParam("time") long time,
-            @RequestParam("timeUnit") TimeUnit timeUnit) {
+            @RequestParam("time") Integer time
+            /*@RequestParam("timeUnit") TimeUnit timeUnit*/) {
         try {
             ValueOperations<String, String> operations = redisTemplate.opsForValue();
-
+            TimeUnit  timeUnit = TimeUnit.MINUTES;
             operations.set(key,value,time,timeUnit);
 
             return ResultEntity.successWithoutData();
