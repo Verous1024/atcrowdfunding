@@ -35,16 +35,16 @@ public class CrowdAccessFilter extends ZuulFilter {
         String servletPath = request.getServletPath();
         System.out.println("++++++++++++++++++"+servletPath);
         if (AccessPassResources.PASS_RES_SET.contains(servletPath)) {
+            System.out.println("false");
             return false; //结果为true，表示为需要放行的网页，因此返回false，不执行run方法
         }
         //再判断是否是需要放行的静态资源，是则返回false
         return !AccessPassResources.judegeCurrentServletPathWetherStaticResource(servletPath);
-
     }
 
     @Override
     public Object run() throws ZuulException {
-
+        System.out.println("被拦截");
         //获取当前的请求对对象
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
@@ -61,7 +61,7 @@ public class CrowdAccessFilter extends ZuulFilter {
             session.setAttribute(CrowdConstant.ATTR_NAME_MESSAGE_WITH_LOGIN,CrowdConstant.MESSAGE_ACCESS_FORBIDEN);
             //注意：这里需要请求重定向，如果是从zuul工程到auth工程的首页，会不停打印，应该让浏览器发送请求
             try {
-                response.sendRedirect("/auth/member/do/login");
+                response.sendRedirect("/auth/member/to/login/page.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
