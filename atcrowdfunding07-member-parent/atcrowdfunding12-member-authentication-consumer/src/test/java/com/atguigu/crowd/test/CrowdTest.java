@@ -1,7 +1,9 @@
 package com.atguigu.crowd.test;
 
 import com.aliyun.api.gateway.demo.util.HttpUtils;
+import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.MailService;
+import com.atguigu.crowd.util.ResultEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,5 +84,11 @@ public class CrowdTest {
         mailService.sendHtmlMail("1987313921@qq.com","发送html格式邮件",content);
     }
 
+    @Test
+    public void testOSS() throws FileNotFoundException {
+        FileInputStream inputStream = new FileInputStream("beauty.jpg");
+        ResultEntity<String> resultEntity = CrowdUtil.uploadFileToOss("http://oss-cn-chengdu.aliyuncs.com", "LTAI4G5UUmcckQKxtnoEo3yV", "710Br6Gv50nYVR0mjbbMspu440SK5r", inputStream, "verous1024", "http://verous1024.oss-cn-chengdu.aliyuncs.com", "beauty.jpg");
+        System.out.println(resultEntity);
+    }
 
 }

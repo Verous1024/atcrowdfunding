@@ -33,9 +33,8 @@ public class CrowdAccessFilter extends ZuulFilter {
         HttpServletRequest request = currentContext.getRequest();
         //获取当前的servletPath
         String servletPath = request.getServletPath();
-        System.out.println("++++++++++++++++++"+servletPath);
         if (AccessPassResources.PASS_RES_SET.contains(servletPath)) {
-            System.out.println("false");
+
             return false; //结果为true，表示为需要放行的网页，因此返回false，不执行run方法
         }
         //再判断是否是需要放行的静态资源，是则返回false
@@ -48,24 +47,29 @@ public class CrowdAccessFilter extends ZuulFilter {
         //获取当前的请求对对象
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletRequest request = currentContext.getRequest();
+
+        //以下两行用于测试显示
+        String servletPath = request.getServletPath();
+        System.out.println("++++"+servletPath);
+
         //获取当前的session
         HttpSession session = request.getSession();
 
         //获取session中的用户
         Object member = session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
-
         if (member == null) {
-
+            System.out.println("需要认证！");
             HttpServletResponse response = currentContext.getResponse();
             //存入需要的信息
             session.setAttribute(CrowdConstant.ATTR_NAME_MESSAGE_WITH_LOGIN,CrowdConstant.MESSAGE_ACCESS_FORBIDEN);
             //注意：这里需要请求重定向，如果是从zuul工程到auth工程的首页，会不停打印，应该让浏览器发送请求
             try {
-                response.sendRedirect("/auth/member/to/login/page.html");
+                response.sendRedirect("/auth/member/to/login/page.html"); //请求重定向到登陆页面
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("不需要认证！");
         return null;
     }
 
