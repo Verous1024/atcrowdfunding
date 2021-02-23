@@ -1,0 +1,23 @@
+server:
+  port: 5000
+spring:
+  application:
+    name: atguigu-crowd-project
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  redis:
+    host: 127.0.0.1
+  session:
+    store-type: redis
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+aliyun:
+  oss:
+    access-key-id: LTAI4G5UUmcckQKxtnoEo3yV
+    accessKeySecert: 710Br6Gv50nYVR0mjbbMspu440SK5r
+    bucket-domain: http://verous1024.oss-cn-chengdu.aliyuncs.com
+    bucket-name: verous1024
+    end-point: http://oss-cn-chengdu.aliyuncs.com #注意从OSS上复制过来时，需要携带http://
