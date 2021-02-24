@@ -21,7 +21,17 @@
         <collection property="detailReturnVOList"
                     select="com.atguigu.crowd.mapper.ProjectPOMapper.selectDeatailReturnVO"
                     column="id"/>
+        <collection property="memberLauchInfoVO" select="com.atguigu.crowd.mapper.ProjectPOMapper.selectMemberLauchInfoVO" column="id"/>
     </resultMap>
+    <select id="selectMemberLauchInfoVO" resultType="com.atguigu.crowd.entity.vo.MemberLauchInfoVO">
+        select
+        description_simple descriptionSimple,
+        description_detail descriptionDetail,
+        phone_num phoneNum,
+        service_num serviceNum
+        from t_member_launch_info
+        where t_member_launch_info.memberid  = (SELECT memberid from t_project WHERE t_project.id=#{id});
+    </select>
     <select id="selectDetailPicturePath" resultType="string">
         SELECT item_pic_path FROM t_project_item_pic WHERE projectid=#{id}
     </select>

@@ -32,4 +32,6 @@ public class DetailProjectVO {
     private String headerPicturePath;
     private List<String> detailPicturePathList;
     private List<DetailReturnVO> detailReturnVOList; //回报信息
+    private MemberLauchInfoVO memberLauchInfoVO; //发起人信息
+    /*private String authstatus;*/ //必须身份验证的人才可以进行比较
 }

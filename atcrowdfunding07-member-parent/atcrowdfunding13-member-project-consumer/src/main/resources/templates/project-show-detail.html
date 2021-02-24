@@ -200,15 +200,15 @@
                                             <div class="col-md-9 column">
                                                 <div class="">
                                                     <h4>
-                                                        <b>福建省南安厨卫</b> <span style="float:right;font-size:12px;"
+                                                        <b th:text="${detailProjectVO.memberLauchInfoVO.descriptionSimple}">福建省南安厨卫</b> <span style="float:right;font-size:12px;"
                                                                              class="label label-success">已认证</span>
                                                     </h4>
-                                                    <p style="font-size:12px">
+                                                    <p style="font-size:12px" th:text="${detailProjectVO.memberLauchInfoVO.descriptionDetail}">
                                                         酷驰是一家年轻的厨卫科技公司，我们有一支朝气蓬勃，有激情、有想法、敢实践的团队。
 
                                                     </p>
                                                     <p style="font-size:12px">
-                                                        客服电话:0595-86218855
+                                                        客服电话:[[${detailProjectVO.memberLauchInfoVO.serviceNum}]]
                                                     </p>
                                                 </div>
                                             </div>
