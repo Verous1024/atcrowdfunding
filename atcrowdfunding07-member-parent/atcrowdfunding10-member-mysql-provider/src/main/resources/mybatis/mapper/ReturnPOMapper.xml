@@ -77,6 +77,16 @@
     id, projectid, type, supportmoney, content, count, signalpurchase, purchase, freight, 
     invoice, returndate, describ_pic_path
   </sql>
+  <!--    void insertReturnPOBatch(@Param("returnPOList") List<ReturnPO> returnPOList, @Param("projectId") Integer projectId);-->
+  <insert id="insertReturnPOBatch">
+  insert into t_return ( projectid, type, supportmoney, content, count, signalpurchase, purchase, freight, invoice, returndate, describ_pic_path )
+  values
+  <foreach collection="returnPOList" item="returnPO" separator=",">
+  ( #{projectId}, #{returnPO.type}, #{returnPO.supportmoney}, #{returnPO.content},
+  #{returnPO.count}, #{returnPO.signalpurchase}, #{returnPO.purchase}, #{returnPO.freight},
+  #{returnPO.invoice}, #{returnPO.returndate}, #{returnPO.describPicPath})
+  </foreach>
+  </insert>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.po.ReturnPOExample" >
     select
     <if test="distinct" >

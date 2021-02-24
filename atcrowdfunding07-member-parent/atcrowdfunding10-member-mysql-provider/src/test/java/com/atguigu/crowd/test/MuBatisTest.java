@@ -1,7 +1,10 @@
 package com.atguigu.crowd.test;
 
 import com.atguigu.crowd.entity.po.MemberPO;
+import com.atguigu.crowd.entity.vo.DetailProjectVO;
+import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.mapper.MemberPOMapper;
+import com.atguigu.crowd.mapper.ProjectPOMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Descriptions:
@@ -30,7 +34,24 @@ public class MuBatisTest {
     @Autowired
     private MemberPOMapper memberPOMapper;
 
+    @Autowired
+    private ProjectPOMapper projectPOMapper;
+
     private Logger logger = LoggerFactory.getLogger(MuBatisTest.class);
+
+    @Test
+    public void testMapper1() {
+        DetailProjectVO detailProjectVO = projectPOMapper.selectDetailProjectVO(2);
+        System.out.println();
+    }
+
+
+
+    @Test
+    public void testMapper() {
+        List<PortalTypeVO> portalTypeVOS = projectPOMapper.selectPortalTypeVOList();
+        System.out.println();
+    }
 
     @Test
     public void test() throws SQLException {

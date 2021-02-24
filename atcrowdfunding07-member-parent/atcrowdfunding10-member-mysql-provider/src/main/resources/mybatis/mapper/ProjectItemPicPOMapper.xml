@@ -67,6 +67,13 @@
   <sql id="Base_Column_List" >
     id, projectid, item_pic_path
   </sql>
+  <!--    void insertPathList(@Param("projectId") Integer projectId, @Param("detailPicturePathList") List<String> detailPicturePathList);-->
+  <insert id="insertPathList">
+    insert into t_project_item_pic (projectid, item_pic_path)
+    values
+    <foreach collection="detailPicturePathList" item="detailPath" separator=",">(#{projectId},#{detailPath})</foreach>
+  </insert>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.po.ProjectItemPicPOExample" >
     select
     <if test="distinct" >

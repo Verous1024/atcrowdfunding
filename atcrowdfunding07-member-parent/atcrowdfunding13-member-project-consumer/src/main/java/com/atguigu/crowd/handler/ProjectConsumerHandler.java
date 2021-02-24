@@ -1,14 +1,16 @@
 package com.atguigu.crowd.handler;
 
+import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.config.OSSProperties;
 import com.atguigu.crowd.constant.CrowdConstant;
-import com.atguigu.crowd.entity.vo.ProjectVO;
-import com.atguigu.crowd.entity.vo.ReturnVO;
+import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +32,51 @@ public class ProjectConsumerHandler {
 
     @Autowired
     private OSSProperties ossProperties;
+
+    @Autowired
+    private MySQLRemoteService mySQLRemoteService;
+
+    @RequestMapping("/get/project/detail/{projectId}")
+    public String getProjectDetail(@PathVariable("projectId") Integer projectId, Model model) {
+        ResultEntity<DetailProjectVO> resultEntity = mySQLRemoteService.getDetailProjectVORemote(projectId);
+        if(ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            DetailProjectVO detailProjectVO = resultEntity.getData();
+            model.addAttribute("detailProjectVO", detailProjectVO);
+        }
+        return "project-show-detail";
+    }
+
+
+    @RequestMapping("/create/confirm")
+    public String saveConfirm(ModelMap modelMap, HttpSession session, MemberConfirmInfoVO
+            memberConfirmInfoVO) {
+        // 1.从 Session域读取之前临时存储的 ProjectVO对象
+        ProjectVO projectVO = (ProjectVO) session.getAttribute(CrowdConstant.ATTR_NAME_TEMPLE_PROJECT);
+        System.out.println("产品"+projectVO);
+        // 2.如果 projectVO为  null
+        if (projectVO == null) {
+            throw new RuntimeException(CrowdConstant.MESSAGE_TEMPLE_PROJECT_MISSING);
+        }
+        // 3.将确认信息数据设置到 projectVO对象中
+        projectVO.setMemberConfirmInfoVO(memberConfirmInfoVO);
+        // 4.从 Session域读取当前登录的用户
+        MemberLoginVO memberLoginVO = (MemberLoginVO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
+        System.out.println("登陆用户"+memberLoginVO);
+        Integer memberId = memberLoginVO.getId();
+        // 5.调用远程方法保存 projectVO对象
+        ResultEntity<String> saveResultEntity = mySQLRemoteService.saveProjectVORemote(projectVO, memberId);
+        // 6.判断远程的保存操作是否成功
+        String result = saveResultEntity.getResult();
+        if (ResultEntity.FAILED.equals(result)) {
+            modelMap.addAttribute(CrowdConstant.ATTR_NAME_MESSAGE, saveResultEntity.getMessage());
+            return "project-confirm";
+        }
+        // 7.将临时的 ProjectVO对象从 Session域移除
+        session.removeAttribute(CrowdConstant.ATTR_NAME_TEMPLE_PROJECT);
+        // 8.如果远程保存成功则跳转到最终完成页面
+        return "redirect:http://localhost:80/project/create/success";
+    }
+
 
     @ResponseBody
     @RequestMapping("/create/save/return.json")
