@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <base th:href="@{/}"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        #topcontrol {
+            color: #fff;
+            z-index: 99;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            background: #222;
+            position: relative;
+            right: 14px !important;
+            bottom: 11px !important;
+            border-radius: 3px !important;
+        }
+
+        #topcontrol:after {
+            /*top: -2px;*/
+            left: 8.5px;
+            content: "\f106";
+            position: absolute;
+            text-align: center;
+            font-family: FontAwesome;
+        }
+
+        #topcontrol:hover {
+            color: #fff;
+            background: #18ba9b;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .label-type, .label-status, .label-order {
+            background-color: #fff;
+            color: #f60;
+            padding: 5px;
+            border: 1px #f60 solid;
+        }
+
+        #typeList :not(:first-child) {
+            margin-top: 20px;
+        }
+
+        .label-text {
+            margin: 0 10px;
+        }
+
+        .panel {
+            border-radius: 0;
+        }
+
+        h3.break {
+            font-size: 16px;
+            display: block;
+            white-space: nowrap;
+            word-wrap: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        h3.break > a {
+            text-decoration: none;
+        }
+    </style>
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="script/docs.min.js"></script>
+    <script src="script/back-to-top.js"></script>
+    <script>
+        $(function () {
+
+            var try1 = [[${typeId}]];
+            var try2 = [[${status}]];
+            var try3 = [[${orderType}]];
+            if (try1 != 100) {
+                $("[class*='label-type']").removeClass("label-type").addClass("label-text");
+                $("#li1").find("[spanval="+try1+"]").addClass("label-type");
+            }
+            if (try2 != 100) {
+                $("[class*='label-status']").removeClass("label-status");
+                $("#li2").find("[spanval="+try2+"]").addClass("label-status");
+            }
+            if (try3 != 100) {
+                $("[class*='label-order']").removeClass("label-order");
+                $("#li3").find("[spanval="+try3+"]").addClass("label-order");
+            }
+
+            $("#searchBtn").click(function () {
+                var typeId = $("[class*='label-type']").attr("spanval");
+                var status = $("[class*='label-status']").attr("spanval");
+                var orderType = $("[class*='label-order']").attr("spanval");
+                var url = "http://localhost/project/get/all/project?";
+                if (typeId != 100) {
+                    url = url + "typeId=" + typeId + "&";
+                }
+                if (status != 100) {
+                    url = url + "status=" + status + "&";
+                }
+                if (orderType != 100) {
+                    url = url + "orderType=" + orderType + "&";
+                }
+                window.location.href = url;
+            });
+            //给三个分类的标签绑定点击函数,当选中一个时,同行的其他标签则无效
+            $(".class1").click(function () {
+                //同行的所有对象置为不选中
+                $(".class1").each(function () {
+                    if ($(this).hasClass("label-type")) {
+                        $(this).removeClass("label-type").addClass("label-text");
+                    }
+                });
+                //将当前对象置为选中,从补选中置为选中
+                $(this).removeClass("label-text").addClass("label-type");
+            });
+
+            $(".class2").click(function () {
+                //同行的所有对象置为不选中
+                $(".class2").each(function () {
+                    if ($(this).hasClass("label-status")) {
+                        $(this).removeClass("label-status").addClass("label-text");
+                    }
+                });
+                //将当前对象置为选中,从补选中置为选中
+                $(this).removeClass("label-text").addClass("label-status");
+            });
+
+            $(".class3").click(function () {
+                //同行的所有对象置为不选中
+                $(".class3").each(function () {
+                    if ($(this).hasClass("label-order")) {
+                        $(this).removeClass("label-order").addClass("label-text");
+                    }
+                });
+                //将当前对象置为选中,从补选中置为选中
+                $(this).removeClass("label-text").addClass("label-order");
+            });
+        })
+    </script>
+</head>
+<body>
+<!-- 头部信息 -->
+<div th:replace="include::header"></div>
+
+<div class="container theme-showcase" role="main">
+
+    <!--众筹首页\项目总览\发起众筹\我的众筹 -->
+    <div th:replace="include::navCrowd"></div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <ul id="typeList" style="list-style: none;">
+                            <li id="li1">
+                                分类：
+                                <span class="class1 label-type" spanval="100">全部</span> <!-- label-type 导致被选中 -->
+                                <span class="class1 label-text" spanval="0">科技</span> <!--actvie表示被导致被选中 -->
+                                <span class="class1 label-text" spanval="1">设计</span>
+                                <span class="class1 label-text" spanval="2">公益</span>
+                                <span class="class1 label-text" spanval="3">农业</span>
+                            </li>
+                            <li id="li2">
+                                状态：
+                                <span class="class2 label-status" spanval="100">全部</span>
+                                <span class="class2 label-text" spanval="0">即将开始</span>
+                                <span class="class2 label-text" spanval="1">众筹中</span>
+                                <span class="class2 label-text" spanval="3">众筹成功</span>
+                            </li>
+                            <li id="li3">
+                                排序：
+                                <span class="class3 label-order" spanval="100">综合排序</span>
+                                <span class="class3 label-text" spanval="0">最新上线</span>
+                                <span class="class3 label-text" spanval="1">金额最多</span>
+                                <span class="class3 label-text" spanval="2">支持最多</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer" style="height:50px;padding:0;">
+                        <div style="float:left;padding:15px;">
+                            共[[${size}]]个众筹项目
+                        </div>
+                        <div style="float:right;">
+                            <form class="navbar-form navbar-left" role="search">
+                                <button id="searchBtn" type="button" class="btn btn-default"><i
+                                        class="glyphicon glyphicon-search"></i>
+                                    搜索
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="row">
+                    <div th:each="project : ${allFindProject}" class="col-md-3">
+                        <div class="thumbnail">
+                            <img th:alt="'图片加载失败'" alt="300x200" src="img/product-1.jpg"
+                                 th:src="${project.headerPicturePath}"/>
+                            <div class="caption">
+                                <h3 class="break">
+                                    <a href="project.html"
+                                       th:href="'http://localhost:80/project/get/project/detail/'+${project.id}"
+                                       th:text="${project.projectName}">众筹项目名</a>
+                                </h3>
+                                <p>
+                                <div style="float:left;"><i class="glyphicon glyphicon-screenshot"
+                                                            title="目标金额"></i>
+                                    $<span th:text="${project.money}">需要的资金</span>
+                                </div>
+                                <div style="float:right;">
+                                    <i title="截至日期" class="glyphicon glyphicon-calendar"></i>
+                                    <span th:text="${project.deploydate}">2017-20-20 日期</span>
+                                </div>
+                                </p>
+                                <br>
+                                <div class="progress" style="margin-bottom: 4px;">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         th:aria-valuenow="${project.money / project.supportmoney}" aria-valuenow="40"
+                                         aria-valuemin="0" aria-valuemax="100"
+                                         th:style="'width:'+${project.money / project.supportmoney}+'%'"
+                                         style="width: 40%">
+                                        <span th:text="${project.money / project.supportmoney}+'% '">40%</span>
+                                    </div>
+                                </div>
+                                <div>
+                                                    <span style="float:right;">
+                                                        <i class="glyphicon glyphicon-star-empty" title="关注人数">
+                                                            <span th:text="${project.follower}">12345</span>
+                                                        </i>
+                                                    </span>
+                                    <span>
+                                                        <i class="glyphicon glyphicon-user" title="支持人数"></i>
+                                                        <span th:text="${project.supporter}">12345</span>
+                                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!--单个项目的展示-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--页脚-->
+    <div th:replace="include::footer"></div>
+
+</div> <!-- /container -->
+
+<script>
+    $('#myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+</script>
+</body>
+</html>
+
