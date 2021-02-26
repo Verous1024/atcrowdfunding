@@ -141,16 +141,20 @@
 
         })
     </script>
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #EEEEEE;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <div><a class="navbar-brand" href="index.html" style="font-size:32px;">尚筹网-创意产品众筹平台</a></div>
-        </div>
-    </div>
-</nav>
+<!--header-->
+<div th:replace="include::simpleHeader" ></div>
 
+<!--body-->
 <div class="container">
 
     <!-- action="auth/do/member/register" method="post" -->
@@ -201,6 +205,11 @@
         <button id="regBtn" type="button" class="btn btn-lg btn-success btn-block" href="login.html"> 注册
         </button>
     </form>
+</div>
+
+<!-- footer -->
+<div class="container" style="margin-top:20px;">
+    <div th:replace="include::footer" ></div>
 </div>
 
 </body>

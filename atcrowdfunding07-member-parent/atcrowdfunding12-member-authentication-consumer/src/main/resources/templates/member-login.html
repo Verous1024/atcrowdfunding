@@ -83,16 +83,20 @@
 
         })
     </script>
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #EEEEEE;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <div><a class="navbar-brand" href="index.html" style="font-size:32px;">尚筹网-创意产品众筹平台</a></div>
-        </div>
-    </div>
-</nav>
+<!--header-->
+<div th:replace="include::simpleHeader" ></div>
 
+<!--body-->
 <div class="container">
     <form class="form-signin" role="form">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户登录</h2>
@@ -116,8 +120,12 @@
         <button id="loginBtn" type="button" class="btn btn-lg btn-success btn-block">登录</button>
     </form>
 </div>
-<script src="jquery/jquery-2.1.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- footer -->
+<div class="container" style="margin-top:20px;">
+    <div th:replace="include::footer" ></div>
+</div>
+
 </body>
 </html>
 
