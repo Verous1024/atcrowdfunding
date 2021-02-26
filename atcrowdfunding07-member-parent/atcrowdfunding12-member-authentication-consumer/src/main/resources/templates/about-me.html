@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<!-- 注意：添加th标签 -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keys" content="">
+    <meta name="author" content="">
+    <!-- 添加相对地址 -->
+    <base th:href="@{/}"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="layer/login.css">
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <style type="text/css">
+        p {
+            text-indent: 2em;
+        }
+
+        .content {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            /*white-space: -pre;*/
+            white-space: -o-pre-wrap;
+            *word-wrap: break-word;
+            *white-space: normal;
+        }
+
+        #footer {
+            padding: 15px 0;
+            background: #EEEEEE;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#serviceBtn").click(function () {
+                $("#myModal").modal('show');
+            })
+        })
+    </script>
+</head>
+<body>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">服务条款</h4>
+            </div>
+            <div class="modal-body">
+                <pre class="content">
+欢迎您使用众筹网的服务！
+
+    为使用众筹网的服务，您应当阅读并遵守《众筹网服务协议》（以下简称“本协议”）和《众筹网隐私政策》。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制众筹网责任的条款、对用户权利进行限制的条款、约定争议解决方式和司法管辖的条款（如第十八条相关约定）等，以及开通或使用某项服务的单独协议或规则。限制、免责条款或者其他涉及您重大权益的条款可能以加粗、加下划线等形式提示您重点注意。
+
+    除非您已充分阅读、完全理解并接受本协议所有条款，否则您无权使用众筹网服务。您点击“同意”或“下一步”，或您使用众筹网服务，或者以其他任何明示或者默示方式表示接受本协议的，均视为您已阅读并同意签署本协议。本协议即在您与众筹网之间产生法律效力，成为对双方均具有约束力的法律文件。
+
+    如果您因年龄、智力等因素而不具有完全民事行为能力，请在法定监护人（以下简称"监护人"）的陪同下阅读和判断是否同意本协议，并特别注意未成年人使用条款。
+
+    如果您是中国大陆地区以外的用户，您订立或履行本协议还需要同时遵守您所属和/或所处国家或地区的法律。
+
+一、【协议的范围】
+
+    1.1本协议是用户与众筹网之间关于其使用众筹网的服务所订立的协议。“众筹网”是指众筹网和/或其相关服务可能存在的运营关联单位。“用户”是指众筹网的服务的使用人，在本协议中更多地称为“您”。
+
+    1.2众筹网的服务是指众筹网向用户提供的，包括但不限于即时通讯、网络媒体、互联网增值、互动娱乐、金融支付、广告等产品及服务，具体服务以众筹网实际提供的为准（以下简称“本服务”）。
+
+    1.3本协议内容同时包括《众筹网隐私政策》
+
+二、【帐号与密码安全】
+
+    2.1您在使用本服务时可能需要注册一个帐号。关于您使用帐号的具体规则，请仔细阅读并遵守相关单独协议。
+
+    2.2众筹网特别提醒您应妥善保管您的帐号和密码。当您使用完毕后，应安全退出。因您保管不善可能导致遭受被盗号或密码失窃，责任由您自行承担。
+
+    2.3为增强用户体验和/或技术便利，本服务的帐号可能包括数字、字母或者其组合，以及手机号码、电子信箱等多种形式。在您注册某一形式的帐号时，众筹网可能附赠该帐号的另一表现形式。具体的帐号形式、帐号体系及帐号之间的关联关系等，以众筹网实际提供的为准。
+
+三、【使用本服务的方式】
+
+    4.1本服务仅为您个人非商业性质的使用，除非您与众筹网另有约定。
+
+    4.2您依本协议条款所取得的权利不可转让。
+
+    4.3您不得使用任何方式（包括但不限于第三方软件、插件、外挂、系统、设备等）对本服务进行干扰、破坏、修改或施加其他影响。
+
+    4.4您应当通过众筹网提供或认可的方式使用本服务，不得通过任何第三方软件、插件、外挂、系统、设备等登录或使用本服务。
+
+    4.5任何人未经众筹网授权不得使用任何第三方软件、插件、外挂、系统等查看、获取本服务中所包含的众筹网、众筹网合作伙伴或用户的任何相关信息、数据等内容，同时，应当严格遵守众筹网发布的Robots协议等相关协议规则。
+
+四、【按现状提供服务】
+
+您理解并同意：
+
+    5.1本服务是按照现有技术和条件所能达到的现状提供的。众筹网会尽最大努力保障服务的连贯性和安全性，但众筹网不能随时预见和防范法律、技术以及其他风险，众筹网对此类风险在法律允许的范围内免责，包括但不限于不可抗力、病毒、木马、黑客攻击、系统不稳定、第三方服务瑕疵、政府行为等原因可能导致的服务中断、数据丢失以及其他的损失和风险。
+
+    5.2因经营策略安排或调整等原因,不同地区的用户可使用的具体众筹网服务的内容可能会存在差异，具体以众筹网实际提供的为准.
+                </pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">已了解</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--header-->
+<div th:replace="include::simpleHeader" ></div>
+
+<!--关于我们-->
+<div class="container">
+    <div id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a class="list-group-item" href="http://localhost/service/about/me#1">1.机构介绍</a>
+                        <a class="list-group-item" href="http://localhost/service/about/me#2">2.关于我们</a>
+                        <a class="list-group-item" href="http://localhost/service/about/me#3">3.服务条款</a>
+                        <a class="list-group-item" href="http://localhost/service/about/me#4">4.免责声明</a>
+                        <a class="list-group-item" href="http://localhost/service/about/me#5">5.网站地图</a>
+                        <a class="list-group-item" href="http://localhost/service/about/me#6">6.联系我们</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <h3 id="1">机构简介</h3>
+                    <P><a href="http://localhost">众筹网</a>是中国专业的一站式综合众筹融资服务平台，是网信集团旗下的众筹模式网站，为大众提供筹资、投资、孵化、运营一站式综合众筹服务。
+                    </P>
+
+                    <h3 id="2">关于我们</h3>
+                    <p>我们在这里支持一切好玩有趣的个性创意和故事，电影、音乐、公益、旅行、艺术、非遗、科研……只要他们都是有趣的、有意义的，你都可以发起。
+                        在过去的一年里，众筹网为将近1万个故事筹款超过1亿元。</p>
+                    <p>主要支持回报方式--产品众筹：又叫回报众筹。顾名思义，就是发起者筹款成功后交付的东西是个产品，可以是个实物，也可以是虚拟商品，还可以是个事件或者活动。</p>
+
+                    <h3 id="3">服务条款</h3>
+                    <p>欢迎您使用众筹网的服务！</p>
+                    <p>
+                        为使用众筹网的服务，您应当阅读并遵守《众筹网服务协议》（以下简称“本协议”）和《众筹网隐私政策》。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制众筹网责任的条款、对用户权利进行限制的条款、约定争议解决方式和司法管辖的条款（如第十八条相关约定）等，以及开通或使用某项服务的单独协议或规则。限制、免责条款或者其他涉及您重大权益的条款可能以加粗、加下划线等形式提示您重点注意。</p>
+                    <p>
+                        除非您已充分阅读、完全理解并接受本协议所有条款，否则您无权使用众筹网服务。您点击“同意”或“下一步”，或您使用众筹网服务，或者以其他任何明示或者默示方式表示接受本协议的，均视为您已阅读并同意签署本协议。本协议即在您与众筹网之间产生法律效力，成为对双方均具有约束力的法律文件。</p>
+                    <p>如果您因年龄、智力等因素而不具有完全民事行为能力，请在法定监护人（以下简称"监护人"）的陪同下阅读和判断是否同意本协议，并特别注意未成年人使用条款。</p>
+                    <p>如果您是中国大陆地区以外的用户，您订立或履行本协议还需要同时遵守您所属和/或所处国家或地区的法律。</p>
+                    <p><b><a id="serviceBtn">了解更多的服务条款!</a></b></p>
+
+                    <h3 id="4">免责声明</h3>
+                    <p>本网站及其雇员一概毋须以任何方式就任何信息传递或传送的失误、不准确或错误对用户或任何其他人士负任何直接或间接的责任。</p>
+                    <p>
+                        在法律允许的范围内，本网站在此声明，不承担用户或任何人士就使用或未能使用本网站所提供的信息或任何链接或项目所引致的任何直接、间接、附带、从属、特殊、惩罚性或惩戒性的损害赔偿（包括但不限于收益、预期利润的损失或失去的业务、未实现预期的节省）。</p>
+                    <p>
+                        本网站所提供的信息，若在任何司法管辖地区供任何人士使用或分发给任何人士时会违反该司法管辖地区的法律或条例的规定或会导致本网站或其第三方代理人受限于该司法管辖地区内的任何监管规定时，则该等信息不宜在该司法管辖地区供该等任何人士使用或分发给该等任何人士。用户须自行保证不会受限于任何限制或禁止用户使用或分发本网站所提供信息的当地的规定。</p>
+                    <p>本网站图片，文字之类版权申明，因为网站可以由注册用户自行上传图片或文字，本网站无法鉴别所上传图片或文字的知识版权，如果侵犯，请及时通知我们，本网站将在第一时间及时删除。</p>
+                    <p><b>凡以任何方式登陆本网站或直接、间接使用本网站者，视为自愿接受本网站声明的约束。</b></p>
+
+                    <h3 id="5">网站地图</h3>
+                    <div>
+                        <a class="btn btn-primary map" style="margin-top:10px;" href="http://localhost">网站首页</a>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary">用户管理</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/login/page.html">用户登陆</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/reg/page.html">用户注册</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/center/page">用户中心</a>
+                        <a class="btn btn-default" href="http://localhost/member/my/crowd">我的众筹</a>
+                        <a class="btn btn-default" href="http://localhost/project/agree/protocol/page">发起众筹</a>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary">管理中心</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/login/page.html">管理员登陆</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/reg/page.html">角色管理</a>
+                        <a class="btn btn-default" href="http://localhost/auth/member/to/center/page">用户管理</a>
+                        <a class="btn btn-default" href="http://localhost/member/my/crowd">审核信息</a>
+                        <a class="btn btn-default" href="http://localhost/project/agree/protocol/page">权限修改</a>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a class="btn btn-primary" href="http://localhost/service/about/me">网站信息</a>
+                    </div>
+
+                    <h3 id="6">联系我们</h3>
+                    <p>客服电话: 400-1000-1000</p>
+                    <p>公司地址: 重庆市北碚区Xxx</p>
+                    <p>商务合作邮箱: pd1829025xxxx@163.com</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top:20px;">
+    <div th:replace="include::footer"></div>
+</div>
+
+
+</body>
+</html>

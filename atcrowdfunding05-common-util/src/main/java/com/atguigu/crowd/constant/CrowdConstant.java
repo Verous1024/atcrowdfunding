@@ -42,5 +42,6 @@ public class CrowdConstant {
     public static final String REDIS_CODE_PREFIX = "REDIS_CODE_PREFIX_";
 
 
-
+    public static final String ATTR_NAME_VIP_PROJECT_1 = "vipProject1";
+    public static final String ATTR_NAME_VIP_PROJECT_2 = "vipProject2";
 }

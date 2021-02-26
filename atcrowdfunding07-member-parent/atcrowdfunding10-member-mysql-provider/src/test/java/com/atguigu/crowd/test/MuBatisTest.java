@@ -3,6 +3,7 @@ package com.atguigu.crowd.test;
 import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
+import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 import com.atguigu.crowd.mapper.MemberPOMapper;
 import com.atguigu.crowd.mapper.ProjectPOMapper;
 import org.junit.Test;
@@ -38,6 +39,13 @@ public class MuBatisTest {
     private ProjectPOMapper projectPOMapper;
 
     private Logger logger = LoggerFactory.getLogger(MuBatisTest.class);
+
+    @Test
+    public void testMapper11() {
+        List<VipProtalProjectVO> vipProtalProjectVOS = projectPOMapper.selectVipProject(2);
+        System.out.println();
+    }
+
 
     @Test
     public void testMapper1() {

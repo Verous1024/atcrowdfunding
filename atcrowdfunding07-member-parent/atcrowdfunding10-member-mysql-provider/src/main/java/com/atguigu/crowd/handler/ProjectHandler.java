@@ -3,6 +3,7 @@ package com.atguigu.crowd.handler;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.entity.vo.ProjectVO;
+import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 import com.atguigu.crowd.service.api.ProjectService;
 import com.atguigu.crowd.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,4 +60,20 @@ public class ProjectHandler {
             return ResultEntity.failed(e.getMessage());
         }
     }
+
+    @RequestMapping("/get/vip/project/data/remote")
+    public ResultEntity<List<VipProtalProjectVO>> getVipProjectDataRemote(){
+        try {
+            List<VipProtalProjectVO> vipProtalProjectVOS =  projectService.getVipProject(1);
+            List<VipProtalProjectVO> vipProtalProjectVOS2 =  projectService.getVipProject(2);
+            for (VipProtalProjectVO vip : vipProtalProjectVOS2) {
+                vipProtalProjectVOS.add(vip);
+            }
+            return ResultEntity.successWithData(vipProtalProjectVOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
 }

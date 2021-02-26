@@ -42,8 +42,6 @@
         </javaClientGenerator>
 
         <!-- 数据库表名字和我们的 entity 类对应的映射指定 -->
-        <table tableName="t_order" domainObjectName="OrderPO"/>
-        <table tableName="t_address" domainObjectName="AddressPO"/>
-        <table tableName="t_order_project" domainObjectName="OrderProjectPO"/>
+        <table tableName="t_advertisement" domainObjectName="AdvertisementPO"/>
     </context>
 </generatorConfiguration>

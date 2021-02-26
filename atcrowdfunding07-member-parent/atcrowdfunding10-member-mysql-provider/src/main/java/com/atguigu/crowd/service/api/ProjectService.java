@@ -3,6 +3,7 @@ package com.atguigu.crowd.service.api;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.entity.vo.ProjectVO;
+import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ProjectService {
     List<PortalTypeVO> getPortalTypeVO();
 
     DetailProjectVO getDetailProjectVO(Integer projectId);
+
+    List<VipProtalProjectVO> getVipProject(Integer vipLevel);
 }

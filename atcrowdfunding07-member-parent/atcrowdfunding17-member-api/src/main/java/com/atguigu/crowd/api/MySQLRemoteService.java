@@ -50,4 +50,7 @@ public interface  MySQLRemoteService {
 
     @RequestMapping("/save/order/remote")
     ResultEntity<String> saveOrderRemote(@RequestBody OrderVO orderVO);
+
+    @RequestMapping("/get/vip/project/data/remote")
+    ResultEntity<List<VipProtalProjectVO>> getVipProjectDataRemote();
 }

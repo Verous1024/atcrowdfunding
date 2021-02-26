@@ -133,4 +133,10 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return detailProjectVO;
     }
+
+    @Override
+    public List<VipProtalProjectVO> getVipProject(Integer vipLevel) {
+        return projectPOMapper.selectVipProject(vipLevel);
+    }
+
 }

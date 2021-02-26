@@ -16,10 +16,13 @@
     <script src="script/docs.min.js"></script>
     <script src="script/back-to-top.js"></script>
     <script>
-        $(".thumbnail img").css("cursor", "pointer");
-        $(".thumbnail img").click(function () {
-            window.location.href = "project.html";
-        });
+
+        $(function () {
+            $(".item").click(function () {
+                var id = this.id;
+                window.location.href="http://localhost:80/project/get/project/detail/"+id;
+            })
+        })
     </script>
     <style>
         h3 {
@@ -224,7 +227,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html" th:href="@{/}"  style="font-size:32px;">西大众筹网-创意产品众筹平台</a>
+                    <a class="navbar-brand" href="index.html" th:href="@{/}" style="font-size:32px;">西大众筹网-创意产品众筹平台</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse" style="float:right;">
                     <ul class="nav navbar-nav navbar-right">
@@ -251,14 +254,19 @@
         <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
     <div class="carousel-inner" role="listbox">
-        <div class="item active" onclick="window.location.href='project.html'" style="cursor:pointer;">
-            <img src="img/carousel-1.jpg" alt="First slide">
+        <!--        <div th:each="vip1 : ${vipProject1}" class="item " onclick="window.location.href='project.html'" style="cursor:pointer;">
+                    <img th:src="${vip1.vipPicPath}" src="img/carousel-1.jpg" alt="加载失败">
+                </div>-->
+        <div class="item active" th:id="${vipProject1[0].projectId}" style="cursor:pointer;">
+            <img th:src="${vipProject1[0].vipPicPath}" src="img/carousel-1.jpg" alt="First slide">
         </div>
-        <div class="item" onclick="window.location.href='project.html'" style="cursor:pointer;">
-            <img src="img/carousel-2.jpg" alt="Second slide">
+
+        <div class="item" th:id="${vipProject1[1].projectId}" style="cursor:pointer;">
+            <img th:src="${vipProject1[1].vipPicPath}" src="img/carousel-2.jpg" alt="Second slide">
         </div>
-        <div class="item" onclick="window.location.href='project.html'" style="cursor:pointer;">
-            <img src="img/carousel-3.jpg" alt="Third slide">
+
+        <div class="item" th:id="${vipProject1[2].projectId}" style="cursor:pointer;">
+            <img th:src=" ${vipProject1[2].vipPicPath}" src="img/carousel-3.jpg" alt="Third slide">
         </div>
     </div>
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -278,28 +286,15 @@
 
 <div class="container marketing">
 
-    <!-- 三个广告栏位 -->
+    <!-- 三个最靠前的众筹项目 -->
     <div class="row"> <!-- 广告栏位 -->
-        <div class="col-lg-4">
-            <img class="img-circle" src="img/p1.jpg" alt="Generic placeholder image"
+        <div th:each="vip2:${vipProject2}" class="col-lg-4">
+            <img class="img-circle" th:src="${vip2.vipPicPath}" src="img/p1.jpg" alt="Generic placeholder image"
                  style="width: 140px; height: 140px;">
-            <h2>智能高清监控机器人</h2>
-            <p>可爱的造型，摄像安防远程互联的全能设计，让你随时随地守护您的家人，陪伴你的生活。</p>
-            <p><a class="btn btn-default" href="project.html" role="button">项目详情 &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-            <img class="img-circle" src="img/p2.jpg" alt="Generic placeholder image"
-                 style="width: 140px; height: 140px;">
-            <h2>NEOKA智能手环</h2>
-            <p>要运动更要安全，这款、名为“蝶舞”的NEOKA-V9100智能运动手环为“安全运动而生”。</p>
-            <p><a class="btn btn-default" href="project.html" role="button">项目详情 &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-            <img class="img-circle" src="img/p3.png" alt="Generic placeholder image"
-                 style="width: 140px; height: 140px;">
-            <h2>驱蚊扣</h2>
-            <p>随处使用的驱蚊纽扣，<br>解决夏季蚊虫问题。</p>
-            <p><a class="btn btn-default" href="project.html" role="button">项目详情 &raquo;</a></p>
+            <h2 th:text="${vip2.projectName}">智能高清监控机器人</h2>
+            <p th:text="${vip2.projectDesc}">可爱的造型，摄像安防远程互联的全能设计，让你随时随地守护您的家人，陪伴你的生活。</p>
+            <p><a class="btn btn-default" th:href="'http://localhost:80/project/get/project/detail/'+${vip2.projectId}"
+                  href="project.html" role="button">项目详情 &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
     </div>
 
@@ -329,7 +324,9 @@
                                                  th:src="${project.headerPicturePath}"/>
                                             <div class="caption">
                                                 <h3 class="break">
-                                                    <a href="project.html" th:href="'http://localhost:80/project/get/project/detail/'+${project.projectId}"  th:text="${project.projectName}">众筹项目名</a>
+                                                    <a href="project.html"
+                                                       th:href="'http://localhost:80/project/get/project/detail/'+${project.projectId}"
+                                                       th:text="${project.projectName}">众筹项目名</a>
                                                 </h3>
                                                 <p>
                                                 <div style="float:left;"><i class="glyphicon glyphicon-screenshot"
@@ -376,10 +373,16 @@
 
 
     <!-- 页脚 -->
-    <div th:replace="include::footer" ></div>
+    <div th:replace="include::footer"></div>
 
 </div><!-- /.container -->
+<script>
+    $(".thumbnail img").css("cursor", "pointer");
+    $(".thumbnail img").click(function () {
+        window.location.href = "project.html";
+    });
 
+</script>
 
 </body>
 </html>

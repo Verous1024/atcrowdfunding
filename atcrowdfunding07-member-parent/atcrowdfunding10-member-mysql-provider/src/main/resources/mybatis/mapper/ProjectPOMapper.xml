@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.atguigu.crowd.mapper.ProjectPOMapper">
 
+
+
+
+
     <!-- 自定义的：用户点击首页的项目时，可以转发到的位置，需要的详细的项目和回报信息  -->
     <resultMap type="com.atguigu.crowd.entity.vo.DetailProjectVO" id="loadProjectDetailResultMap">
         <id column="id" property="projectId"/>
@@ -67,6 +71,19 @@
         where id=#{projectId}
     </select>
 
+    <!--List<VipProtalProjectVO> selectVipProject()获取vip产品-->
+    <select id="selectVipProject" resultType="com.atguigu.crowd.entity.vo.VipProtalProjectVO">
+        select
+        project_id projectId,
+        vip_level vipLevel,
+        vip_pic_url vipPicPath,
+        project_description projectDesc,
+        project_name projectName
+        from t_project_vip
+        left JOIN t_project ON t_project_vip.project_id = t_project.id
+        WHERE t_project_vip.vip_level = #{id}
+        LIMIT 0,3
+    </select>
 
     <!-- 自定义的：首页加载项目的简单信息查询sql -->
     <resultMap type="com.atguigu.crowd.entity.vo.PortalTypeVO" id="loadPortalProjectListResultMap">

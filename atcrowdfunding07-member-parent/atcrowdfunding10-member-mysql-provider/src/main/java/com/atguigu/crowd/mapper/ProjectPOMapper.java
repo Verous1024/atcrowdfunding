@@ -4,6 +4,7 @@ import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.po.ProjectPOExample;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
+import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,4 +39,6 @@ public interface ProjectPOMapper {
     List<PortalTypeVO> selectPortalTypeVOList();
 
     DetailProjectVO selectDetailProjectVO(Integer projectId);
+
+    List<VipProtalProjectVO> selectVipProject(Integer vipLevel);
 }
