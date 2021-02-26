@@ -3,9 +3,12 @@ package com.atguigu.crowd.handler;
 import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.config.OSSProperties;
 import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +39,38 @@ public class ProjectConsumerHandler {
     @Autowired
     private MySQLRemoteService mySQLRemoteService;
 
+    private Logger logger = LoggerFactory.getLogger(ProjectConsumerHandler.class);
+
+
+    @RequestMapping("/get/all/project")
+    public String getAllProject(
+            @RequestParam(value = "typeId", required = false) Integer typeId,
+            @RequestParam(value = "status", required = false) Integer status,
+            @RequestParam(value = "orderType", required = false) Integer orderType,
+            Model model) {
+        logger.info("typeId="+typeId);
+        logger.info("status="+status);
+        logger.info("orderType="+orderType);
+        ResultEntity<List<ProjectPO>> allProjectWithType = mySQLRemoteService.getAllProjectWithType(typeId, status, orderType);
+        if (ResultEntity.SUCCESS.equals(allProjectWithType.getResult())) {
+            List<ProjectPO> data = allProjectWithType.getData();
+            model.addAttribute("allFindProject", data);
+            if(typeId==null){typeId=100;}
+            if(status==null){status=100;}
+            if(orderType==null){orderType=100;}
+            model.addAttribute("typeId", typeId);
+            model.addAttribute("status", status);
+            model.addAttribute("orderType", orderType);
+            model.addAttribute("size", data.size());
+        }
+        return "project-all";
+    }
+
+
     @RequestMapping("/get/project/detail/{projectId}")
     public String getProjectDetail(@PathVariable("projectId") Integer projectId, Model model) {
         ResultEntity<DetailProjectVO> resultEntity = mySQLRemoteService.getDetailProjectVORemote(projectId);
-        if(ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+        if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
             DetailProjectVO detailProjectVO = resultEntity.getData();
             model.addAttribute("detailProjectVO", detailProjectVO);
         }
@@ -52,7 +83,7 @@ public class ProjectConsumerHandler {
             memberConfirmInfoVO) {
         // 1.从 Session域读取之前临时存储的 ProjectVO对象
         ProjectVO projectVO = (ProjectVO) session.getAttribute(CrowdConstant.ATTR_NAME_TEMPLE_PROJECT);
-        System.out.println("产品"+projectVO);
+        System.out.println("产品" + projectVO);
         // 2.如果 projectVO为  null
         if (projectVO == null) {
             throw new RuntimeException(CrowdConstant.MESSAGE_TEMPLE_PROJECT_MISSING);
@@ -61,7 +92,7 @@ public class ProjectConsumerHandler {
         projectVO.setMemberConfirmInfoVO(memberConfirmInfoVO);
         // 4.从 Session域读取当前登录的用户
         MemberLoginVO memberLoginVO = (MemberLoginVO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
-        System.out.println("登陆用户"+memberLoginVO);
+        System.out.println("登陆用户" + memberLoginVO);
         Integer memberId = memberLoginVO.getId();
         // 5.调用远程方法保存 projectVO对象
         ResultEntity<String> saveResultEntity = mySQLRemoteService.saveProjectVORemote(projectVO, memberId);

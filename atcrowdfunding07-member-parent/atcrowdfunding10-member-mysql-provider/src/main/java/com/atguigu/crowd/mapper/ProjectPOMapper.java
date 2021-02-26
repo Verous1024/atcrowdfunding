@@ -41,4 +41,6 @@ public interface ProjectPOMapper {
     DetailProjectVO selectDetailProjectVO(Integer projectId);
 
     List<VipProtalProjectVO> selectVipProject(Integer vipLevel);
+
+    List<ProjectPO> selectAllProjectWithType(@Param("typeId")Integer typeId,@Param("status")Integer status,@Param("OrderType")Integer orderType);
 }

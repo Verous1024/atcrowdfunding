@@ -1,5 +1,6 @@
 package com.atguigu.crowd.service.api;
 
+import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.entity.vo.ProjectVO;
@@ -21,4 +22,6 @@ public interface ProjectService {
     DetailProjectVO getDetailProjectVO(Integer projectId);
 
     List<VipProtalProjectVO> getVipProject(Integer vipLevel);
+
+    List<ProjectPO> getAllProject(Integer typeId, Integer status, Integer orderType);
 }

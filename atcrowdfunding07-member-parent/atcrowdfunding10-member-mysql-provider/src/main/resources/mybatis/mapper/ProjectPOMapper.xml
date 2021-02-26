@@ -199,6 +199,42 @@
     id, project_name, project_description, money, day, status, deploydate, supportmoney, 
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
+
+    <!--查询所有的项目,同时携带该项目所在的位置-->
+    <!--List<ProjectPO> selectAllProjectWithType
+    (@Param("typeId")Integer typeId,
+    @Param("status")Integer status,
+    @Param("OrderType")Integer orderType);-->
+    <select id="selectAllProjectWithType" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+      from t_project
+      where 1 = 1
+        <if test="typeId != null">
+            and t_project.id in
+            (select t_project_type.projectid
+            from t_project_type
+            where t_project_type.typeid = #{typeId})
+        </if>
+        <if test="status !=null">
+             and t_project.status=#{status}
+        </if>
+       ORDER BY
+        <if test="OrderType == 0">
+            t_project.deploydate DESC
+        </if>
+        <if test="OrderType == 1">
+            t_project.money DESC
+
+        </if>
+        <if test="OrderType == 2">
+            t_project.supporter DESC
+        </if>
+        <if test="OrderType ==null">
+            t_project.id
+        </if>
+    </select>
+
     <!--void insertTypeRelationship(@Param("typeIdList") List<Integer> typeIdList,@Param("projectId") Integer projectId);-->
     <insert id="insertTypeRelationship">
         insert into t_project_type(`projectid`,`typeid`) values

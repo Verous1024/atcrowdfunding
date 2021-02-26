@@ -1,6 +1,7 @@
 package com.atguigu.crowd.api;
 
 import com.atguigu.crowd.entity.po.MemberPO;
+import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.util.ResultEntity;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -53,4 +54,10 @@ public interface  MySQLRemoteService {
 
     @RequestMapping("/get/vip/project/data/remote")
     ResultEntity<List<VipProtalProjectVO>> getVipProjectDataRemote();
+
+    @RequestMapping("/get/all/project/with/type")
+    ResultEntity<List<ProjectPO>> getAllProjectWithType(
+            @RequestParam(value="typeId",required = false) Integer typeId,
+            @RequestParam(value="status",required = false) Integer status,
+            @RequestParam(value="orderType",required = false) Integer orderType);
 }

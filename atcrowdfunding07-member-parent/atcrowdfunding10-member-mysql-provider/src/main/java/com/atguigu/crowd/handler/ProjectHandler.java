@@ -1,11 +1,14 @@
 package com.atguigu.crowd.handler;
 
+import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.entity.vo.ProjectVO;
 import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 import com.atguigu.crowd.service.api.ProjectService;
 import com.atguigu.crowd.util.ResultEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,27 @@ import java.util.List;
 public class ProjectHandler {
     @Autowired
     private ProjectService projectService;
+
+    private Logger logger = LoggerFactory.getLogger(ProjectHandler.class);
+    //获取所有的值:
+    @RequestMapping("/get/all/project/with/type")
+    ResultEntity<List<ProjectPO>> getAllProjectWithType(
+            @RequestParam(value="typeId",required = false) Integer typeId,
+            @RequestParam(value="status",required = false) Integer status,
+            @RequestParam(value="orderType",required = false) Integer orderType){
+        logger.info("typeId="+typeId);
+        logger.info("status="+status);
+        logger.info("orderType="+orderType);
+        try {
+            List<ProjectPO> allProject = projectService.getAllProject(typeId, status, orderType);
+            return ResultEntity.successWithData(allProject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+
 
     //关键点：除请求参数外，还可以使用projectId路径参数来进行设置
     @RequestMapping("/get/project/detail/remote/{projectId}")

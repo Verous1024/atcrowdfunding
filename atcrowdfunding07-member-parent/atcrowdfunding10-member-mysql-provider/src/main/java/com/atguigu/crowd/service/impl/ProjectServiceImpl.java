@@ -139,4 +139,9 @@ public class ProjectServiceImpl implements ProjectService {
         return projectPOMapper.selectVipProject(vipLevel);
     }
 
+    @Override
+    public List<ProjectPO> getAllProject(Integer typeId, Integer status, Integer orderType) {
+        return projectPOMapper.selectAllProjectWithType(typeId,status,orderType);
+    }
+
 }
