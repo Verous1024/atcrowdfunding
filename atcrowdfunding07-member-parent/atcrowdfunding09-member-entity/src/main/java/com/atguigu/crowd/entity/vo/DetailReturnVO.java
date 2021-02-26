@@ -30,5 +30,7 @@ public class DetailReturnVO {
     private Integer returnDate;
     //回报内容
     private String content;
+    //现额人数
+    private Integer count;
 }
 

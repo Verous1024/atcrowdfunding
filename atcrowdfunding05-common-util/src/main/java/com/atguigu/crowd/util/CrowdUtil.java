@@ -13,13 +13,10 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.comm.ResponseMessage;
 import com.aliyun.oss.model.PutObjectResult;
 import com.atguigu.crowd.constant.CrowdConstant;
-import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;

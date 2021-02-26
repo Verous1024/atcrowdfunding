@@ -51,7 +51,5 @@ public class MemberProviderHandler {
             e.printStackTrace();
             return ResultEntity.failed(e.getMessage());
         }
-
-
     }
 }

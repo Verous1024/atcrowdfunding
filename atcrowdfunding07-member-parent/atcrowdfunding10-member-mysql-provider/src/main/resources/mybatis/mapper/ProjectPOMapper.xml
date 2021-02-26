@@ -43,7 +43,8 @@
         signalpurchase signalPurchase,
         purchase,
         freight,
-        returndate returnDate
+        returndate returnDate,
+        `count`
         from t_return
         where projectid=#{id}
     </select>
