@@ -32,6 +32,57 @@ import java.util.UUID;
  */
 public class CrowdUtil {
 
+    /** 省份证号码验证，需要号码/名字
+     * @param cardNum
+     * @param name
+     * @return
+     */
+    public static ResultEntity<String> sendCardByShortMessage(String cardNum, String name) {
+        String host = "https://dfidveri.market.alicloudapi.com";
+        String path = "/verify_id_name";
+        String method = "POST";
+        String appcode = "493cbdd6fcfb45a99bbc3dfb86b1bfc1";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        //根据API的要求，定义相对应的Content-Type
+        headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+        Map<String, String> querys = new HashMap<String, String>();
+
+        Map<String, String> bodys = new HashMap<String, String>();
+        bodys.put("id_number", cardNum);
+        bodys.put("name", name);
+
+
+        try {
+            /**
+             * 重要提示如下:
+             * HttpUtils请从
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+             * 下载
+             * 相应的依赖请参照
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+             */
+            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+            //获取response的body
+            String responseBody = EntityUtils.toString(response.getEntity());
+            System.out.println(responseBody);
+            if (responseBody.contains("OK")) { //进行了验证 --- 100
+                if (responseBody.contains("100")) {
+                    return ResultEntity.successWithoutData();
+                }
+                return  ResultEntity.failed("身份不一致");
+            } else {
+                return ResultEntity.failed("服务器验证号码过程失效!等待后台维护！").setCodeWithRe("200"); // 200
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed("服务器出现异常").setCodeWithRe("200");
+        }
+    }
+
 
     /**
      * 专门负责上传文件到 OSS 服务器的工具方法
@@ -105,11 +156,6 @@ public class CrowdUtil {
         }
     }
 
-/*    public static void main(String[] args) throws FileNotFoundException {
-        FileInputStream inputStream = new FileInputStream("beauty.jpg");
-        ResultEntity<String> resultEntity = CrowdUtil.uploadFileToOss("http://oss-cn-chengdu.aliyuncs.com", "LTAI4G5UUmcckQKxtnoEo3yV", "710Br6Gv50nYVR0mjbbMspu440SK5r", inputStream, "verous1024", "http://verous1024.oss-cn-chengdu.aliyuncs.com", "beauty.jpg");
-        System.out.println(resultEntity);
-    }*/
 
     /**
      * 返回状态码，JSON数据中的0表示成功，1403表示手机号码不正确，1905验证不通过

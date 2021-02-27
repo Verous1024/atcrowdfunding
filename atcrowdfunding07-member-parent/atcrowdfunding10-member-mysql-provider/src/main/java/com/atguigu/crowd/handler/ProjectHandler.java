@@ -26,6 +26,44 @@ public class ProjectHandler {
     private ProjectService projectService;
 
     private Logger logger = LoggerFactory.getLogger(ProjectHandler.class);
+
+
+    @RequestMapping("/get/my/support")
+    ResultEntity<List<ProjectPO>> getMySupport(@RequestParam("memberId") Integer memberId){
+        try {
+            List<ProjectPO> mySupport = projectService.getMySupport(memberId);
+            return ResultEntity.successWithData(mySupport);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+    @RequestMapping("/get/my/focus")
+    ResultEntity<List<ProjectPO>> getMyFocus(@RequestParam("memberId") Integer memberId){
+        try {
+            List<ProjectPO> myFocus = projectService.getMyFocus(memberId);
+            return ResultEntity.successWithData(myFocus);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+
+    @RequestMapping("/get/my/project")
+    ResultEntity<List<ProjectPO>> getMyProject(@RequestParam("memberId") Integer memberId){
+        try {
+            List<ProjectPO> myProject = projectService.getMyProject(memberId);
+            return ResultEntity.successWithData(myProject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+
+
     //获取所有的值:
     @RequestMapping("/get/all/project/with/type")
     ResultEntity<List<ProjectPO>> getAllProjectWithType(

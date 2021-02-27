@@ -24,4 +24,10 @@ public interface ProjectService {
     List<VipProtalProjectVO> getVipProject(Integer vipLevel);
 
     List<ProjectPO> getAllProject(Integer typeId, Integer status, Integer orderType);
+
+    List<ProjectPO> getMySupport(Integer memberId);
+
+    List<ProjectPO> getMyProject(Integer memberId);
+
+    List<ProjectPO> getMyFocus(Integer memberId);
 }

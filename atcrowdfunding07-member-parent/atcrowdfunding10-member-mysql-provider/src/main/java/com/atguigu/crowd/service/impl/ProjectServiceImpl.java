@@ -1,9 +1,6 @@
 package com.atguigu.crowd.service.impl;
 
-import com.atguigu.crowd.entity.po.MemberConfirmInfoPO;
-import com.atguigu.crowd.entity.po.MemberLaunchInfoPO;
-import com.atguigu.crowd.entity.po.ProjectPO;
-import com.atguigu.crowd.entity.po.ReturnPO;
+import com.atguigu.crowd.entity.po.*;
 import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.mapper.*;
 import com.atguigu.crowd.service.api.ProjectService;
@@ -144,4 +141,24 @@ public class ProjectServiceImpl implements ProjectService {
         return projectPOMapper.selectAllProjectWithType(typeId,status,orderType);
     }
 
+    @Override
+    public List<ProjectPO> getMySupport(Integer memberId) {
+
+    }
+
+    @Override
+    public List<ProjectPO> getMyProject(Integer memberId) {
+        AddressPOExample example = new AddressPOExample();
+        example.createCriteria().andMemberIdEqualTo(memberId);
+        ProjectPOExample projectPOExample = new ProjectPOExample();
+        projectPOExample.createCriteria().andMemberidEqualTo(memberId);
+        return projectPOMapper.selectByExample(projectPOExample);
+    }
+
+    @Override
+    public List<ProjectPO> getMyFocus(Integer memberId) {
+        return projectPOMapper.selectMyFocus(memberId);
+    }
+
+    //如果是保存，需要填写修改事务等级
 }

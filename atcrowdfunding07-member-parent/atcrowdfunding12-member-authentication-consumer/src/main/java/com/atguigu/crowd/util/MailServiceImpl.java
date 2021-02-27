@@ -1,6 +1,9 @@
 package com.atguigu.crowd.util;
 
 
+import com.atguigu.crowd.handler.MemberHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,7 +25,7 @@ public class MailServiceImpl implements MailService {
  
     @Autowired
     private JavaMailSender mailSender;
-
+    private Logger logger = LoggerFactory.getLogger(MemberHandler.class);
 
     private String form = "pd18290259402@163.com";
     /**
@@ -42,15 +45,15 @@ public class MailServiceImpl implements MailService {
         mailMessage.setText(content);
         try {
             mailSender.send(mailMessage);
-            System.out.println("发送简单邮件");
+            logger.info("发送简单邮件成功");
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("发送简单邮件失败");
+            logger.info("发送简单邮件失败");
         }
     }
 
     @Override
-    public void sendHtmlMail(String to, String subject, String content) {
+    public boolean sendHtmlMail(String to, String subject, String content) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             //true表示需要创建一个multipart message
@@ -60,10 +63,12 @@ public class MailServiceImpl implements MailService {
             helper.setSubject(subject);
             helper.setText(content,true); //开启HTML格式的邮箱
             mailSender.send(message);
-            System.out.println("html格式邮件发送成功");
+            logger.info("发送HTML邮件成功");
+            return true;
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("html格式邮件发送失败");
+            logger.info("发送HTML邮件失败");
+            return false;
         }
     }
 }

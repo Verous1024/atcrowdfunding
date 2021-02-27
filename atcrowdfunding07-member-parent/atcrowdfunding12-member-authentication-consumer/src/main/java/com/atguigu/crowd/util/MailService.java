@@ -15,5 +15,5 @@ public interface MailService {
      * @param content
      */
     void sendMail(String to,String subject,String content);
-    void sendHtmlMail(String to,String subject,String content);
+    boolean sendHtmlMail(String to,String subject,String content);
 }

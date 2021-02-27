@@ -23,6 +23,18 @@ public class MemberProviderHandler {
     @Autowired
     private MemberService memberService;
 
+    @RequestMapping("/update/member")
+    public ResultEntity<String> updateMember(@RequestBody MemberPO loginMember){
+        try {
+            memberService.updateMember(loginMember);
+            return ResultEntity.successWithoutData();
+        } catch (Exception e) {
+            if (e instanceof DuplicateKeyException) {
+                return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
 
     //通过远程接口调用mysql工程的请求时，必须要有@RequestBody
     @RequestMapping("/save/member/remote")

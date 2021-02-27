@@ -14,21 +14,6 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="script/docs.min.js"></script>
     <script src="script/back-to-top.js"></script>
-    <script>
-        $(function () {
-            $("#launchCrowdBtn").click(function () {
-                window.location.href = "http://localhost:80/project/agree/protocol/page"
-            });
-            $('#myTab a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show')
-            });
-            $('#myTab1 a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show')
-            });
-        })
-    </script>
     <style>
         #footer {
             padding: 15px 0;
@@ -68,6 +53,27 @@
         }
 
     </style>
+    <script>
+        $(function () {
+            $("#launchCrowdBtn").click(function () {
+                window.location.href = "http://localhost:80/project/agree/protocol/page"
+            });
+            $('#myTab a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show')
+            });
+            $('#myTab1 a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show')
+            });
+
+            $(function () {
+                $("#applyBtn").click(function () {
+                    window.location.href="http://localhost/identity/select"
+                })
+            })
+        })
+    </script>
 </head>
 <body>
 <!-- 头部信息 -->
@@ -85,14 +91,16 @@
                             <h3>
                                 [[${session.loginMember.username}]]
                             </h3>
-                            <span class="label label-danger" style="cursor:pointer;" onclick="window.location.href='cert.html'">未实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==0}" id="applyBtn" class="label label-danger" style="cursor:pointer;">未实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==1}" id="applyBtn" class="label label-info" style="cursor:pointer;">实名认证申请中</span>
+                            <span th:if="${session.loginMember.authstatus==2}" id="applyBtn" class="label label-success" style="cursor:pointer;">已完成实名认证</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="list-group">
                 <div class="list-group-item" style="cursor:pointer;" onclick="window.location.href='member.html'">
-                    资产总览<span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
+                    <a th:href="@{/auth/member/to/center/page}">资产总览</a><span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
                 </div>
                 <div class="list-group-item active">
                     我的众筹<span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
@@ -115,7 +123,9 @@
                             <button id="launchCrowdBtn" type="button" class="btn btn-warning">发起众筹</button>
                         </li>
                     </ul>
+
                     <div id="myTab2" class="tab-content" style="margin-top:10px;">
+                        <!--我支持的-->
                         <div role="tabpanel" class="tab-pane fade active in" id="support" aria-labelledby="home-tab">
                             <div class="container-fluid">
                                 <div class="row clearfix">
@@ -209,6 +219,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--我关注的-->
                         <div role="tabpanel" class="tab-pane fade" id="attension" aria-labelledby="attension-tab">
                             <div class="container-fluid">
                                 <div class="row clearfix">
@@ -260,12 +271,13 @@
                                 </div>
                             </div>
                         </div>
+                        <!--我发起的-->
                         <div role="tabpanel" class="tab-pane fade  " id="add" aria-labelledby="add-tab">
                             <div class="container-fluid">
                                 <div class="row clearfix">
-                                    <div class="col-md-12 column">
+                                    <!--<div class="col-md-12 column">
                                         <span class="label label-warning">全部</span> <span class="label" style="color:#000;">众筹中</span> <span class="label " style="color:#000;">众筹成功</span>  <span class="label " style="color:#000;">众筹失败</span>
-                                    </div>
+                                    </div>-->
                                     <div class="col-md-12 column" style="padding:0;margin-top:10px;">
                                         <table class="table table-bordered" style="text-align:center;">
                                             <thead>

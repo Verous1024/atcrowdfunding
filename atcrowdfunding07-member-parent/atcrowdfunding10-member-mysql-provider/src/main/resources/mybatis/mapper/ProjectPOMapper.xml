@@ -200,6 +200,14 @@
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
 
+    <!-- List<ProjectPO> selectMyFocus(Integer memberId); -->
+    <select id="selectMyFocus" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM t_project
+    WHERE t_project.id IN
+    (SELECT t_project_focus.project_id FROM t_project_focus  WHERE t_project_focus.member_id = #{memberId})
+    </select>
+
     <!--查询所有的项目,同时携带该项目所在的位置-->
     <!--List<ProjectPO> selectAllProjectWithType
     (@Param("typeId")Integer typeId,

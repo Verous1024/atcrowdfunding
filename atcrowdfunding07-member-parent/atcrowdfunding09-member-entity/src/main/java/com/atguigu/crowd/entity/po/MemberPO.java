@@ -1,6 +1,12 @@
 package com.atguigu.crowd.entity.po;
 
-public class MemberPO {
+import lombok.ToString;
+
+import java.io.Serializable;
+
+@ToString
+public class MemberPO implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
 
     private String loginacct;

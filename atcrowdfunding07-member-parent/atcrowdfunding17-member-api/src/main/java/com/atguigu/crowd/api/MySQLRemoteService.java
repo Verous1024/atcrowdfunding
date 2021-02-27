@@ -20,7 +20,7 @@ import java.util.List;
  * @version 1.0 2021-02-21 下午 01:03
  */
 @FeignClient("atguigu-crowd-mysql")
-public interface  MySQLRemoteService {
+public interface MySQLRemoteService {
 
     @RequestMapping("/get/project/detail/remote/{projectId}")
     ResultEntity<DetailProjectVO> getDetailProjectVORemote(@PathVariable("projectId") Integer projectId);
@@ -34,7 +34,7 @@ public interface  MySQLRemoteService {
 
     //注意：实体类需要添加@RequestBody，单个的需要添加@RequestParam
     @RequestMapping("/save/project/vo/remote")
-    ResultEntity<String> saveProjectVORemote(@RequestBody ProjectVO projectVO,@RequestParam("memberId")  Integer memberId);
+    ResultEntity<String> saveProjectVORemote(@RequestBody ProjectVO projectVO, @RequestParam("memberId") Integer memberId);
 
     @RequestMapping("/get/portal/type/project/data/remote")
     ResultEntity<List<PortalTypeVO>> getPortalTypeProjectDataRemote();
@@ -57,7 +57,20 @@ public interface  MySQLRemoteService {
 
     @RequestMapping("/get/all/project/with/type")
     ResultEntity<List<ProjectPO>> getAllProjectWithType(
-            @RequestParam(value="typeId",required = false) Integer typeId,
-            @RequestParam(value="status",required = false) Integer status,
-            @RequestParam(value="orderType",required = false) Integer orderType);
+            @RequestParam(value = "typeId", required = false) Integer typeId,
+            @RequestParam(value = "status", required = false) Integer status,
+            @RequestParam(value = "orderType", required = false) Integer orderType);
+
+
+    @RequestMapping("/update/member")
+    ResultEntity<String> updateMember(@RequestBody MemberPO loginMember);
+
+    @RequestMapping("/get/my/support")
+    ResultEntity<List<ProjectPO>> getMySupport(@RequestParam("memberId") Integer memberId);
+
+    @RequestMapping("/get/my/focus")
+    ResultEntity<List<ProjectPO>> getMyFocus(@RequestParam("memberId") Integer memberId);
+
+    @RequestMapping("/get/my/project")
+    ResultEntity<List<ProjectPO>> getMyProject(@RequestParam("memberId") Integer memberId);
 }

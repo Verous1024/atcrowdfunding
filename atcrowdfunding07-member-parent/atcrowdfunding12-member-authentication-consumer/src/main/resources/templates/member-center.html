@@ -55,7 +55,13 @@
     <script src="script/docs.min.js"></script>
     <script src="script/back-to-top.js"></script>
     <script src="script/echarts.js"></script>
-
+    <script>
+        $(function () {
+            $("#applyBtn").click(function () {
+                window.location.href="http://localhost/identity/select"
+            })
+        })
+    </script>
 </head>
 <body>
 <!-- 头部信息 -->
@@ -73,8 +79,9 @@
                             <h3>
                                 [[${session.loginMember.username}]]
                             </h3>
-                            <span class="label label-danger" style="cursor:pointer;"
-                                  onclick="window.location.href='accttype.html'">未实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==0}" id="applyBtn" class="label label-danger" style="cursor:pointer;">未实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==1}" id="applyBtn" class="label label-info" style="cursor:pointer;">实名认证申请中</span>
+                            <span th:if="${session.loginMember.authstatus==2}" id="applyBtn" class="label label-success" style="cursor:pointer;">已完成实名认证</span>
                         </div>
                     </div>
                 </div>

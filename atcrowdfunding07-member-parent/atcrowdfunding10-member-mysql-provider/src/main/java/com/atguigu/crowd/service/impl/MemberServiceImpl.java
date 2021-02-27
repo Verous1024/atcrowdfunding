@@ -4,6 +4,8 @@ import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.po.MemberPOExample;
 import com.atguigu.crowd.mapper.MemberPOMapper;
 import com.atguigu.crowd.service.api.MemberService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberPOMapper memberPOMapper;
+    private Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     @Override
     public MemberPO getMemberPOByLoginAcct(String loginacct) {
@@ -44,6 +47,15 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class,readOnly = false)
     @Override
     public void saveMember(MemberPO memberPO) {
+        logger.info(memberPO.toString());
         memberPOMapper.insertSelective(memberPO);
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class,readOnly = false)
+    @Override
+    public void updateMember(MemberPO loginMember) {
+        logger.info(loginMember.toString());
+        memberPOMapper.updateByPrimaryKey(loginMember);
     }
 }

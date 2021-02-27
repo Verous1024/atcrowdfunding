@@ -12,4 +12,6 @@ public interface MemberService {
     MemberPO getMemberPOByLoginAcct(String loginacct);
 
     void saveMember(MemberPO memberPO);
+
+    void updateMember(MemberPO loginMember);
 }
