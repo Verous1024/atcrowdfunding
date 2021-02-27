@@ -4,7 +4,10 @@ import com.atguigu.crowd.entity.vo.AddressVO;
 import com.atguigu.crowd.entity.vo.OrderProjectVO;
 import com.atguigu.crowd.entity.vo.OrderVO;
 import com.atguigu.crowd.service.api.OrderService;
+import com.atguigu.crowd.service.impl.OrderServiceImpl;
 import com.atguigu.crowd.util.ResultEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +27,14 @@ public class OrderProviderHandler {
 
     @Autowired
     private OrderService orderService;
-
+    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @RequestMapping("/save/order/remote")
-    public ResultEntity<String> saveOrderRemote(@RequestBody OrderVO orderVO){
+    public ResultEntity<String> saveOrderRemote(@RequestBody OrderVO orderVO) {
         try {
-              orderService.saveOrder(orderVO);
-              return  ResultEntity.successWithoutData();
+            logger.info(orderVO.toString());
+            orderService.saveOrder(orderVO);
+            return ResultEntity.successWithoutData();
         } catch (Exception e) {
             e.printStackTrace();
             return ResultEntity.failed(e.getMessage());
@@ -50,7 +54,7 @@ public class OrderProviderHandler {
     }
 
     @RequestMapping("/get/address/vo/remote")
-    public ResultEntity<List<AddressVO>> getAddressVORemote(@RequestParam("memberId")  Integer memberId) {
+    public ResultEntity<List<AddressVO>> getAddressVORemote(@RequestParam("memberId") Integer memberId) {
         try {
             List<AddressVO> addressVOList = orderService.getAddressVOList(memberId);
             return ResultEntity.successWithData(addressVOList);

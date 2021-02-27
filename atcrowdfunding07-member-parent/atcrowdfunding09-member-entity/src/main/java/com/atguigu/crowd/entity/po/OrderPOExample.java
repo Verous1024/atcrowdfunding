@@ -633,6 +633,126 @@ public class OrderPOExample {
             addCriterion("address_id not between", value1, value2, "addressId");
             return (Criteria) this;
         }
+
+        public Criteria andProjectIdIsNull() {
+            addCriterion("project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIsNotNull() {
+            addCriterion("project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdEqualTo(Integer value) {
+            addCriterion("project_id =", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotEqualTo(Integer value) {
+            addCriterion("project_id <>", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThan(Integer value) {
+            addCriterion("project_id >", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("project_id >=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThan(Integer value) {
+            addCriterion("project_id <", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThanOrEqualTo(Integer value) {
+            addCriterion("project_id <=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIn(List<Integer> values) {
+            addCriterion("project_id in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotIn(List<Integer> values) {
+            addCriterion("project_id not in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdBetween(Integer value1, Integer value2) {
+            addCriterion("project_id between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("project_id not between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdIsNull() {
+            addCriterion("return_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdIsNotNull() {
+            addCriterion("return_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdEqualTo(Integer value) {
+            addCriterion("return_id =", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdNotEqualTo(Integer value) {
+            addCriterion("return_id <>", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdGreaterThan(Integer value) {
+            addCriterion("return_id >", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("return_id >=", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdLessThan(Integer value) {
+            addCriterion("return_id <", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdLessThanOrEqualTo(Integer value) {
+            addCriterion("return_id <=", value, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdIn(List<Integer> values) {
+            addCriterion("return_id in", values, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdNotIn(List<Integer> values) {
+            addCriterion("return_id not in", values, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdBetween(Integer value1, Integer value2) {
+            addCriterion("return_id between", value1, value2, "returnId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("return_id not between", value1, value2, "returnId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

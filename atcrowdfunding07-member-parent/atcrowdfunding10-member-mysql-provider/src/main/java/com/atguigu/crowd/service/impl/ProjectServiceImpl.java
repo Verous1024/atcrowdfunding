@@ -142,14 +142,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectPO> getMySupport(Integer memberId) {
-
+    public List<MySupportVO> getMySupport(Integer memberId) {
+        return projectPOMapper.selectMysupport(memberId);
     }
 
     @Override
     public List<ProjectPO> getMyProject(Integer memberId) {
-        AddressPOExample example = new AddressPOExample();
-        example.createCriteria().andMemberIdEqualTo(memberId);
         ProjectPOExample projectPOExample = new ProjectPOExample();
         projectPOExample.createCriteria().andMemberidEqualTo(memberId);
         return projectPOMapper.selectByExample(projectPOExample);

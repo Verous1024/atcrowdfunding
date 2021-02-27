@@ -2,8 +2,8 @@ package com.atguigu.crowd.handler;
 
 import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.vo.AddressVO;
-import com.atguigu.crowd.entity.vo.MemberLoginVO;
 import com.atguigu.crowd.entity.vo.OrderProjectVO;
 import com.atguigu.crowd.util.ResultEntity;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class OrderHandler {
         orderProjectVO.setReturnCount(returnCount);
         session.setAttribute("orderProjectVO", orderProjectVO);
         // 2.获取当前已登录用户的id
-        MemberLoginVO memberLoginVO = (MemberLoginVO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
+        MemberPO memberLoginVO = (MemberPO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
         Integer memberId = memberLoginVO.getId();
         // 3.查询目前的收货地址数据
         ResultEntity<List<AddressVO>> resultEntity = mySQLRemoteService.getAddressVORemote(memberId);
@@ -70,6 +70,8 @@ public class OrderHandler {
         if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
             OrderProjectVO orderProjectVO = resultEntity.getData();
             session.setAttribute("orderProjectVO", orderProjectVO);
+            session.setAttribute("orderedProjectId",projectId);
+            session.setAttribute("orderedReturnId",returnId);
         }
         return "confirm-return";
     }

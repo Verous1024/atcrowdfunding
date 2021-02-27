@@ -200,6 +200,28 @@
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
 
+    <!--List<MySupportVO> selectMysupport(Integer memberId);-->
+    <select id="selectMysupport" resultType="com.atguigu.crowd.entity.vo.MySupportVO">
+        SELECT
+        t_project.id projectId,
+        t_project.project_name  projectName,
+        t_project.money	money,
+        t_project.supportmoney	supportmoney,
+        t_project.status	status,
+        t_project.deploydate	deploydate,
+        t_project.day `day`,
+        t_order.order_num	orderNum,
+        t_order.order_amount	orderAmount,
+        t_order_project.return_count	returnCount,
+        t_return.freight	freight
+        FROM t_order
+        LEFT JOIN t_project ON t_project.id = t_order.project_id
+        LEFT JOIN t_order_project ON t_order.id = t_order_project.order_id
+        LEFT JOIN t_return ON t_return.id = t_order.return_id
+        WHERE t_order.address_id IN
+        (SELECT id FROM t_address WHERE t_address.member_id = #{memberId})
+    </select>
+
     <!-- List<ProjectPO> selectMyFocus(Integer memberId); -->
     <select id="selectMyFocus" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List"/>

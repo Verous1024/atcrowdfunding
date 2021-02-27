@@ -17,6 +17,10 @@ public class OrderPO {
 
     private String addressId;
 
+    private Integer projectId;
+
+    private Integer returnId;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +83,21 @@ public class OrderPO {
 
     public void setAddressId(String addressId) {
         this.addressId = addressId == null ? null : addressId.trim();
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Integer getReturnId() {
+        return returnId;
+    }
+
+    public void setReturnId(Integer returnId) {
+        this.returnId = returnId;
     }
 }

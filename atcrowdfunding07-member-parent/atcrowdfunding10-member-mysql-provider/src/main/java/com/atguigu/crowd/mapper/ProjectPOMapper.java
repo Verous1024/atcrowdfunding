@@ -3,6 +3,7 @@ package com.atguigu.crowd.mapper;
 import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.po.ProjectPOExample;
 import com.atguigu.crowd.entity.vo.DetailProjectVO;
+import com.atguigu.crowd.entity.vo.MySupportVO;
 import com.atguigu.crowd.entity.vo.PortalTypeVO;
 import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
 import org.apache.ibatis.annotations.Param;
@@ -45,4 +46,6 @@ public interface ProjectPOMapper {
     List<ProjectPO> selectAllProjectWithType(@Param("typeId")Integer typeId,@Param("status")Integer status,@Param("OrderType")Integer orderType);
 
     List<ProjectPO> selectMyFocus(Integer memberId);
+
+    List<MySupportVO> selectMysupport(Integer memberId);
 }

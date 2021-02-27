@@ -1,10 +1,7 @@
 package com.atguigu.crowd.service.api;
 
 import com.atguigu.crowd.entity.po.ProjectPO;
-import com.atguigu.crowd.entity.vo.DetailProjectVO;
-import com.atguigu.crowd.entity.vo.PortalTypeVO;
-import com.atguigu.crowd.entity.vo.ProjectVO;
-import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
+import com.atguigu.crowd.entity.vo.*;
 
 import java.util.List;
 
@@ -25,7 +22,7 @@ public interface ProjectService {
 
     List<ProjectPO> getAllProject(Integer typeId, Integer status, Integer orderType);
 
-    List<ProjectPO> getMySupport(Integer memberId);
+    List<MySupportVO> getMySupport(Integer memberId);
 
     List<ProjectPO> getMyProject(Integer memberId);
 

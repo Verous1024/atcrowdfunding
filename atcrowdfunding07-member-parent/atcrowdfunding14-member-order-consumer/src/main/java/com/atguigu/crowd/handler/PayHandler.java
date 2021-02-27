@@ -10,11 +10,9 @@ import com.atguigu.crowd.config.PayProperties;
 import com.atguigu.crowd.entity.vo.OrderProjectVO;
 import com.atguigu.crowd.entity.vo.OrderVO;
 import com.atguigu.crowd.util.ResultEntity;
-import com.netflix.client.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
-import java.security.PrivateKey;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -125,7 +122,13 @@ public class PayHandler {
 
             //保存到数据库
             OrderVO orderVO = (OrderVO)session.getAttribute("orderVO");
+            Integer orderedProjectId =(Integer) session.getAttribute("orderedProjectId");
+            Integer orderedReturnId =(Integer) session.getAttribute("orderedReturnId");
+            logger.info(orderVO.toString());
+            orderVO.setProjectId(orderedProjectId);
+            orderVO.setReturnId(orderedReturnId);
             orderVO.setPayOrderNum(payOrderNum);
+            logger.info(orderVO.toString());
             ResultEntity<String> resultEntity = mySQLRemoteService.saveOrderRemote(orderVO);
             logger.info("订单信息保存到数据库的操作"+resultEntity.getResult());
             model.addAttribute("message","支付成功！");

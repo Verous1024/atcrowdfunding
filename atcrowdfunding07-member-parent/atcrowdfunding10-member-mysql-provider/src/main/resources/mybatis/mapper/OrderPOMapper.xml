@@ -10,6 +10,8 @@
     <result column="invoice_title" property="invoiceTitle" jdbcType="CHAR" />
     <result column="order_remark" property="orderRemark" jdbcType="CHAR" />
     <result column="address_id" property="addressId" jdbcType="CHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="return_id" property="returnId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, order_num, pay_order_num, order_amount, invoice, invoice_title, order_remark, 
-    address_id
+    address_id, project_id, return_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.po.OrderPOExample" >
     select
@@ -106,10 +108,12 @@
   <insert id="insert" parameterType="com.atguigu.crowd.entity.po.OrderPO" useGeneratedKeys="true" keyProperty="id" >
     insert into t_order (id, order_num, pay_order_num, 
       order_amount, invoice, invoice_title, 
-      order_remark, address_id)
+      order_remark, address_id, project_id, 
+      return_id)
     values (#{id,jdbcType=INTEGER}, #{orderNum,jdbcType=CHAR}, #{payOrderNum,jdbcType=CHAR}, 
       #{orderAmount,jdbcType=DOUBLE}, #{invoice,jdbcType=INTEGER}, #{invoiceTitle,jdbcType=CHAR}, 
-      #{orderRemark,jdbcType=CHAR}, #{addressId,jdbcType=CHAR})
+      #{orderRemark,jdbcType=CHAR}, #{addressId,jdbcType=CHAR}, #{projectId,jdbcType=INTEGER}, 
+      #{returnId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.atguigu.crowd.entity.po.OrderPO" >
     insert into t_order
@@ -138,6 +142,12 @@
       <if test="addressId != null" >
         address_id,
       </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="returnId != null" >
+        return_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -163,6 +173,12 @@
       </if>
       <if test="addressId != null" >
         #{addressId,jdbcType=CHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="returnId != null" >
+        #{returnId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -199,6 +215,12 @@
       <if test="record.addressId != null" >
         address_id = #{record.addressId,jdbcType=CHAR},
       </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.returnId != null" >
+        return_id = #{record.returnId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -213,7 +235,9 @@
       invoice = #{record.invoice,jdbcType=INTEGER},
       invoice_title = #{record.invoiceTitle,jdbcType=CHAR},
       order_remark = #{record.orderRemark,jdbcType=CHAR},
-      address_id = #{record.addressId,jdbcType=CHAR}
+      address_id = #{record.addressId,jdbcType=CHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      return_id = #{record.returnId,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,6 +266,12 @@
       <if test="addressId != null" >
         address_id = #{addressId,jdbcType=CHAR},
       </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="returnId != null" >
+        return_id = #{returnId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -253,7 +283,9 @@
       invoice = #{invoice,jdbcType=INTEGER},
       invoice_title = #{invoiceTitle,jdbcType=CHAR},
       order_remark = #{orderRemark,jdbcType=CHAR},
-      address_id = #{addressId,jdbcType=CHAR}
+      address_id = #{addressId,jdbcType=CHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      return_id = #{returnId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

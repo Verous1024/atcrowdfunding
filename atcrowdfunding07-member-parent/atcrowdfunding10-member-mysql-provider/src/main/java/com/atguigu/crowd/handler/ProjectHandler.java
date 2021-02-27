@@ -1,10 +1,7 @@
 package com.atguigu.crowd.handler;
 
 import com.atguigu.crowd.entity.po.ProjectPO;
-import com.atguigu.crowd.entity.vo.DetailProjectVO;
-import com.atguigu.crowd.entity.vo.PortalTypeVO;
-import com.atguigu.crowd.entity.vo.ProjectVO;
-import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
+import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.service.api.ProjectService;
 import com.atguigu.crowd.util.ResultEntity;
 import org.slf4j.Logger;
@@ -29,9 +26,9 @@ public class ProjectHandler {
 
 
     @RequestMapping("/get/my/support")
-    ResultEntity<List<ProjectPO>> getMySupport(@RequestParam("memberId") Integer memberId){
+    ResultEntity<List<MySupportVO>> getMySupport(@RequestParam("memberId") Integer memberId){
         try {
-            List<ProjectPO> mySupport = projectService.getMySupport(memberId);
+            List<MySupportVO> mySupport = projectService.getMySupport(memberId);
             return ResultEntity.successWithData(mySupport);
         } catch (Exception e) {
             e.printStackTrace();

@@ -37,5 +37,9 @@ public class OrderVO  implements Serializable {
 
     private String addressId; //收件人的地址的id-
 
+    private Integer projectId;
+
+    private Integer returnId;
+
     private OrderProjectVO orderProjectVO; //订单的产品信息--
 }

@@ -7,6 +7,7 @@ import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.MemberLoginVO;
 import com.atguigu.crowd.entity.vo.MemberVO;
+import com.atguigu.crowd.entity.vo.MySupportVO;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.MailService;
 import com.atguigu.crowd.util.ResultEntity;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,28 +51,55 @@ public class MemberHandler {
 
     private Logger logger = LoggerFactory.getLogger(MemberHandler.class);
 
+    /**
+     * 请求转发到我的众筹页面
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping("/member/my/crowd")
-    public String toMyCrowd(HttpSession session) {
-        MemberPO loginMember =(MemberPO) session.getAttribute("loginMember");
+    public String toMyCrowd(HttpSession session, Model model) throws ParseException {
+        MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
         Integer memberId = loginMember.getId();
-
-        List<ProjectPO> mySupport =  mySQLRemoteService.getMySupport(memberId).getData();
-        List<ProjectPO> myFocus =  mySQLRemoteService.getMyFocus(memberId).getData();
-        List<ProjectPO> myProject =  mySQLRemoteService.getMyProject(memberId).getData();
-
-        return "member-crowd";
+        ResultEntity<List<MySupportVO>> mySupport1 = mySQLRemoteService.getMySupport(memberId);
+        ResultEntity<List<ProjectPO>> myFocus1 = mySQLRemoteService.getMyFocus(memberId);
+        ResultEntity<List<ProjectPO>> myProject1 = mySQLRemoteService.getMyProject(memberId);
+        if(ResultEntity.SUCCESS.equals(mySupport1.getResult())
+                && ResultEntity.SUCCESS.equals(myFocus1.getResult())
+                && ResultEntity.SUCCESS.equals(myProject1.getResult())){ //全部数据查找且无误
+            List<MySupportVO> mySupport =mySupport1.getData();
+            //mySupport的剩余时间、还没有计算,支持日期
+            for (MySupportVO supportVO : mySupport) {
+                Integer day = supportVO.getDay();
+                String deploydate = supportVO.getDeploydate();
+                Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
+                Date date = new Date();
+                Long l =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
+                supportVO.setLastDays(day - l);
+                String timeString = supportVO.getOrderNum().substring(0,14);
+                supportVO.setSupportTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(timeString));
+            }
+            List<ProjectPO> myFocus = myFocus1.getData();
+            //我的关注
+            List<ProjectPO> myProject = myProject1.getData();
+            model.addAttribute("mySupport",mySupport);
+            model.addAttribute("myFocus",myFocus);
+            model.addAttribute("myProject",myProject);
+            return "member-crowd";
+        }
+        return "member-center"; //如果查询数据失败，就返回到自己的前一个页面
     }
 
     @ResponseBody
     @RequestMapping("/do/verifiy")
-    public ResultEntity<String> doVerifiy(MemberPO memberPO,@RequestParam("code") String code,HttpSession session) {
+    public ResultEntity<String> doVerifiy(MemberPO memberPO, @RequestParam("code") String code, HttpSession session) {
         logger.info(memberPO.toString());
         logger.info(code);
         memberPO.setAuthstatus(1);
         //省份证检查
         ResultEntity<String> resultEntity = CrowdUtil.sendCardByShortMessage(memberPO.getCardnum(), memberPO.getRealname());
-        if (! ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
-            return  ResultEntity.failed("身份证号码不匹配！").setCodeWithRe("400");
+        if (!ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            return ResultEntity.failed("身份证号码不匹配！").setCodeWithRe("400");
         }
         logger.info("身份通过！");
         //验证码检查
@@ -76,10 +107,10 @@ public class MemberHandler {
         ResultEntity<String> saveCodeResultEntity = redisRemoteService.getRedisStringValueByKeyRemote(key);
         if (ResultEntity.SUCCESS.equals(saveCodeResultEntity.getResult())) {
             String redisCode = saveCodeResultEntity.getData();
-            logger.info("rediscode="+redisCode);
+            logger.info("rediscode=" + redisCode);
             if (redisCode == null) {
-               return  ResultEntity.failed("验证码已失效！").setCodeWithRe("200");
-            }else{
+                return ResultEntity.failed("验证码已失效！").setCodeWithRe("200");
+            } else {
                 if (Objects.equals(redisCode, code)) {
                     //验证码无误
                     MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
@@ -89,11 +120,11 @@ public class MemberHandler {
                     loginMember.setCardnum(memberPO.getCardnum());
                     loginMember.setAccttype(memberPO.getAccttype());
                     logger.info(loginMember.toString());
-                    session.setAttribute("loginMember",loginMember);
+                    session.setAttribute("loginMember", loginMember);
                     mySQLRemoteService.updateMember(loginMember);
-                    return  ResultEntity.successWithoutData();
+                    return ResultEntity.successWithoutData();
                 } else {
-                    return  ResultEntity.failed("验证码不正确！");
+                    return ResultEntity.failed("验证码不正确！");
                 }
             }
         } else {
@@ -104,7 +135,7 @@ public class MemberHandler {
 
     @ResponseBody
     @RequestMapping("/send/code/by/email")
-    public ResultEntity<String> sendMessageByEmail(@RequestParam("email")String email) {
+    public ResultEntity<String> sendMessageByEmail(@RequestParam("email") String email) {
         logger.info(email);
         //生成随机码
         StringBuilder builder = new StringBuilder();
@@ -114,7 +145,7 @@ public class MemberHandler {
         }
         String code = builder.toString();
         String subject = "西大众筹网！实名认证";
-        String content = "<p>您的验码如下<p>"+"<h2 text-align='center'>"+code+"</h2>"+"<p>请在2分钟之内完成注册，否则验证码失效</p>";
+        String content = "<p>您的验码如下<p>" + "<h2 text-align='center'>" + code + "</h2>" + "<p>请在2分钟之内完成注册，否则验证码失效</p>";
         boolean result = mailService.sendHtmlMail(email, subject, content);
         if (result == false) {
             return ResultEntity.failed("发送验证码失败！");
@@ -122,7 +153,7 @@ public class MemberHandler {
             //3、发送成果存入到Redis中
             String key = CrowdConstant.REDIS_CODE_PREFIX + email;
             ResultEntity<String> saveCodeResultEntity = redisRemoteService.setRedisKeyValueRemoteWithTimeout(key, code, 2/*, TimeUnit.MINUTES*/);
-            if(!ResultEntity.SUCCESS.equals(saveCodeResultEntity.getResult())){
+            if (!ResultEntity.SUCCESS.equals(saveCodeResultEntity.getResult())) {
                 return ResultEntity.failed("发送验证码失败！");
             }
             return ResultEntity.successWithoutData();
@@ -131,18 +162,18 @@ public class MemberHandler {
 
     @RequestMapping("/to/verified/page.html/{acctType}")
     public String toVerifiedPage(@PathVariable("acctType") Integer acctType, Model model) {
-        if(acctType==1){
-            model.addAttribute("userType",1);
-            model.addAttribute("acctType",0);
+        if (acctType == 1) {
+            model.addAttribute("userType", 1);
+            model.addAttribute("acctType", 0);
         } else if (acctType == 2) {
-            model.addAttribute("userType",0);
-            model.addAttribute("acctType",1);
+            model.addAttribute("userType", 0);
+            model.addAttribute("acctType", 1);
         } else if (acctType == 3) {
-            model.addAttribute("userType",0);
-            model.addAttribute("acctType",2);
+            model.addAttribute("userType", 0);
+            model.addAttribute("acctType", 2);
         } else if (acctType == 4) {
-            model.addAttribute("userType",1);
-            model.addAttribute("acctType",3);
+            model.addAttribute("userType", 1);
+            model.addAttribute("acctType", 3);
         } else {
             return "identity-select";
         }
@@ -178,7 +209,7 @@ public class MemberHandler {
             return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED_WITHOUT_ACCT).setCodeWithRe("100");
             //100:表示用户不存在
         }
-        logger.info("memberPO"+memberPO);
+        logger.info("memberPO" + memberPO);
         String dbpswd = memberPO.getUserpswd();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //有有户名，但密码不争取
@@ -189,7 +220,7 @@ public class MemberHandler {
 
         MemberLoginVO memberLoginVO = new MemberLoginVO(memberPO.getId(), memberPO.getUsername(), memberPO.getEmail());
 
-        session.setAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER,memberPO); //这里被我修改了
+        session.setAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER, memberPO); //这里被我修改了
 
         return ResultEntity.successWithoutData();
     }

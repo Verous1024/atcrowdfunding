@@ -11,6 +11,8 @@ import com.atguigu.crowd.mapper.AddressPOMapper;
 import com.atguigu.crowd.mapper.OrderPOMapper;
 import com.atguigu.crowd.mapper.OrderProjectPOMapper;
 import com.atguigu.crowd.service.api.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private AddressPOMapper addressPOMapper;
+
+    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
     public OrderProjectVO getOrderProjectVO(Integer projectId, Integer returnId) {
@@ -71,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
     public void saveOrder(OrderVO orderVO) {
         OrderPO orderPO = new OrderPO();
         BeanUtils.copyProperties(orderVO, orderPO);
+        logger.info(orderPO.toString());
         OrderProjectPO orderProjectPO = new OrderProjectPO();
         BeanUtils.copyProperties(orderVO.getOrderProjectVO(),orderProjectPO);
         orderPOMapper.insert(orderPO);

@@ -66,7 +66,7 @@ public interface MySQLRemoteService {
     ResultEntity<String> updateMember(@RequestBody MemberPO loginMember);
 
     @RequestMapping("/get/my/support")
-    ResultEntity<List<ProjectPO>> getMySupport(@RequestParam("memberId") Integer memberId);
+    ResultEntity<List<MySupportVO>> getMySupport(@RequestParam("memberId") Integer memberId);
 
     @RequestMapping("/get/my/focus")
     ResultEntity<List<ProjectPO>> getMyFocus(@RequestParam("memberId") Integer memberId);
