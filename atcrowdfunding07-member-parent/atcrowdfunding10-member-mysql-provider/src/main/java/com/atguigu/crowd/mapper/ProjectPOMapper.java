@@ -48,4 +48,12 @@ public interface ProjectPOMapper {
     List<ProjectPO> selectMyFocus(Integer memberId);
 
     List<MySupportVO> selectMysupport(Integer memberId);
+
+    void unsubscribeStep1(@Param("projectId")Integer projectId, @Param("memberId")Integer memberId);
+
+    void updateProjectFollower(@Param("followers")Integer followers,@Param("projectId") Integer projectId);
+
+    Integer selectMyFollow(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);
+
+    void subscribeStep1(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);
 }

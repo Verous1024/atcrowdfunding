@@ -84,4 +84,10 @@ public class OrderServiceImpl implements OrderService {
         orderProjectPO.setOrderId(id);
         orderProjectPOMapper.insert(orderProjectPO);
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW,readOnly = false,rollbackFor = Exception.class)
+    @Override
+    public void deleteMyOrderById(Integer orderId) {
+        orderPOMapper.deleteByPrimaryKey(orderId);
+    }
 }

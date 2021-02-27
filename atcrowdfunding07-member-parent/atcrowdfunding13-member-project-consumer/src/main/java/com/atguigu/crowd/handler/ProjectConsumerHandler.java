@@ -3,6 +3,7 @@ package com.atguigu.crowd.handler;
 import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.config.OSSProperties;
 import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.util.CrowdUtil;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -40,6 +38,31 @@ public class ProjectConsumerHandler {
     private MySQLRemoteService mySQLRemoteService;
 
     private Logger logger = LoggerFactory.getLogger(ProjectConsumerHandler.class);
+
+    @ResponseBody
+    @RequestMapping("unsubscribe/to/this/product")
+    public ResultEntity<String> unsubscribeThisProject(@RequestParam("projectId")Integer projectId,HttpSession session) {
+        MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
+        ResultEntity<String> resultEntity = mySQLRemoteService.unsubscribeRemote(projectId, loginMember.getId());
+        if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            return ResultEntity.successWithoutData();
+        }
+        return ResultEntity.failed("失败");
+    }
+
+    @ResponseBody
+    @RequestMapping("subscribe/to/this/product")
+    public ResultEntity<String> subscribeThisProject(@RequestParam("projectId")Integer projectId,HttpSession session) {
+        MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
+        Integer memberId = loginMember.getId();
+        logger.info("projectId="+projectId);
+        logger.info("memberId="+memberId);
+        ResultEntity<String> resultEntity = mySQLRemoteService.subscribeRemote(projectId,memberId );
+        if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            return ResultEntity.successWithoutData();
+        }
+        return ResultEntity.failed("失败");
+    }
 
 
     @RequestMapping("/get/all/project")
@@ -68,11 +91,14 @@ public class ProjectConsumerHandler {
 
 
     @RequestMapping("/get/project/detail/{projectId}")
-    public String getProjectDetail(@PathVariable("projectId") Integer projectId, Model model) {
+    public String getProjectDetail(@PathVariable("projectId") Integer projectId, Model model,HttpSession session) {
         ResultEntity<DetailProjectVO> resultEntity = mySQLRemoteService.getDetailProjectVORemote(projectId);
+        MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
+        ResultEntity<Integer> resultEntity1 = mySQLRemoteService.isHasFollow(projectId,loginMember.getId());
         if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
             DetailProjectVO detailProjectVO = resultEntity.getData();
             model.addAttribute("detailProjectVO", detailProjectVO);
+            model.addAttribute("isFollow", resultEntity1.getData());
         }
         return "project-show-detail";
     }

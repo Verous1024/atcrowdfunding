@@ -20,4 +20,6 @@ public interface OrderService {
     void saveAddress(AddressVO addressVO);
 
     void saveOrder(OrderVO orderVO);
+
+    void deleteMyOrderById(Integer orderId);
 }

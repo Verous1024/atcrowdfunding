@@ -200,6 +200,31 @@
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
 
+    <!--Integer selectMyFollow(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);-->
+    <select id="selectMyFollow" resultType="java.lang.Integer">
+        select id
+        from t_project_focus
+        WHERE project_id=#{projectId} and member_id = #{memberId}
+    </select>
+
+    <!--    void subscribeStep1(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId); -->
+    <insert id="subscribeStep1">
+        insert into t_project_focus(project_id,member_id)
+        values(#{projectId},#{memberId})
+    </insert>
+    <!-- void updateProjectFollower(@Param("followers")Integer followers,@Param("projectId") Integer projectId);-->
+    <update id="updateProjectFollower">
+        update t_project
+        SET follower = #{followers}
+        WHERE id=#{projectId};
+    </update>
+
+    <!--void unsubscribeStep1(@Param("projectId")Integer projectId, @Param("memberId")Integer memberId);-->
+    <delete id="unsubscribeStep1">
+        delete from t_project_focus
+        WHERE project_id=#{projectId} and member_id=#{memberId}
+    </delete>
+
     <!--List<MySupportVO> selectMysupport(Integer memberId);-->
     <select id="selectMysupport" resultType="com.atguigu.crowd.entity.vo.MySupportVO">
         SELECT
@@ -210,6 +235,7 @@
         t_project.status	status,
         t_project.deploydate	deploydate,
         t_project.day `day`,
+        t_order.id `orderId`,
         t_order.order_num	orderNum,
         t_order.order_amount	orderAmount,
         t_order_project.return_count	returnCount,

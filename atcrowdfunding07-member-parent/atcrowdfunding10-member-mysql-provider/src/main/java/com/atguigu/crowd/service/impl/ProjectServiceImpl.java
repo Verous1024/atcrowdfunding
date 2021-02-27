@@ -158,5 +158,47 @@ public class ProjectServiceImpl implements ProjectService {
         return projectPOMapper.selectMyFocus(memberId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
+    @Override
+    public void unsubscribeStep1(Integer projectId, Integer memberId) {
+          projectPOMapper.unsubscribeStep1(projectId,memberId);
+    }
+
+
+    @Override
+    public ProjectPO getProjectById(Integer projectId) {
+        return projectPOMapper.selectByPrimaryKey(projectId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
+    @Override
+    public void unsubscribeStep2(Integer followers, Integer memberId) {
+        projectPOMapper.updateProjectFollower(followers, memberId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
+    @Override
+    public void deleteMyProjectById(Integer projectId) {
+        projectPOMapper.deleteByPrimaryKey(projectId);
+    }
+
+    @Override
+    public Integer isHasFollow(Integer projectId, Integer memberId) {
+        return projectPOMapper.selectMyFollow(projectId,memberId);
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
+    @Override
+    public void subscribeStep1(Integer projectId, Integer memberId) {
+        projectPOMapper.subscribeStep1(projectId,memberId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
+    @Override
+    public void subscribeStep2(Integer i, Integer projectId) {
+        projectPOMapper.updateProjectFollower(i, projectId);
+    }
+
     //如果是保存，需要填写修改事务等级
 }

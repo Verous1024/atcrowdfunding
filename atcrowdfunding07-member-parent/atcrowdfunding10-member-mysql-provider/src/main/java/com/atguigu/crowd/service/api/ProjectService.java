@@ -27,4 +27,18 @@ public interface ProjectService {
     List<ProjectPO> getMyProject(Integer memberId);
 
     List<ProjectPO> getMyFocus(Integer memberId);
+
+    void unsubscribeStep1(Integer projectId, Integer memberId);
+
+    ProjectPO getProjectById(Integer projectId);
+
+    void unsubscribeStep2(Integer i, Integer memberId);
+
+    void deleteMyProjectById(Integer projectId);
+
+    Integer isHasFollow(Integer projectId, Integer memberId);
+
+    void subscribeStep1(Integer projectId, Integer memberId);
+
+    void subscribeStep2(Integer i, Integer projectId);
 }

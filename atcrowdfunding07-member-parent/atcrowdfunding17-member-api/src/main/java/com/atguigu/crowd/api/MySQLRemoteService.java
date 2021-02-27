@@ -73,4 +73,19 @@ public interface MySQLRemoteService {
 
     @RequestMapping("/get/my/project")
     ResultEntity<List<ProjectPO>> getMyProject(@RequestParam("memberId") Integer memberId);
+
+    @RequestMapping("/delete/my/order/remote")
+    ResultEntity<String> deleteMyOrderRemote(@RequestParam("orderId") Integer orderId);
+
+    @RequestMapping("/unsubscribe/remote")
+    ResultEntity<String> unsubscribeRemote(@RequestParam("projectId") Integer projectId,@RequestParam("memberId") Integer memberId);
+
+    @RequestMapping("/delete/my/project/by/id/remote")
+    ResultEntity<String> deleteMyProjectByIdRemote(@RequestParam("projectId") Integer projectId);
+
+    @RequestMapping("/is/has/follow")
+    ResultEntity<Integer> isHasFollow(@RequestParam("projectId")Integer projectId,@RequestParam("id") Integer memberId);
+
+    @RequestMapping("/subscribe/remote")
+    ResultEntity<String> subscribeRemote(@RequestParam("projectId") Integer projectId,@RequestParam("memberId") Integer memberId);
 }

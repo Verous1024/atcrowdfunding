@@ -66,6 +66,49 @@
         $(".prjtip img").click(function () {
             window.location.href = 'project.html';
         });
+
+        $(function () {
+            $("#attentionBtn").click(function () {
+                var projectId = [[${detailProjectVO.projectId}]];
+                var defaultValue = $("#followers").text();
+                defaultValue = parseInt(defaultValue);
+                alert(defaultValue);
+                if ($("#hearIcon").attr("style") == "color:#f60") { //关注状态 --取消关注
+                    $.ajax({
+                        url: "project/unsubscribe/to/this/product",
+                        type: "post",
+                        data: {
+                            "projectId": projectId
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            $("#hearIcon").attr("style", "color:#696969"); //改变颜色
+                            $("#followers").empty().append(defaultValue - 1);
+                        },
+                        error:function (response) {
+                            alert("取消关注失败！请重新尝试");
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "project/subscribe/to/this/product",
+                        data: {
+                            "projectId": projectId
+                        },
+                        type: "post",
+                        dataType: "json",
+                        success: function () {
+                            $("#hearIcon").attr("style", "color:#f60"); //改变颜色
+                            $("#followers").empty().append(defaultValue + 1);
+                        },
+                        error:function (response) {
+                            alert(response.result);
+                            alert("关注失败！请重新尝试");
+                        }
+                    });
+                }
+            })
+        })
     </script>
 </head>
 <body>
@@ -74,12 +117,8 @@
 
 <div class="container theme-showcase" role="main">
 
-
-
-        <!--众筹首页\项目总览\发起众筹\我的众筹 -->
-        <div th:replace="include::navCrowd"></div>
-
-
+    <!--众筹首页\项目总览\发起众筹\我的众筹 -->
+    <div th:replace="include::navCrowd"></div>
 
     <div th:if="${#strings.isEmpty(detailProjectVO)}"> 查询项目详情信息失败</div>
     <div th:if="${not #strings.isEmpty(detailProjectVO)}">
@@ -92,10 +131,15 @@
                         <div style="float:left;width:70%;" th:text="${detailProjectVO.projectDesc}">
                             智能时代，酷驰触控厨房龙头，让煮妇解放双手，触发更多烹饪灵感，让美味信手拈来。
                         </div>
-                        <div style="float:right;">
-                            <button type="button" class="btn btn-default"><i style="color:#f60"
-                                                                             class="glyphicon glyphicon-heart"></i>
-                                关注<span th:text="${detailProjectVO.followerCount}">111</span></button>
+                        <div th:if="${isFollow!=null}" style="float:right;">
+                            <button id="attentionBtn" type="button" class="btn btn-default">
+                                <i id="hearIcon" style="color:#f60" class="glyphicon glyphicon-heart do"></i>
+                                关注<span id="followers" th:text="${detailProjectVO.followerCount}">111</span></button>
+                        </div>
+                        <div th:if="${isFollow==null}" style="float:right;">
+                            <button id="attentionBtn" type="button" class="btn btn-default">
+                                <i id="hearIcon" style="color:#696969" class="glyphicon glyphicon-heart do"></i>
+                                关注<span id="followers" th:text="${detailProjectVO.followerCount}">111</span></button>
                         </div>
                     </div>
                 </div>
@@ -157,10 +201,12 @@
                                             <div class="col-md-9 column">
                                                 <div class="">
                                                     <h4>
-                                                        <b th:text="${detailProjectVO.memberLauchInfoVO.descriptionSimple}">福建省南安厨卫</b> <span style="float:right;font-size:12px;"
-                                                                             class="label label-success">已认证</span>
+                                                        <b th:text="${detailProjectVO.memberLauchInfoVO.descriptionSimple}">福建省南安厨卫</b>
+                                                        <span style="float:right;font-size:12px;"
+                                                              class="label label-success">已认证</span>
                                                     </h4>
-                                                    <p style="font-size:12px" th:text="${detailProjectVO.memberLauchInfoVO.descriptionDetail}">
+                                                    <p style="font-size:12px"
+                                                       th:text="${detailProjectVO.memberLauchInfoVO.descriptionDetail}">
                                                         酷驰是一家年轻的厨卫科技公司，我们有一支朝气蓬勃，有激情、有想法、敢实践的团队。
 
                                                     </p>
@@ -221,20 +267,20 @@
                                 </div>
                             </div>
 
-                            <div><h2>为你推荐</h2>
-                                <hr>
-                            </div>
-                            <div class="prjtip panel panel-default" style="border-radius: 0px;">
-                                <div class="panel-body">
-                                    <img src="img/product-3.png" width="100%" height="100%">
-                                </div>
-                            </div>
+                            <!--                           <div><h2>为你推荐</h2>
+                                                           <hr>
+                                                       </div>
+                                                       <div class="prjtip panel panel-default" style="border-radius: 0px;">
+                                                           <div class="panel-body">
+                                                               <img src="img/product-3.png" width="100%" height="100%">
+                                                           </div>
+                                                       </div>
 
-                            <div class="prjtip panel panel-default" style="border-radius: 0px;">
-                                <div class="panel-body">
-                                    <img src="img/product-4.jpg" width="100%" height="100%">
-                                </div>
-                            </div>
+                                                       <div class="prjtip panel panel-default" style="border-radius: 0px;">
+                                                           <div class="panel-body">
+                                                               <img src="img/product-4.jpg" width="100%" height="100%">
+                                                           </div>
+                                                       </div>-->
                         </div>
                     </div>
 
@@ -267,28 +313,34 @@
                         <div class="col-sm-3 col-md-3 column" id="myScrollspy">
                             <ul class="nav nav-tabs nav-stacked">
                                 <li th:each="return : ${detailProjectVO.detailReturnVOList}" class="active">
-                                    <a href="#section-1" th:href="'http://localhost:80/project/get/project/detail/'+${detailProjectVO.projectId}+'#section-'+${return.returnId}">￥[[${return.supportMoney}]]</a>
+                                    <a href="#section-1"
+                                       th:href="'http://localhost:80/project/get/project/detail/'+${detailProjectVO.projectId}+'#section-'+${return.returnId}">￥[[${return.supportMoney}]]</a>
                                 </li>
                             </ul>
                         </div>
                         <!--右侧项目显示-->
                         <div id="navList" class="col-sm-9 col-md-9 column" style="height:400px;overflow-y:auto;">
                             <div th:each="return : ${detailProjectVO.detailReturnVOList}">
-                                <h2 th:if="${return.signalPurchase==0}"  th:id="'section-'+${return.returnId}" style="border-bottom:1px dashed #ddd;"><span
+                                <h2 th:if="${return.signalPurchase==0}" th:id="'section-'+${return.returnId}"
+                                    style="border-bottom:1px dashed #ddd;"><span
                                         style="font-size:20px;font-weight:bold;">￥[[${return.supportMoney}]]</span><span
-                                        style="font-size:12px;margin-left:60px;">无限额，[[${return.supproterCount}]]位支持者</span></h2>
-                                <h2 th:if="${return.signalPurchase>0}"  th:id="'section-'+${return.returnId}" style="border-bottom:1px dashed #ddd;"><span
+                                        style="font-size:12px;margin-left:60px;">无限额，[[${return.supproterCount}]]位支持者</span>
+                                </h2>
+                                <h2 th:if="${return.signalPurchase>0}" th:id="'section-'+${return.returnId}"
+                                    style="border-bottom:1px dashed #ddd;"><span
                                         style="font-size:20px;font-weight:bold;">￥[[${return.supportMoney}]]</span><span
-                                        style="font-size:12px;margin-left:60px;">限额[[${return.count}]]名，[[${return.supproterCount}]]位支持者</span></h2>
+                                        style="font-size:12px;margin-left:60px;">限额[[${return.count}]]名，[[${return.supproterCount}]]位支持者</span>
+                                </h2>
                                 <p th:if="${return.freight==0}">配送费用：全国包邮</p>
                                 <p th:if="${return.freight!=0}">配送费用：[[${return.freight}]]</p>
                                 <p>预计发放时间：项目筹款成功后的[[${return.returnDate}]]天内</p>
                                 <a type="button" class="btn  btn-warning btn-lg "
                                    th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}"
-                                        >支持
+                                >支持
                                 </a>
                                 <br><br>
-                                <p th:text="${return.content}">每满1750人抽取一台活性富氢净水直饮机，至少抽取一台。抽取名额（小数点后一位四舍五入）=参与人数÷1750人，由苏宁官方抽取。</p>
+                                <p th:text="${return.content}">
+                                    每满1750人抽取一台活性富氢净水直饮机，至少抽取一台。抽取名额（小数点后一位四舍五入）=参与人数÷1750人，由苏宁官方抽取。</p>
                                 <hr>
                             </div>
                         </div>

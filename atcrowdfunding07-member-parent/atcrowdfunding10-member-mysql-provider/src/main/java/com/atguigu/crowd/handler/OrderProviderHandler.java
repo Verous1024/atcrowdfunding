@@ -29,6 +29,18 @@ public class OrderProviderHandler {
     private OrderService orderService;
     private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    @RequestMapping("/delete/my/order/remote")
+    public ResultEntity<String> deleteMyOrderRemote(@RequestParam("orderId") Integer orderId) {
+        try {
+            orderService.deleteMyOrderById(orderId);
+            return ResultEntity.successWithoutData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+
     @RequestMapping("/save/order/remote")
     public ResultEntity<String> saveOrderRemote(@RequestBody OrderVO orderVO) {
         try {
