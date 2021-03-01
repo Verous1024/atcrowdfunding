@@ -39,6 +39,25 @@ public class ProjectConsumerHandler {
 
     private Logger logger = LoggerFactory.getLogger(ProjectConsumerHandler.class);
 
+    @RequestMapping("/send/my/order/{orderId}/{projectId}")
+    public String sendMyOrder(@PathVariable("orderId")Integer orderId,
+                              @PathVariable("projectId")Integer projectId) {
+        ResultEntity<String> resultEntity = mySQLRemoteService.sendMyOrderRemote(orderId);
+
+        return "redirect:http://localhost/project/supporter/project/return/"+projectId;
+    }
+
+    @RequestMapping("/supporter/project/return/{projectId}")
+    public String supporterProjecyReturn(@PathVariable("projectId") Integer projectId,Model model) {
+        ResultEntity<List<SupporterAddressReturnVO>> resultEntity =  mySQLRemoteService.getSupporterAddressReturn(projectId);
+        if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            model.addAttribute("supporters", resultEntity.getData());
+            model.addAttribute("projectId", projectId);
+        }
+        return "project-supporter";
+    }
+
+
     @ResponseBody
     @RequestMapping("unsubscribe/to/this/product")
     public ResultEntity<String> unsubscribeThisProject(@RequestParam("projectId")Integer projectId,HttpSession session) {
@@ -117,7 +136,7 @@ public class ProjectConsumerHandler {
         // 3.将确认信息数据设置到 projectVO对象中
         projectVO.setMemberConfirmInfoVO(memberConfirmInfoVO);
         // 4.从 Session域读取当前登录的用户
-        MemberLoginVO memberLoginVO = (MemberLoginVO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
+        MemberPO memberLoginVO = (MemberPO) session.getAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER);
         System.out.println("登陆用户" + memberLoginVO);
         Integer memberId = memberLoginVO.getId();
         // 5.调用远程方法保存 projectVO对象
@@ -203,7 +222,6 @@ public class ProjectConsumerHandler {
         System.out.println("第一个对象" + projectVO);
         System.out.println("第二个对象" + headerPicture);
         System.out.println("第三个对象" + detailPictureList);
-
         //一、完成头图上传
         // 1.获取当前 headerPicture对象是否为空
         boolean headerPictureIsEmpty = headerPicture.isEmpty();

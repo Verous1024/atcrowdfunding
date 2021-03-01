@@ -59,6 +59,7 @@
     </style>
     <script src="jquery/jquery-2.1.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="layer/layer.js"></script>
     <script src="script/docs.min.js"></script>
     <script src="script/back-to-top.js"></script>
     <script>
@@ -72,7 +73,6 @@
                 var projectId = [[${detailProjectVO.projectId}]];
                 var defaultValue = $("#followers").text();
                 defaultValue = parseInt(defaultValue);
-                alert(defaultValue);
                 if ($("#hearIcon").attr("style") == "color:#f60") { //关注状态 --取消关注
                     $.ajax({
                         url: "project/unsubscribe/to/this/product",
@@ -86,7 +86,7 @@
                             $("#followers").empty().append(defaultValue - 1);
                         },
                         error:function (response) {
-                            alert("取消关注失败！请重新尝试");
+                            layer.msg("取消关注失败！请重新尝试");
                         }
                     });
                 } else {
@@ -102,12 +102,17 @@
                             $("#followers").empty().append(defaultValue + 1);
                         },
                         error:function (response) {
-                            alert(response.result);
-                            alert("关注失败！请重新尝试");
+                            layer.msg(response.result);
+                            layer.msg("关注失败！请重新尝试");
                         }
                     });
                 }
-            })
+            });
+
+            ///点击支持超链接之前，检查是否有disabe的属性
+            $(".supportBtn").click(function () {
+                return !$(this).hasClass("cuowu");
+            });
         })
     </script>
 </head>
@@ -235,13 +240,17 @@
                                         </h3>
                                     </div>
                                     <div class="panel-body">
-                                        <p th:if="${return.freight==0}">配送费用：包邮></p>
+                                        <p th:if="${return.freight==0}">配送费用：包邮</p>
                                         <p th:if="${return.freight>0}">配送费用：￥[[${return.freight}]]</p>
                                         <p>预计发放时间：项目筹款成功后的[[${return.returnDate}]]天内</p>
-                                        <a type="button" class="btn  btn-warning btn-lg"
+                                        <a th:if="${return.count - return.supproterCount >0 }" type="button" class="btn  btn-warning btn-lg supportBtn"
+                                           th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
+                                        </a>
+                                        <a th:if="${return.count - return.supproterCount <=0 }" type="button" class="btn  btn-warning btn-lg supportBtn cuowu" disabled="true"
                                            th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
                                         </a>
                                         <br><br>
+                                        <p th:if="${return.count - return.supproterCount == 0 }" style="color:#DC143C">该回报项目支持者已达到上限！</p>
                                         <p th:text="${return.content}">
                                             感谢您的支持，在众筹开始后，您将以79元的优惠价格获得“遇见彩虹?”智能插座一件（参考价208元）。</p>
                                     </div>
@@ -334,11 +343,14 @@
                                 <p th:if="${return.freight==0}">配送费用：全国包邮</p>
                                 <p th:if="${return.freight!=0}">配送费用：[[${return.freight}]]</p>
                                 <p>预计发放时间：项目筹款成功后的[[${return.returnDate}]]天内</p>
-                                <a type="button" class="btn  btn-warning btn-lg "
-                                   th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}"
-                                >支持
+                                <a th:if="${return.count - return.supproterCount >0 }" type="button" class="btn  btn-warning btn-lg "
+                                   th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
+                                </a>
+                                <a th:if="${return.count - return.supproterCount <=0 }" type="button" class="btn  btn-warning btn-lg " disabled="true"
+                                   th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
                                 </a>
                                 <br><br>
+                                <p th:if="${return.count - return.supproterCount == 0 }" style="color:#DC143C">该回报项目支持者已达到上限！</p>
                                 <p th:text="${return.content}">
                                     每满1750人抽取一台活性富氢净水直饮机，至少抽取一台。抽取名额（小数点后一位四舍五入）=参与人数÷1750人，由苏宁官方抽取。</p>
                                 <hr>

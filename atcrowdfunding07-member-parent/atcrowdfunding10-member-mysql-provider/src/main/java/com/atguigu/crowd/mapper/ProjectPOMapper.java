@@ -2,10 +2,7 @@ package com.atguigu.crowd.mapper;
 
 import com.atguigu.crowd.entity.po.ProjectPO;
 import com.atguigu.crowd.entity.po.ProjectPOExample;
-import com.atguigu.crowd.entity.vo.DetailProjectVO;
-import com.atguigu.crowd.entity.vo.MySupportVO;
-import com.atguigu.crowd.entity.vo.PortalTypeVO;
-import com.atguigu.crowd.entity.vo.VipProtalProjectVO;
+import com.atguigu.crowd.entity.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -56,4 +53,10 @@ public interface ProjectPOMapper {
     Integer selectMyFollow(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);
 
     void subscribeStep1(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);
+
+    void updateSupportMoneyById(@Param("projectId") Integer projectId, @Param("totalSummary") Integer totalSummary,@Param("supportmoney") Long supportmoney);
+
+    Integer getSupproterCount(Integer returnId);
+
+    List<SupporterAddressReturnVO> selectSupporterAddressReturn(Integer projectId);
 }

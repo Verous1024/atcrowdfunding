@@ -56,6 +56,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updateMember(MemberPO loginMember) {
         logger.info(loginMember.toString());
-        memberPOMapper.updateByPrimaryKey(loginMember);
+        memberPOMapper.updateByPrimaryKeySelective(loginMember);
     }
 }

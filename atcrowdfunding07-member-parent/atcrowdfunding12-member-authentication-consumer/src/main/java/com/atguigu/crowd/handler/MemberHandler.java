@@ -53,6 +53,29 @@ public class MemberHandler {
 
     private Logger logger = LoggerFactory.getLogger(MemberHandler.class);
 
+    @ResponseBody
+    @RequestMapping("/auth/confirm/receipt")
+    public ResultEntity<String> confirmMyReceipt(@RequestParam("orderId") Integer orderId) {
+        ResultEntity<String> resultEntity =  mySQLRemoteService.confirmMyReceipt(orderId);
+        if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
+            return ResultEntity.successWithoutData();
+        }
+        return ResultEntity.failed("失败");
+    }
+
+
+    @RequestMapping("auth/save/personal/information")
+    public String savePersonalInformation(MemberPO memberPO,HttpSession session) {
+        mySQLRemoteService.updateMember(memberPO);
+        MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
+        loginMember.setLoginacct(memberPO.getLoginacct());
+        loginMember.setUsername(memberPO.getUsername());
+        loginMember.setEmail(memberPO.getEmail());
+        loginMember.setPhonenum(memberPO.getPhonenum());
+        session.setAttribute("loginMember",loginMember);
+        return "redirect:http://localhost/auth/member/to/center/page";
+    }
+
     @RequestMapping("/delete/my/project/{projectId}")
     public String deleteMyProjectById(@PathVariable("projectId")Integer projectId) {
         ResultEntity<String> resultEntity =  mySQLRemoteService.deleteMyProjectByIdRemote(projectId);

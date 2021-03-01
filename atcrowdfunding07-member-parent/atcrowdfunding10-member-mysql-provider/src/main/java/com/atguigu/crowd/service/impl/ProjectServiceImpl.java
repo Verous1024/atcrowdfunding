@@ -128,6 +128,18 @@ public class ProjectServiceImpl implements ProjectService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //4、将每个回报挡位的支持者显示出来
+        List<DetailReturnVO> detailReturnVOList = detailProjectVO.getDetailReturnVOList();
+        for(DetailReturnVO detailReturnVO:detailReturnVOList){
+            Integer returnId = detailReturnVO.getReturnId();
+            Integer supproterCount =  projectPOMapper.getSupproterCount(returnId);
+            if (supproterCount == null) {
+                detailReturnVO.setSupproterCount(0);
+            }else{
+                detailReturnVO.setSupproterCount(supproterCount);
+            }
+
+        }
         return detailProjectVO;
     }
 
@@ -198,6 +210,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void subscribeStep2(Integer i, Integer projectId) {
         projectPOMapper.updateProjectFollower(i, projectId);
+    }
+
+    @Override
+    public List<SupporterAddressReturnVO> getSupporterAddressReturn(Integer projectId) {
+       return projectPOMapper.selectSupporterAddressReturn(projectId);
     }
 
     //如果是保存，需要填写修改事务等级

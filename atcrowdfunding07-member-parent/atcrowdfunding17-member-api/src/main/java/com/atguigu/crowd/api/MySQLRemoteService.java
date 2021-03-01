@@ -88,4 +88,13 @@ public interface MySQLRemoteService {
 
     @RequestMapping("/subscribe/remote")
     ResultEntity<String> subscribeRemote(@RequestParam("projectId") Integer projectId,@RequestParam("memberId") Integer memberId);
+
+    @RequestMapping("/get/supporter/address/return")
+    ResultEntity<List<SupporterAddressReturnVO>> getSupporterAddressReturn(@RequestParam("projectId") Integer projectId);
+
+    @RequestMapping("/send/my/order/remote")
+    ResultEntity<String> sendMyOrderRemote(@RequestParam("orderId")Integer orderId);
+
+    @RequestMapping("/confirm/my/receipt")
+    ResultEntity<String> confirmMyReceipt(@RequestParam("orderId")Integer orderId);
 }

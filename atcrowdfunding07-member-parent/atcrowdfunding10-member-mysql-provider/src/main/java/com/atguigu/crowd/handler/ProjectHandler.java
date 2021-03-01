@@ -24,6 +24,17 @@ public class ProjectHandler {
 
     private Logger logger = LoggerFactory.getLogger(ProjectHandler.class);
 
+    @RequestMapping("/get/supporter/address/return")
+    public ResultEntity<List<SupporterAddressReturnVO>> getSupporterAddressReturn(@RequestParam("projectId") Integer projectId){
+        try {
+            List<SupporterAddressReturnVO> supporterAddressReturn =  projectService.getSupporterAddressReturn(projectId); //获取关注的id
+            return ResultEntity.successWithData(supporterAddressReturn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
     @RequestMapping("/is/has/follow")
     public ResultEntity<Integer> isHasFollow(@RequestParam("projectId")Integer projectId,@RequestParam("id") Integer memberId){
         try {

@@ -23,7 +23,7 @@ public class DetailReturnVO {
     //具体限额数量
     private Integer purchase;
     //当前该档位支持者数量
-    private Integer supproterCount;
+    private Integer supproterCount; //需要手动查找
     //运费，取值为  0时表示包邮
     private Integer freight;
     //众筹成功后多少天发货

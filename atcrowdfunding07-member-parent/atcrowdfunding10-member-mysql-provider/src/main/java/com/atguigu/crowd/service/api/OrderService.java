@@ -22,4 +22,8 @@ public interface OrderService {
     void saveOrder(OrderVO orderVO);
 
     void deleteMyOrderById(Integer orderId);
+
+    void sendMyOrder(Integer orderId);
+
+    void confirmMyReceipt(Integer orderId);
 }

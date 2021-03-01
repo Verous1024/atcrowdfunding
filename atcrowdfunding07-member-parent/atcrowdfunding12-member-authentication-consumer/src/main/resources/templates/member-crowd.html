@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/theme.css">
     <script src="jquery/jquery-2.1.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="layer/layer.js"></script>
     <script src="script/docs.min.js"></script>
     <script src="script/back-to-top.js"></script>
     <style>
@@ -73,6 +74,28 @@
                 })
             });
 
+            $(".confirmReceiptBtn").click(function () {
+              var orderId =  $(this).attr("orderId");
+              $.ajax({
+                  url:"auth/confirm/receipt",
+                  data:{
+                      "orderId":orderId
+                  },
+                  type: "post",
+                  dataType: "json",
+                  success:function (response) {
+                      var result =response.result;
+                      if (result == "SUCCESS") {
+                          var id = "#"+ "orderStatusTd"+orderId;
+                          $(id).find("b").empty().append("已收货");
+                          $(id).find("b").removeAttr("style").attr("style","color:#00FF7F");
+                          layer.msg("确认收货成功！");
+                      }else{
+                          layer.msg("确认收货失败！请重新尝试！");
+                      }
+                  }
+              })
+            })
         })
     </script>
 </head>
@@ -101,7 +124,7 @@
             </div>
             <div class="list-group">
                 <div class="list-group-item" style="cursor:pointer;" onclick="window.location.href='member.html'">
-                    <a th:href="@{/auth/member/to/center/page}">资产总览</a><span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
+                    <a th:href="@{/auth/member/to/center/page}">个人信息</a><span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
                 </div>
                 <div class="list-group-item active">
                     我的众筹<span class="badge"><i class="glyphicon glyphicon-chevron-right"></i></span>
@@ -182,10 +205,17 @@
                                                 <td style="vertical-align:middle;" th:text="${support.supportTime}">2017-05-23 11:31:22</td>
                                                 <td style="vertical-align:middle;" >[[${support.orderAmount}]].00<br>(运费：[[${support.freight}]].00 )</td>
                                                 <td style="vertical-align:middle;" th:text="${support.returnCount}">1</td>
-                                                <td style="vertical-align:middle;">交易完成</td>
+                                                <td th:id="'orderStatusTd'+${support.orderId}" th:switch="${support.orderStatus}" style="vertical-align:middle;">
+                                                    <b th:case="0" style="color:#DC143C">未发货</b>
+                                                    <b th:case="1" style="color:#1E90FF">已发货</b>
+                                                    <b th:case="2" style="color:#00FF7F">已收货</b>
+                                                </td>
                                                 <td style="vertical-align:middle;">
                                                     <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                                                        <a th:href="'http://localhost/delete/my/order/' + ${support.orderId}" id="deleteOrderBtn" type="button" class="btn btn-default">删除订单</a>
+                                                        <a th:if="${support.orderStatus == 2}" th:href="'http://localhost/delete/my/order/' + ${support.orderId}" id="deleteOrderBtn" type="button" class="btn btn-default">删除订单</a>
+                                                        <a th:if="${support.orderStatus != 2}" th:href="'http://localhost/delete/my/order/' + ${support.orderId}" id="deleteOrderBtn" type="button" class="btn btn-default" disabled="true">删除订单</a>
+                                                        <button th:if="${support.orderStatus == 1}" th:orderId="${support.orderId}" type="button" class="btn btn-default confirmReceiptBtn">确认收货</button>
+                                                        <button th:if="${support.orderStatus != 1}" th:orderId="${support.orderId}" type="button" class="btn btn-default confirmReceiptBtn" disabled="true">确认收货</button>
                                                        <!-- <button id="moreAboutOrderBtn" type="button" class="btn btn-default">交易详情</button>-->
                                                     </div>
                                                 </td>
@@ -315,7 +345,7 @@
                                                 <td style="vertical-align:middle;">草稿</td>
                                                 <td style="vertical-align:middle;">
                                                     <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                                                        <button type="button" class="btn btn-default">项目预览</button>
+                                                        <a th:href="'http://localhost/project/supporter/project/return/' + ${project.id}" type="button" class="btn btn-default">支持预览</a>
                                                        <!-- <button  type="button" class="btn btn-default">修改项目</button>-->
                                                         <a th:href="'http://localhost/delete/my/project/' + ${project.id}" type="button" class="btn btn-default">删除项目</a>
                                                         <!--<button type="button" class="btn btn-default">问题管理</button>-->

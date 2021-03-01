@@ -27,8 +27,9 @@ public class MySupportVO {
     private String supportTime; //支持时间，从订单号中拿出来
     private Double orderAmount;// 支持金额
     private Integer returnCount; //回报数量
-    private Integer status;//众筹是否成功
+    private Integer status;//交易状态
     private Integer freight;//运费
     private Integer day;//要求的天数
     private Integer percentage; //百分比
+    private Integer orderStatus; //交易状态
 }

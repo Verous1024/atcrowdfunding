@@ -21,6 +21,8 @@ public class OrderPO {
 
     private Integer returnId;
 
+    private Integer status;
+
     public Integer getId() {
         return id;
     }
@@ -99,5 +101,13 @@ public class OrderPO {
 
     public void setReturnId(Integer returnId) {
         this.returnId = returnId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -29,6 +29,29 @@ public class OrderProviderHandler {
     private OrderService orderService;
     private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    @RequestMapping("/confirm/my/receipt")
+    public ResultEntity<String> confirmMyReceipt(@RequestParam("orderId") Integer orderId) {
+        try {
+            orderService.confirmMyReceipt(orderId);
+            return ResultEntity.successWithoutData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
+
+    @RequestMapping("/send/my/order/remote")
+    public ResultEntity<String> sendMyOrderRemote(@RequestParam("orderId") Integer orderId) {
+        try {
+            orderService.sendMyOrder(orderId);
+            return ResultEntity.successWithoutData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
     @RequestMapping("/delete/my/order/remote")
     public ResultEntity<String> deleteMyOrderRemote(@RequestParam("orderId") Integer orderId) {
         try {

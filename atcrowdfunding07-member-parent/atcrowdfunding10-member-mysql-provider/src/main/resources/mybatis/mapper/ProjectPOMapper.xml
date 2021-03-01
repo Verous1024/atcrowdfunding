@@ -200,6 +200,42 @@
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
 
+    <!--SupporterAddressReturn selectSupporterAddressReturn(Integer projectId);-->
+    <select id="selectSupporterAddressReturn" resultType="com.atguigu.crowd.entity.vo.SupporterAddressReturnVO">
+        select
+        t_order.id id,
+        t_member.loginacct loginacct,
+        t_address.receive_name receiveName,
+        t_address.phone_num phoneNum,
+        t_address.address address,
+        t_order.order_remark orderRemark,
+        t_order_project.return_content returnContent,
+        t_order_project.return_count returnCount,
+        t_order.invoice invoice,
+        t_order.invoice_title invoiceTitle,
+        t_order.`status` status
+        from t_order
+        left JOIN t_order_project ON t_order_project.order_id = t_order.id
+        left JOIN t_address ON t_address.id = t_order.address_id
+        left JOIN t_member ON t_member.id = t_address.member_id
+        where t_order.project_id = #{projectId}
+    </select>
+
+    <!--Integer getSupproterCount(Integer returnId);-->
+    <select id="getSupproterCount" resultType="java.lang.Integer">
+        select count(*)
+        from t_order
+        GROUP BY return_id
+        HAVING return_id = #{returnId}
+    </select>
+
+    <!--    void updateSupportMoneyById(@Param("projectId")Integer projectId,@Param("totalSummary") int totalSummary,@Param("supportmoney") Long supportmoney);-->
+    <update id="updateSupportMoneyById">
+        update t_project
+        set supportmoney = #{totalSummary}+#{supportmoney}
+        where id = #{projectId}
+    </update>
+
     <!--Integer selectMyFollow(@Param("projectId")Integer projectId,@Param("memberId") Integer memberId);-->
     <select id="selectMyFollow" resultType="java.lang.Integer">
         select id
@@ -239,7 +275,8 @@
         t_order.order_num	orderNum,
         t_order.order_amount	orderAmount,
         t_order_project.return_count	returnCount,
-        t_return.freight	freight
+        t_return.freight	freight,
+        t_order.status orderStatus
         FROM t_order
         LEFT JOIN t_project ON t_project.id = t_order.project_id
         LEFT JOIN t_order_project ON t_order.id = t_order_project.order_id

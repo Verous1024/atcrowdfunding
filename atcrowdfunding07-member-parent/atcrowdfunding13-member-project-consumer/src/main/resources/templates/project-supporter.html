@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <base th:href="@{/}"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script src="script/docs.min.js"></script>
+    <script src="script/back-to-top.js"></script>
+    <style>
+        .tree li {
+            list-style-type: none;
+            cursor: pointer;
+        }
+
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $(".list-group-item").click(function () {
+                if ($(this).find("ul")) {
+                    $(this).toggleClass("tree-closed");
+                    if ($(this).hasClass("tree-closed")) {
+                        $("ul", this).hide("fast");
+                    } else {
+                        $("ul", this).show("fast");
+                    }
+                }
+            });
+
+            $(".shipBtn").click(function () {
+                return !$("this").hasClass("notwork");
+            })
+        });
+    </script>
+</head>
+
+<body>
+<!-- 头部信息 -->
+<div th:replace="include::header"></div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <div class="tree">
+                <ul style="padding-left:0px;" class="list-group">
+                    <li class="list-group-item tree-closed">
+                        <a href="main.html"><i class="glyphicon glyphicon-dashboard"></i>项目面板</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span><i class="glyphicon glyphicon glyphicon-tasks"></i> 项目管理 <span class="badge" style="float:right">3</span></span>
+                        <ul style="margin-top:10px;">
+                            <li style="height:30px;">
+                                <a href="#" style="color:red;"><i class="glyphicon glyphicon-user"></i> 支持者</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 数据列表</h3>
+                </div>
+                <div class="panel-body">
+                    <br>
+                    <hr style="clear:both;">
+                    <div class="table-responsive" style="white-space: nowrap;
+                    overflow: hidden; overflow-x: scroll; -webkit-backface-visibility: hidden;
+                    -webkit-overflow-scrolling: touch;">
+                        <table class="table  table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th width="30">#</th>
+                                <th width="80">用户昵称</th>
+                                <th width="80">接收人姓名</th>
+                                <th width="110">手机号码</th>
+                                <th width="200">地址</th>
+                                <th width="200">备注</th>
+                                <th width="200">回报内容</th>
+                                <th width="70">回报数量</th>
+                                <th width="130">是否需要发票</th>
+                                <th width="70">状态</th>
+                                <th width="70">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="supporter,supporterStat : ${supporters}">
+                                <td th:text="${supporterStat.index}">1</td>
+                                <td th:text="${supporter.loginacct}">火星人</td>
+                                <td th:text="${supporter.receiveName}">彭先生</td>
+                                <td th:text="${supporter.phoneNum}">1829029402</td>
+                                <td th:text="${supporter.address}">重庆市西南大学</td>
+                                <td th:text="${supporter.orderRemark}">发邮政</td>
+                                <td th:text="${supporter.returnContent}">白嫖下次一定</td>
+                                <td th:text="${supporter.returnCount}">3</td>
+                                <td th:if="${supporter.invoice==0}">不需要</td>
+                                <td th:if="${supporter.invoice==1}">需要([[${supporter.invoiceTitle}]])</td>
+                                <td th:if="${supporter.status==0}" class="danger">未发货</td>
+                                <td th:if="${supporter.status==1}" class="info">已发货</td>
+                                <td th:if="${supporter.status==2}" class="success">已收货</td>
+                                <td>
+                                    <a th:if="${supporter.status==0}" th:href="'http://localhost/project/send/my/order/' + ${supporter.id}+'/'+${projectId}"
+                                       class="btn btn-primary btn-xs shipBtn">
+                                        <i class=" glyphicon glyphicon-ok" title="发货！"></i></a>
+                                    <a th:if="${supporter.status!=0}" th:href="'http://localhost/project/send/my/order/' + ${supporter.id}+'/'+${projectId}"
+                                       class="btn btn-primary btn-xs shipBtn notwork"  disabled="true">
+                                        <i class=" glyphicon glyphicon-ok" title="发货！"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--页脚-->
+<div th:replace="include::footer"></div>
+
+
+</body>
+</html>
+

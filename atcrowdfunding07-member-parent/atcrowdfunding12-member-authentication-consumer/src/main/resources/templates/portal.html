@@ -231,9 +231,9 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse" style="float:right;">
                     <ul   class="nav navbar-nav navbar-right">
-                        <li th:if="${session.loginMember.username == null}"><a href="login.html" th:href="@{/auth/member/to/login/page.html}">登录</a></li>
-                        <li th:if="${session.loginMember.username == null}" ><a href="member-reg" th:href="@{/auth/member/to/reg/page.html}">注册</a></li>
-                        <li th:if="${session.loginMember.username != null}" class="dropdown">
+                        <li th:if="${session.loginMember?.username == null}"><a href="login.html" th:href="@{/auth/member/to/login/page.html}">登录</a></li>
+                        <li th:if="${session.loginMember?.username == null}" ><a href="member-reg" th:href="@{/auth/member/to/reg/page.html}">注册</a></li>
+                        <li th:if="${session.loginMember?.username != null}" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> [[${session.loginMember.username}]]<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="member.html" th:href="@{/auth/member/to/center/page}"><i class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
@@ -319,8 +319,8 @@
                                 <a href="projects.html" th:href="@{/project/get/all/project}">更多...</a>
                             </div>
                             <h3>
-                                <span th:text="${type.name}">类别</span>
-                                <small th:text="${type.remark}" style="color:#FFF;">类别的信息展示</small>
+                                <span th:text="${type.name}" style="font-size:20px">类别</span>
+                                <small th:text="${type.remark}" style="color:#FFF;font-size:14px">类别的信息展示</small>
                             </h3>
                         </div>
                         <div class="mBd" style="padding-top:10px;">

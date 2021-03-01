@@ -17,6 +17,8 @@
     <script src="script/back-to-top.js"></script>
     <script>
         $(function () {
+            $('[data-toggle="popover"]').popover();
+
             $('#myTab a').click(function (e) {
                 e.preventDefault()
                 $(this).tab('show');
@@ -81,7 +83,8 @@
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                     var path = url.createObjectURL(file);
-                    var imgHtml = "<img src='" + path + "'/><br/>";
+                    /* var imgHtml = "<img src='" + path + "' style='width:200px'/><br/>";*/
+                    var imgHtml = "<div class='col-sm-5'>" + "<img src='" + path + "' class='img-responsive'/><br/>" + "</div>";
                     //使用path修改img标签的src属性
                     $("#showDetailPicture").append(imgHtml);
                 }
@@ -97,6 +100,7 @@
                 }
                 $("#projectForm").submit();
             });
+
 
         })
     </script>
@@ -261,7 +265,7 @@
                                         </blockquote>
                                     </div>
                                     <div class="col-md-12 column">
-                                        <div class="page-header" style="    border-bottom-style: dashed;">
+                                        <div class="page-header" style="border-bottom-style: dashed;">
                                             <h3>
                                                 项目信息
                                             </h3>
@@ -287,6 +291,9 @@
                                                            value="4"> 农业
                                                 </label>
                                             </div>
+                                            <a tabindex="0" class="btn btn-lg btn-danger" role="button"
+                                               data-toggle="popover" data-trigger="focus" title="错误"
+                                               data-content="请选择对应的分类">可消失的弹出框</a>
                                         </div>
                                         <div class="form-group">
                                             <label for="labelchoose" class="col-sm-2 control-label">标签</label>
@@ -344,12 +351,12 @@
                                             <label class="col-sm-2 control-label">项目头图</label>
                                             <div class="col-sm-10">
                                                 <input type="file" name="headerPicture" style="display: none;"/>
-                                                <button id="uploadHeadBtn" type="button"
+                                                <button id="uploadHeadBtn" type="button" style="margin-bottom:20px"
                                                         class="btn btn-primary btn-lg active">上传图片
                                                 </button>
                                                 <label class="control-label">图片上无文字,支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：740*457px</label>
                                                 <br/>
-                                                <img id="add_header_picture" style="display: none;"/>
+                                                <img id="add_header_picture" style="display: none;width:430px"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -357,7 +364,7 @@
                                             <div class="col-sm-10">
                                                 <input type="file" multiple="multiple" name="detailPictureList"
                                                        style="display: none;"/>
-                                                <button id="uploadDetailBtn" type="button"
+                                                <button id="uploadDetailBtn" type="button" style="margin-bottom:20px"
                                                         class="btn btn-primary btn-lg active">上传图片
                                                 </button>
                                                 <label class="control-label">支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：宽740px</label>
@@ -378,7 +385,7 @@
                                                 <div class="col-sm-10">
                                                     <input type="text" name="memberLauchInfoVO.descriptionSimple"
                                                            class="form-control"
-                                                           placeholder="一句话自我介绍，不超过40字">
+                                                           placeholder="一句话自我介绍,或者公司名称，不超过40字">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -393,7 +400,7 @@
                                                 <label class="col-sm-2 control-label">联系电话</label>
                                                 <div class="col-sm-10">
                                                     <input type="text" name="memberLauchInfoVO.phoneNum"
-                                                           class="form-control" placeholder="此信息不会显示在项目页面">
+                                                           class="form-control" placeholder="此信息不会显示在项目页面，仅供于官方联系">
                                                 </div>
                                             </div>
                                             <div class="form-group">

@@ -41,4 +41,6 @@ public interface ProjectService {
     void subscribeStep1(Integer projectId, Integer memberId);
 
     void subscribeStep2(Integer i, Integer projectId);
+
+    List<SupporterAddressReturnVO> getSupporterAddressReturn(Integer projectId);
 }

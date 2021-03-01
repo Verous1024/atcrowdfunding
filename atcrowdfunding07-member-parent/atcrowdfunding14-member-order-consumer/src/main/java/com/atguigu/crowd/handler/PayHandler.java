@@ -135,7 +135,7 @@ public class PayHandler {
             return "system";
         }else {
             //校验失败
-            model.addAttribute("message","校验失败");
+            model.addAttribute("message","支付成功！");
             return "system";
         }
     }

@@ -19,8 +19,62 @@
     <script type="text/javascript" src="layer/layer.js"></script>
     <script type="text/javascript">
         $(function () {
+
+            var successCount = 0;
+
+            var time = 60;
+            var flag = true;   //设置点击标记，防止60内再次点击生效
+
+            //发送验证码
+            $('#sendBtn').click(function(){
+                $(this).attr("disabled",true);
+                var phoneNum = $.trim($("#add_phone").val());
+                if(flag){
+                    var timer = setInterval(function () {
+                        if(time == 60 && flag){
+                            flag = false; //发送ajxa请求
+                            $.ajax({
+                                type : 'POST',
+                                async : false,
+                                url : 'auth/member/send/short/message.json',//修改地址
+                                data : {
+                                    "phoneNum" : phoneNum
+                                },
+                                dataType:"json",
+                                success : function(response) {
+                                    if(response.result == "SUCCESS"){
+                                        layer.msg("发送验证码成功，请在1分钟内完成注册！");
+                                        $("#sendBtn").html("已发送");
+                                    }else {
+                                        if(/^1403$/.test(response.data)){
+                                            layer.msg("手机号码不存在");
+                                            $("#add_phone_div").removeClass("has-success").addClass("has-error");
+                                            $("#phoneNum_reminder").empty().removeAttr("hidden").append("手机号码不存在！");
+                                        }else{
+                                            $("#add_phone_div").removeClass("has-success").addClass("has-error");
+                                            $("#phoneNum_reminder").empty().removeAttr("hidden").append("后台服务器出现故障！");
+                                        }
+                                        flag = true;
+                                        time = 60;
+                                        clearInterval(timer);
+                                    }
+                                }
+                            });
+                        }else if(time == 0){
+                            $("#sendBtn").removeAttr("disabled");
+                            $("#sendBtn").html("获取验证码");
+                            clearInterval(timer);
+                            time = 60;
+                            flag = true;
+                        }else {
+                            $("#sendBtn").html("("+time + " s)后重新发送");
+                            time--;
+                        }
+                    },1000);
+                }
+            });
             //1、给发送验证码按钮绑定单击事件
-            $("#sendBtn").click(function () {
+          /*  $("#sendBtn").click(function () {
 
                 //1、获取手机号
                 var phoneNum = $.trim($("#add_phone").val());
@@ -54,7 +108,7 @@
                         });
                     }
                 });
-            });
+            });*/
 
             //2、如果是手机号错误，调用该函数，进行提示，并改变样式
             function showInformateForPhoneNumNotExist(message) {
@@ -66,13 +120,19 @@
             function bingChange(input, reminder, div, regex, successMessage, errorMessage) {
                 input.change(function () {
                     reminder.empty();
-                    var inputVal = input.val();
-                    if (regex.test(inputVal)) {
-                        div.removeClass("has-error").addClass("has-success");
-                        // reminder.removeAttr("hidden").append(successMessage); //不提示信息，仅仅改变框的颜色
-                    } else {
+                    var inputVal = $.trim(input.val()) ;
+                    if(inputVal==null || inputVal ==''){
                         div.removeClass("has-success").addClass("has-error");
-                        reminder.removeAttr("hidden").append(errorMessage);
+                        reminder.removeAttr("hidden").append("请填写此项");
+                    }else{
+                        if (regex.test(inputVal)) {
+                            div.removeClass("has-error").addClass("has-success");
+                            reminder.attr("hidden", "hidden"); //不提示信息，仅改变框的颜色
+                            successCount++;
+                        } else {
+                            div.removeClass("has-success").addClass("has-error");
+                            reminder.removeAttr("hidden").append(errorMessage);
+                        }
                     }
                 });
             }
@@ -91,25 +151,25 @@
             var regexCode = /^[0-9]{6,}$/;
             bingChange($("#add_code"), $("#code_reminder"), $("#add_code_div"), regexCode, "", "验证码格式错误！");
 
+
+
+
             //发送请求进行注册
             $("#regBtn").click(function () {
+                successCount = 0;
+                $("#add_acct").change();
+                $("#add_user").change();
+                $("#add_pswd").change();
+                $("#add_email").change();
+                $("#add_phone").change();
+                $("#add_code").change();
 
-                //判断是否可以发送请求，要求：所有项都填写且格式正确
-                var flag = true;
-                $(".form-group").each(function () {
-                    if (!$(this).hasClass("has-success")) {
-                        flag = false;
-                        if (!$(this).hasClass("has-error")) {
-                            $(this).removeClass("has-success").addClass("has-error");
-                            $(this).find("label").removeAttr("hidden").append("请填写此项！");
-                        }
-                    }
-                });
+
                 //根据结果flag进行判断
-                if (!flag) {
+                if (successCount != 6) {
                     return false;
                 }
-                alert("发送ajxa请求");
+
                 //正确就发送ajax请求
                 $.ajax({
                     url: "auth/do/member/register",
@@ -129,7 +189,6 @@
                         }
                     },
                     error: function (response) {
-                        alert("走不通！");
                         layer.msg("错误状态码：" + response.status + " ；错误信息：" + response.statusText, {
                             icon: 6,
                             time: 4000,
