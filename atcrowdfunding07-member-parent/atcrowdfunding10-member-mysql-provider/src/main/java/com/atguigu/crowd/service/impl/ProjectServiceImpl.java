@@ -4,6 +4,8 @@ import com.atguigu.crowd.entity.po.*;
 import com.atguigu.crowd.entity.vo.*;
 import com.atguigu.crowd.mapper.*;
 import com.atguigu.crowd.service.api.ProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ReturnPOMapper returnPOMapper;
 
+    private Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
     @Override
@@ -87,6 +90,7 @@ public class ProjectServiceImpl implements ProjectService {
     public DetailProjectVO getDetailProjectVO(Integer projectId) {
         // 1.查询得到 DetailProjectVO对象
         DetailProjectVO detailProjectVO = projectPOMapper.selectDetailProjectVO(projectId);
+        logger.info(detailProjectVO.toString());
         // 2.根据 status确定  statusText
         Integer status = detailProjectVO.getStatus();
         switch (status) {

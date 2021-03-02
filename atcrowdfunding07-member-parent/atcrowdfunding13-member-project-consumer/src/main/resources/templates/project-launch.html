@@ -17,7 +17,6 @@
     <script src="script/back-to-top.js"></script>
     <script>
         $(function () {
-            $('[data-toggle="popover"]').popover();
 
             $('#myTab a').click(function (e) {
                 e.preventDefault()
@@ -89,9 +88,27 @@
                     $("#showDetailPicture").append(imgHtml);
                 }
             });
-
-
             $("#submitBtn").click(function () {
+                successCount = 0;
+                $("[name=projectName]").change();
+                $("[name=projectDescription]").change();
+                $("[name=money]").change();
+                $("[name=day]").change();
+                $("#myself").change();
+                $("#detailMyself").change();
+                $("#phoneNumInput").change();
+                $("#kehudianhua").change();
+                checkTypeInformation();
+                if (tagIdList.length == 0) {
+                    $("#tagSpan").empty().append("请至少选择一个标签！");
+                } else {
+                    $("#tagSpan").empty();
+                    successCount++;
+                }
+                if (successCount != 10) {
+                    layer.msg("请填写所有表单项，并保证格式正确！");
+                    return false;
+                }
                 for (var i = 0; i < tagIdList.length; i++) {
                     var tagId = tagIdList[i];
 
@@ -101,7 +118,124 @@
                 $("#projectForm").submit();
             });
 
+            var successCount = 0;
+            //项目名称
+            $("[name=projectName]").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写项目名称");
+                } else {
+                    successCount++;
+                }
+            });
+            //一句话简介
+            $("[name=projectDescription]").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写项目的简介");
+                } else {
+                    successCount++;
+                }
+            });
+            //筹集金额
+            $("[name=money]").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写筹集金额");
+                } else {
+                    if (value < 100 || value > 1000000000) {
+                        $(this).next().append("请填写正确范围的金额");
+                    } else {
+                        successCount++;
+                    }
+                }
+            });
+            //筹集天数
+            $("[name=day]").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写筹资天数");
+                } else {
+                    if (value < 0 || value > 100) {
+                        $(this).next().append("请填写正确范围的筹资天数");
+                    } else {
+                        successCount++;
+                    }
+                }
+            });
+            //自我介绍
+            $("#myself").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写自我介绍（个体）/公司名称（企业）");
+                } else {
+                    successCount++;
+                }
+            });
 
+            //详细自我介绍
+            $("#detailMyself").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写详细的关于个体（公司）的介绍");
+                } else {
+                    successCount++;
+                }
+            });
+            //手机号码
+            $("#phoneNumInput").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写手机号码");
+                } else {
+                    if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(value)) {
+                        $(this).next().append("请填写正确的手机号码");
+                    } else {
+                        successCount++;
+                    }
+                }
+            });
+            //客服电话
+            $("#kehudianhua").change(function () {
+                $(this).next().empty();
+                var value = $.trim($(this).val());
+                if (value == null || value == "") {
+                    $(this).next().append("请填写客服电话");
+                } else {
+                    if (!/^\d{3}-\d{4}-\d{4}$/.test(value)) {
+                        $(this).next().append("请填写正确的客服电话");
+                    } else {
+                        successCount++;
+                    }
+                }
+            });
+            //分类信息
+            $(":checkbox").click(function () {
+                var len = $(":checkbox:checked").length;
+                $("#typeSpan").empty();
+                if (len == 0 || len == "") {
+                    $("#typeSpan").empty().append("请选择至少一个分类");
+                } else {
+                    successCount++;
+                }
+            });
+
+            function checkTypeInformation() {
+                var len = $(":checkbox:checked").length;
+                $("#typeSpan").empty();
+                if (len == 0 || len == "") {
+                    $("#typeSpan").empty().append("请选择至少一个分类");
+                } else {
+                    successCount++;
+                }
+            };
         })
     </script>
     <style>
@@ -272,7 +406,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inlineRadio1" class="col-sm-2 control-label">分类信息</label>
+                                            <label id="typeLabel" for="inlineRadio1"
+                                                   class="col-sm-2 control-label">分类信息</label>
                                             <div class="col-sm-10">
                                                 <label class="radio-inline">
                                                     <input type="checkbox" name="typeIdList" id="inlineRadio1"
@@ -290,10 +425,10 @@
                                                     <input type="checkbox" name="typeIdList" id="inlineRadio4 "
                                                            value="4"> 农业
                                                 </label>
+                                                <label>
+                                                    <b id="typeSpan" style="color: #ac2925"></b>
+                                                </label>
                                             </div>
-                                            <a tabindex="0" class="btn btn-lg btn-danger" role="button"
-                                               data-toggle="popover" data-trigger="focus" title="错误"
-                                               data-content="请选择对应的分类">可消失的弹出框</a>
                                         </div>
                                         <div class="form-group">
                                             <label for="labelchoose" class="col-sm-2 control-label">标签</label>
@@ -316,6 +451,7 @@
                                                         <span class="tagLabel label-txt" id="10">显卡</span>
                                                         <span class="tagLabel label-txt" id="11">内存条</span>
                                                     </li>
+                                                    <b id="tagSpan" style="color: #ac2925"></b>
                                                 </ul>
                                             </div>
                                         </div>
@@ -323,6 +459,7 @@
                                             <label class="col-sm-2 control-label">项目名称</label>
                                             <div class="col-sm-10">
                                                 <input name="projectName" type="text" class="form-control">
+                                                <b style="color: #ac2925"></b>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -330,6 +467,7 @@
                                             <div class="col-sm-10">
                                                 <textarea name="projectDescription" class="form-control"
                                                           rows="5"></textarea>
+                                                <b style="color: #ac2925"></b>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -337,6 +475,7 @@
                                             <div class="col-sm-10">
                                                 <input name="money" type="text" class="form-control"
                                                        style="width:100px;">
+                                                <b style="color: #ac2925"></b>
                                                 <label class="control-label">筹资金额不能低于100元,不能高于1000000000元</label>
                                             </div>
                                         </div>
@@ -344,6 +483,7 @@
                                             <label class="col-sm-2 control-label">筹资天数（天）</label>
                                             <div class="col-sm-10">
                                                 <input name="day" type="text" class="form-control" style="width:100px;">
+                                                <b style="color: #ac2925"></b>
                                                 <label class="control-label">一般10-90天，建议30天</label>
                                             </div>
                                         </div>
@@ -352,7 +492,9 @@
                                             <div class="col-sm-10">
                                                 <input type="file" name="headerPicture" style="display: none;"/>
                                                 <button id="uploadHeadBtn" type="button" style="margin-bottom:20px"
-                                                        class="btn btn-primary btn-lg active">上传图片
+                                                        class="btn btn-primary btn-lg active" data-toggle="tooltip"
+                                                        data-placement="top"
+                                                        title="项目头图仅一张，在项目审核审核通过后，将在首页上展示！">上传图片
                                                 </button>
                                                 <label class="control-label">图片上无文字,支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：740*457px</label>
                                                 <br/>
@@ -365,7 +507,9 @@
                                                 <input type="file" multiple="multiple" name="detailPictureList"
                                                        style="display: none;"/>
                                                 <button id="uploadDetailBtn" type="button" style="margin-bottom:20px"
-                                                        class="btn btn-primary btn-lg active">上传图片
+                                                        class="btn btn-primary btn-lg active" data-toggle="tooltip"
+                                                        data-placement="top"
+                                                        title="项目详图可多张，在项目审核审核通过后，供用户进入该项目详细查看时！！">上传图片
                                                 </button>
                                                 <label class="control-label">支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：宽740px</label>
                                                 <div id="showDetailPicture"></div>
@@ -383,31 +527,38 @@
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">自我介绍</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" name="memberLauchInfoVO.descriptionSimple"
+                                                    <input id="myself" type="text"
+                                                           name="memberLauchInfoVO.descriptionSimple"
                                                            class="form-control"
-                                                           placeholder="一句话自我介绍,或者公司名称，不超过40字">
+                                                           placeholder="一句话自我介绍（个体）或者公司名称（企业），不超过40字">
+                                                    <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">详细自我介绍</label>
                                                 <div class="col-sm-10">
-                                                    <textarea class="form-control" rows="5"
+                                                    <textarea id="detailMyself" class="form-control" rows="5"
                                                               name="memberLauchInfoVO.descriptionDetail"
                                                               placeholder="向支持者详细介绍你自己或你的团队及项目背景，让支持者在最短时间内了解你，不超过160字"></textarea>
+                                                    <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">联系电话</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" name="memberLauchInfoVO.phoneNum"
+                                                    <input id="phoneNumInput" type="text"
+                                                           name="memberLauchInfoVO.phoneNum"
                                                            class="form-control" placeholder="此信息不会显示在项目页面，仅供于官方联系">
+                                                    <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label">客服电话</label>
+                                                <label class="col-sm-2 control-label ">客服电话</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" name="memberLauchInfoVO.serviceNum"
+                                                    <input id="kehudianhua" type="text"
+                                                           name="memberLauchInfoVO.serviceNum"
                                                            class="form-control" placeholder="此信息显示在项目页面">
+                                                    <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
                                         </div>
@@ -416,8 +567,7 @@
                             </div>
                         </div>
                         <div class="panel-footer" style="text-align:center;">
-                            <button id="submitBtn" type="button" class="btn  btn-warning btn-lg">下一步
-                            </button>
+                            <button id="submitBtn" type="button" class="btn  btn-warning btn-lg">下一步</button>
                         </div>
                     </div>
                 </form>

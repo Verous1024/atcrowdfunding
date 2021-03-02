@@ -151,9 +151,14 @@ public class MemberHandler {
                 BeanUtils.copyProperties(projectPO,projectVO);
                 Integer day = projectVO.getDay();
                 String deploydate = projectVO.getDeploydate();
-                Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
-                Date date = new Date();
-                Long existDay =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
+                Long existDay;
+                if (deploydate != "0") {
+                    Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
+                    Date date = new Date();
+                    existDay =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
+                }else{
+                    existDay = 0L;
+                }
                 projectVO.setLastDays(day - existDay);
                 int per = (int) (projectVO.getSupportmoney() * 100 / projectVO.getMoney() ) ;
                 projectVO.setPercentage(per);

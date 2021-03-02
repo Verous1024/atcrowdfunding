@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: atguigu-crowd-zuul
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 100MB
   redis:
     host: 127.0.0.1 #redis的主机，端口使用默认的即可
   session:
@@ -24,3 +28,8 @@ zuul:
     crowd-order:
       service-id: atguigu-crowd-order
       path: /order/**
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 7000
+  ConnectTimeout: 7000
