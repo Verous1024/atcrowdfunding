@@ -5,7 +5,6 @@ import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.service.api.AdminService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +73,7 @@ public class AdminHandler {
         return "redirect:/admin/get/page.html?pageNum=" + pageNum + "&keyword=" + keyword;
     }
 
-    @PreAuthorize("hasRole('经理')")
+    //@PreAuthorize("hasRole('经理')")
     @RequestMapping("/admin/get/page.html")
     public String getPageInfo(
             @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,

@@ -330,6 +330,7 @@
                     <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 数据列表</h3>
                 </div>
                 <div class="panel-body">
+
                     <form class="form-inline" role="form" style="float:left;">
                         <div class="form-group has-feedback">
                             <div class="input-group">
@@ -342,6 +343,7 @@
                                 class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
+
                     <button id="batchRemoveBtn" type="button" class="btn btn-danger"
                             style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i> 删除
@@ -349,10 +351,13 @@
                     <button id="showAddModalBtn" type="button" class="btn btn-primary" style="float:right;"><i
                             class="glyphicon glyphicon-plus"></i> 新增
                     </button>
+
                     <br>
-                    <hr style="clear:both;">
+                    <hr style="clear:both;"> <%--清除浮动效果--%>
+
                     <div class="table-responsive">
                         <table class="table  table-bordered table-hover">
+
                             <thead>
                             <tr>
                                 <th width="30">#</th>
@@ -361,16 +366,17 @@
                                 <th width="100">操作</th>
                             </tr>
                             </thead>
+
                             <tbody id="rolePageBody">
 
                             </tbody>
+
                             <tfoot>
                             <tr>
                                 <td colspan="6" align="center">
                                     <div id="Pagination" class="pagination"/> <!-- 这里显示分页 -->
                                 </td>
                             </tr>
-
                             </tfoot>
                         </table>
                     </div>
