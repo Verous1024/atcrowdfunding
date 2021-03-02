@@ -530,14 +530,18 @@
                                                     <input id="myself" type="text"
                                                            name="memberLauchInfoVO.descriptionSimple"
                                                            class="form-control"
-                                                           placeholder="一句话自我介绍（个体）或者公司名称（企业），不超过40字">
+                                                           placeholder="一句话自我介绍（个体）或者公司名称（企业），不超过40字"
+                                                           th:value="${launchInfo?.descriptionSimple}">
                                                     <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">详细自我介绍</label>
                                                 <div class="col-sm-10">
-                                                    <textarea id="detailMyself" class="form-control" rows="5"
+                                                    <textarea th:if="${launchInfo?.descriptionDetail!=null}" id="detailMyself" class="form-control" rows="5"
+                                                              name="memberLauchInfoVO.descriptionDetail"
+                                                              placeholder="向支持者详细介绍你自己或你的团队及项目背景，让支持者在最短时间内了解你，不超过160字">[[${launchInfo?.descriptionDetail}]]</textarea>
+                                                    <textarea th:if="${launchInfo?.descriptionDetail==null} " id="detailMyself" class="form-control" rows="5"
                                                               name="memberLauchInfoVO.descriptionDetail"
                                                               placeholder="向支持者详细介绍你自己或你的团队及项目背景，让支持者在最短时间内了解你，不超过160字"></textarea>
                                                     <b style="color: #ac2925"></b>
@@ -548,7 +552,8 @@
                                                 <div class="col-sm-10">
                                                     <input id="phoneNumInput" type="text"
                                                            name="memberLauchInfoVO.phoneNum"
-                                                           class="form-control" placeholder="此信息不会显示在项目页面，仅供于官方联系">
+                                                           class="form-control" placeholder="此信息不会显示在项目页面，仅供于官方联系"
+                                                           th:value="${launchInfo?.phoneNum}">
                                                     <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>
@@ -557,7 +562,8 @@
                                                 <div class="col-sm-10">
                                                     <input id="kehudianhua" type="text"
                                                            name="memberLauchInfoVO.serviceNum"
-                                                           class="form-control" placeholder="此信息显示在项目页面">
+                                                           class="form-control" placeholder="此信息显示在项目页面"
+                                                           th:value="${launchInfo?.serviceNum}">
                                                     <b style="color: #ac2925"></b>
                                                 </div>
                                             </div>

@@ -43,4 +43,6 @@ public interface ProjectService {
     void subscribeStep2(Integer i, Integer projectId);
 
     List<SupporterAddressReturnVO> getSupporterAddressReturn(Integer projectId);
+
+    MemberLauchInfoVO getMyLanuchInfo(Integer memberId);
 }

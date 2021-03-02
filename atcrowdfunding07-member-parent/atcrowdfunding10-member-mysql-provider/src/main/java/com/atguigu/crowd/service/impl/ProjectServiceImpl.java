@@ -48,7 +48,9 @@ public class ProjectServiceImpl implements ProjectService {
         projectPO.setMemberid(memberId);
         projectPO.setCreatedate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         //1.1 保存projectPO的同时还需要获取其id
-        Integer projectId = projectPOMapper.insertSelective(projectPO);
+        projectPOMapper.insertSelective(projectPO);
+        Integer projectId = projectPO.getId(); // 保存projectPO返回的id值从其原本对象中取出来
+        logger.info("保存project后返回的projectId：" + projectId);
         //2、保存项目的、分类的关联关系信息
         List<Integer> typeIdList = projectVO.getTypeIdList();
         projectPOMapper.insertTypeRelationship(typeIdList, projectId);
@@ -58,12 +60,19 @@ public class ProjectServiceImpl implements ProjectService {
         //4、保存项目中详情图片的路径信息
         List<String> detailPicturePathList = projectVO.getDetailPicturePathList();
         projectItemPicPOMapper.insertPathList(projectId, detailPicturePathList);
-        //5、保存项目发起人的信息
+        //5、保存项目发起人的信息 -- 修改
         MemberLauchInfoVO memberLauchInfoVO = projectVO.getMemberLauchInfoVO();
         MemberLaunchInfoPO memberLaunchInfoPO = new MemberLaunchInfoPO();
         BeanUtils.copyProperties(memberLauchInfoVO, memberLaunchInfoPO);
         memberLaunchInfoPO.setMemberid(memberId);
-        memberLaunchInfoPOMapper.insert(memberLaunchInfoPO);
+        MemberLaunchInfoPOExample example = new MemberLaunchInfoPOExample();
+        example.createCriteria().andMemberidEqualTo(memberId);
+        if(memberLaunchInfoPOMapper.selectByExample(example) == null) {
+           memberLaunchInfoPOMapper.insert(memberLaunchInfoPO);
+       }else{
+           memberLaunchInfoPOMapper.updateByPrimaryKey(memberLaunchInfoPO);
+       }
+
         //6、保存项目回报信息
         List<ReturnVO> returnVOList = projectVO.getReturnVOList();
         List<ReturnPO> returnPOS = new ArrayList<>();
@@ -134,12 +143,12 @@ public class ProjectServiceImpl implements ProjectService {
         }
         //4、将每个回报挡位的支持者显示出来
         List<DetailReturnVO> detailReturnVOList = detailProjectVO.getDetailReturnVOList();
-        for(DetailReturnVO detailReturnVO:detailReturnVOList){
+        for (DetailReturnVO detailReturnVO : detailReturnVOList) {
             Integer returnId = detailReturnVO.getReturnId();
-            Integer supproterCount =  projectPOMapper.getSupproterCount(returnId);
+            Integer supproterCount = projectPOMapper.getSupproterCount(returnId);
             if (supproterCount == null) {
                 detailReturnVO.setSupproterCount(0);
-            }else{
+            } else {
                 detailReturnVO.setSupproterCount(supproterCount);
             }
 
@@ -154,7 +163,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectPO> getAllProject(Integer typeId, Integer status, Integer orderType) {
-        return projectPOMapper.selectAllProjectWithType(typeId,status,orderType);
+        return projectPOMapper.selectAllProjectWithType(typeId, status, orderType);
     }
 
     @Override
@@ -177,7 +186,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
     @Override
     public void unsubscribeStep1(Integer projectId, Integer memberId) {
-          projectPOMapper.unsubscribeStep1(projectId,memberId);
+        projectPOMapper.unsubscribeStep1(projectId, memberId);
     }
 
 
@@ -200,14 +209,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Integer isHasFollow(Integer projectId, Integer memberId) {
-        return projectPOMapper.selectMyFollow(projectId,memberId);
+        return projectPOMapper.selectMyFollow(projectId, memberId);
 
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
     @Override
     public void subscribeStep1(Integer projectId, Integer memberId) {
-        projectPOMapper.subscribeStep1(projectId,memberId);
+        projectPOMapper.subscribeStep1(projectId, memberId);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class, readOnly = false)
@@ -218,7 +227,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<SupporterAddressReturnVO> getSupporterAddressReturn(Integer projectId) {
-       return projectPOMapper.selectSupporterAddressReturn(projectId);
+        return projectPOMapper.selectSupporterAddressReturn(projectId);
+    }
+
+    @Override
+    public MemberLauchInfoVO getMyLanuchInfo(Integer memberId) {
+        return projectPOMapper.selectMyLanuchInfo(memberId);
     }
 
     //如果是保存，需要填写修改事务等级

@@ -24,6 +24,17 @@ public class ProjectHandler {
 
     private Logger logger = LoggerFactory.getLogger(ProjectHandler.class);
 
+    @RequestMapping("/get/my/lanuch/info")
+    public ResultEntity<MemberLauchInfoVO> getMyLanuchInfo(@RequestParam("memberId")Integer memberId){
+        try {
+            MemberLauchInfoVO myLauchInfo =  projectService.getMyLanuchInfo(memberId); //获取关注的id
+            return ResultEntity.successWithData(myLauchInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
+
     @RequestMapping("/get/supporter/address/return")
     public ResultEntity<List<SupporterAddressReturnVO>> getSupporterAddressReturn(@RequestParam("projectId") Integer projectId){
         try {

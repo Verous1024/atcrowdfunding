@@ -99,8 +99,8 @@
                                 var td6 = "<td>" + ($("[name=freight]").val() == 0 ? "包邮" : $("[name=freight]").val()) + "</td>";
                                 var td7 = "<td>" + "<button type=\"button\" class=\"btn btn-primary btn-xs\"><i class=\" glyphicon glyphicon-pencil\"></i></button>\n" +
                                     "<button type=\"button\" class=\"btn btn-danger btn-xs\"><i class=\" glyphicon glyphicon-remove\"></i></button>" + "</td>";
-                                trHTML = "<tr>" + td0 + td1 + td2 + td3 + td4 + td5 + td6 + td7 + "</tr>";
-
+                                /*trHTML = "<tr>" + td0 + td1 + td2 + td3 + td4 + td5 + td6 + td7 + "</tr>";*/
+                                trHTML = "<tr>" + td0 + td1 + td2 + td3 + td4 + td5 + td6 + "</tr>";
                                 $("#returnTableBody").append(trHTML);
 
                                 $(".returnFormDiv").hide();
@@ -118,7 +118,6 @@
                             layer.msg("后台出现异常！", {icon: 2, time: 2000, btn: ["知道了", "关闭"]});
                         }
                     });
-
                 })
             });
         })
@@ -291,7 +290,7 @@
                                             <td>回报内容</td>
                                             <td>回报时间</td>
                                             <td>运费</td>
-                                            <td>操作</td>
+                                            <!--<td>操作</td>-->
                                         </tr>
                                         </thead>
                                         <tbody id="returnTableBody">
@@ -467,7 +466,7 @@
                                 onclick="window.location.href='start-step-1.html'">上一步
                         </button>-->
                         <a type="button" class="btn  btn-warning btn-lg" th:href="@{/project/create/confirm/page}">下一步</a>
-                        <a class="btn"> 预览 </a>
+                        <!--<a class="btn"> 预览 </a>-->
                     </div>
                 </div>
             </div>

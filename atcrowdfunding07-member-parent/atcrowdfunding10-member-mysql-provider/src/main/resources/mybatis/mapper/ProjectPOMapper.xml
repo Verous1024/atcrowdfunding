@@ -2,10 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.atguigu.crowd.mapper.ProjectPOMapper">
 
-
-
-
-
     <!-- 自定义的：用户点击首页的项目时，可以转发到的位置，需要的详细的项目和回报信息  -->
     <resultMap type="com.atguigu.crowd.entity.vo.DetailProjectVO" id="loadProjectDetailResultMap">
         <id column="id" property="projectId"/>
@@ -69,6 +65,17 @@
         from
         t_project
         where id=#{projectId}
+    </select>
+
+    <!--MemberLauchInfoVO selectMyLanuchInfo(Integer memberId);-->
+    <select id="selectMyLanuchInfo" resultType="com.atguigu.crowd.entity.vo.MemberLauchInfoVO">
+        select
+        description_simple descriptionSimple,
+        description_detail descriptionDetail,
+        phone_num phoneNum,
+        service_num serviceNum
+        from  t_member_launch_info
+        where  t_member_launch_info.`memberid` = #{memberId}
     </select>
 
     <!--List<VipProtalProjectVO> selectVipProject()获取vip产品-->

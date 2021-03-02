@@ -56,7 +56,7 @@ public class MemberHandler {
     @ResponseBody
     @RequestMapping("/auth/confirm/receipt")
     public ResultEntity<String> confirmMyReceipt(@RequestParam("orderId") Integer orderId) {
-        ResultEntity<String> resultEntity =  mySQLRemoteService.confirmMyReceipt(orderId);
+        ResultEntity<String> resultEntity = mySQLRemoteService.confirmMyReceipt(orderId);
         if (ResultEntity.SUCCESS.equals(resultEntity.getResult())) {
             return ResultEntity.successWithoutData();
         }
@@ -65,38 +65,39 @@ public class MemberHandler {
 
 
     @RequestMapping("auth/save/personal/information")
-    public String savePersonalInformation(MemberPO memberPO,HttpSession session) {
+    public String savePersonalInformation(MemberPO memberPO, HttpSession session) {
         mySQLRemoteService.updateMember(memberPO);
         MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
         loginMember.setLoginacct(memberPO.getLoginacct());
         loginMember.setUsername(memberPO.getUsername());
         loginMember.setEmail(memberPO.getEmail());
         loginMember.setPhonenum(memberPO.getPhonenum());
-        session.setAttribute("loginMember",loginMember);
+        session.setAttribute("loginMember", loginMember);
         return "redirect:http://localhost/auth/member/to/center/page";
     }
 
     @RequestMapping("/delete/my/project/{projectId}")
-    public String deleteMyProjectById(@PathVariable("projectId")Integer projectId) {
-        ResultEntity<String> resultEntity =  mySQLRemoteService.deleteMyProjectByIdRemote(projectId);
+    public String deleteMyProjectById(@PathVariable("projectId") Integer projectId) {
+        ResultEntity<String> resultEntity = mySQLRemoteService.deleteMyProjectByIdRemote(projectId);
         return "redirect:http://localhost/member/my/crowd";
     }
 
     @RequestMapping("/unsubscribe/{projectId}")
-    public String unsubscribe(@PathVariable("projectId") Integer projectId,HttpSession session){
+    public String unsubscribe(@PathVariable("projectId") Integer projectId, HttpSession session) {
         MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
-        ResultEntity<String> resultEntity =  mySQLRemoteService.unsubscribeRemote(projectId,loginMember.getId());
+        ResultEntity<String> resultEntity = mySQLRemoteService.unsubscribeRemote(projectId, loginMember.getId());
         return "redirect:http://localhost/member/my/crowd#attension";
     }
 
     @RequestMapping("/delete/my/order/{orderId}")
     public String deleteMyOrder(@PathVariable("orderId") Integer orderId) {
-            ResultEntity<String> resultEntity =  mySQLRemoteService.deleteMyOrderRemote(orderId);
-            return "redirect:http://localhost/member/my/crowd";
+        ResultEntity<String> resultEntity = mySQLRemoteService.deleteMyOrderRemote(orderId);
+        return "redirect:http://localhost/member/my/crowd";
     }
 
     /**
      * 请求转发到我的众筹页面
+     *
      * @param session
      * @param model
      * @return
@@ -108,38 +109,50 @@ public class MemberHandler {
         ResultEntity<List<MySupportVO>> mySupport1 = mySQLRemoteService.getMySupport(memberId);
         ResultEntity<List<ProjectPO>> myFocus1 = mySQLRemoteService.getMyFocus(memberId);
         ResultEntity<List<ProjectPO>> myProject1 = mySQLRemoteService.getMyProject(memberId);
-        if(ResultEntity.SUCCESS.equals(mySupport1.getResult())
+        if (ResultEntity.SUCCESS.equals(mySupport1.getResult())
                 && ResultEntity.SUCCESS.equals(myFocus1.getResult())
-                && ResultEntity.SUCCESS.equals(myProject1.getResult())){ //全部数据查找且无误
-            List<MySupportVO> mySupport =mySupport1.getData();
+                && ResultEntity.SUCCESS.equals(myProject1.getResult())) { //全部数据查找且无误
+            List<MySupportVO> mySupport = mySupport1.getData();
             //mySupport的剩余时间、还没有计算,支持日期
             for (MySupportVO supportVO : mySupport) {
                 logger.info(supportVO.toString());
                 Integer day = supportVO.getDay();
                 String deploydate = supportVO.getDeploydate();
-                Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
-                Date date = new Date();
-                Long existDay =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
+                Long existDay;
+                if (!Objects.equals("0", deploydate)) {
+                    Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
+                    Date date = new Date();
+                    existDay = (Long) ((date.getTime() - parse.getTime()) / 1000 / 60 / 60 / 24);
+                } else {
+                    existDay = 0L;
+                }
                 supportVO.setLastDays(day - existDay);
-                String timeString = supportVO.getOrderNum().substring(0,14);
+                String timeString = supportVO.getOrderNum().substring(0, 14);
                 Date supportime = new SimpleDateFormat("yyyyMMddHHmmss").parse(timeString);
                 String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(supportime);
                 supportVO.setSupportTime(format);
-                int per = (int) (supportVO.getSupportmoney() * 100 / supportVO.getMoney() ) ;
-                logger.info("per"+per);
+                int per = (int) (supportVO.getSupportmoney() * 100 / supportVO.getMoney());
+                logger.info("per" + per);
                 supportVO.setPercentage(per);
             }
             List<ProjectPO> myFocusPO = myFocus1.getData();
             ArrayList<MyCrowdProjectVO> myFocus = new ArrayList<MyCrowdProjectVO>();
             for (ProjectPO focusPO : myFocusPO) {
                 MyCrowdProjectVO focusVO = new MyCrowdProjectVO();
-                BeanUtils.copyProperties(focusPO,focusVO);
+                BeanUtils.copyProperties(focusPO, focusVO);
                 Integer day = focusVO.getDay();
-                Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(focusVO.getDeploydate());
-                Date date = new Date();
-                Long existDay =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
+                String deploydate = focusVO.getDeploydate();
+                Long existDay = 0L;
+                if (!Objects.equals("0", deploydate)) {
+                    Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
+                    Date date = new Date();
+                    existDay = (Long) ((date.getTime() - parse.getTime()) / 1000 / 60 / 60 / 24);
+                } else {
+                    existDay = 0L;
+                    logger.info("existDay" + existDay);
+                }
                 focusVO.setLastDays(day - existDay);
-                int per = (int) (focusVO.getSupportmoney()* 100 / focusVO.getMoney() ) ;
+                int per = (int) (focusVO.getSupportmoney() * 100 / focusVO.getMoney());
                 focusVO.setPercentage(per);
                 myFocus.add(focusVO);
             }
@@ -148,25 +161,25 @@ public class MemberHandler {
             ArrayList<MyCrowdProjectVO> myProject = new ArrayList<MyCrowdProjectVO>();
             for (ProjectPO projectPO : myProjectPO) {
                 MyCrowdProjectVO projectVO = new MyCrowdProjectVO();
-                BeanUtils.copyProperties(projectPO,projectVO);
+                BeanUtils.copyProperties(projectPO, projectVO);
                 Integer day = projectVO.getDay();
                 String deploydate = projectVO.getDeploydate();
                 Long existDay;
-                if (deploydate != "0") {
+                if (!Objects.equals("0", deploydate)) {
                     Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(deploydate);
                     Date date = new Date();
-                    existDay =(Long)( (date.getTime() - parse.getTime())/1000/60/60/24);
-                }else{
+                    existDay = (Long) ((date.getTime() - parse.getTime()) / 1000 / 60 / 60 / 24);
+                } else {
                     existDay = 0L;
                 }
                 projectVO.setLastDays(day - existDay);
-                int per = (int) (projectVO.getSupportmoney() * 100 / projectVO.getMoney() ) ;
+                int per = (int) (projectVO.getSupportmoney() * 100 / projectVO.getMoney());
                 projectVO.setPercentage(per);
                 myProject.add(projectVO);
             }
-            model.addAttribute("mySupport",mySupport);
-            model.addAttribute("myFocus",myFocus);
-            model.addAttribute("myProject",myProject);
+            model.addAttribute("mySupport", mySupport);
+            model.addAttribute("myFocus", myFocus);
+            model.addAttribute("myProject", myProject);
             return "member-crowd";
         }
         return "member-center"; //如果查询数据失败，就返回到自己的前一个页面

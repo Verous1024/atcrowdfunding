@@ -342,8 +342,12 @@
                                                     </div>
                                                 </td>
                                                 <td style="vertical-align:middle;">[[${project.supportmoney}]].00</td>
-                                                <td style="vertical-align:middle;">草稿</td>
-                                                <td style="vertical-align:middle;">
+                                                <td th:if="${project.status==0}" style="vertical-align:middle;" class="warning">待审核</td>
+                                                <td th:if="${project.status==1}" style="vertical-align:middle;" class="info">众筹中</td>
+                                                <td th:if="${project.status==2}" style="vertical-align:middle;" class="success">众筹成功</td>
+                                                <td th:if="${project.status==3}" style="vertical-align:middle;" class="warning">众筹失败</td>
+                                                <td th:if="${project.status==4}" style="vertical-align:middle;" class="danger">审核未通过</td>
+                                                <td  style="vertical-align:middle;">
                                                     <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                                                         <a th:href="'http://localhost/project/supporter/project/return/' + ${project.id}" type="button" class="btn btn-default">支持预览</a>
                                                        <!-- <button  type="button" class="btn btn-default">修改项目</button>-->

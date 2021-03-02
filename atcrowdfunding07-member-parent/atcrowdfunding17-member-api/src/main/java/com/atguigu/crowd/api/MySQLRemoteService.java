@@ -97,4 +97,7 @@ public interface MySQLRemoteService {
 
     @RequestMapping("/confirm/my/receipt")
     ResultEntity<String> confirmMyReceipt(@RequestParam("orderId")Integer orderId);
+
+    @RequestMapping("/get/my/lanuch/info")
+    ResultEntity<MemberLauchInfoVO> getMyLanuchInfo(@RequestParam("memberId")Integer memberId);
 }

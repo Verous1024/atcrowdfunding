@@ -59,4 +59,6 @@ public interface ProjectPOMapper {
     Integer getSupproterCount(Integer returnId);
 
     List<SupporterAddressReturnVO> selectSupporterAddressReturn(Integer projectId);
+
+    MemberLauchInfoVO selectMyLanuchInfo(Integer memberId);
 }
