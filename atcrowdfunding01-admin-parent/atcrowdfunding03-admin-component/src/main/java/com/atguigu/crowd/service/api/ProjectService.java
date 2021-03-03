@@ -14,4 +14,6 @@ public interface ProjectService {
     PageInfo<ProjectTabVO> getPageInfo(Integer pageNum, Integer pageSize, String keyword);
 
     ProjectDetailVO getProjectDetailVO(Integer projectId);
+
+    void doExaminationPass(Integer projectId,Integer type);
 }

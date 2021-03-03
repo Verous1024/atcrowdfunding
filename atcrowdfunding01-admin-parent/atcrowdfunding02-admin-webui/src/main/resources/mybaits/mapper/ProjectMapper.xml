@@ -136,6 +136,20 @@
     id, project_name, project_description, money, day, status, deploydate, supportmoney, 
     supporter, completion, memberid, createdate, follower, header_picture_path
   </sql>
+  <!-- List<ProjectTabVO> selectProjectByStatus(@Param("keyword") String keyword);-->
+  <select id="selectProjectByStatus" resultType="com.atguigu.crowd.entity.ProjectTabVO">
+    select
+        t_project.id id,
+        project_name projectName,
+        launch.description_simple launchMember,
+        money money,
+        `day` day,
+        createdate createdate,
+        `status` status
+        from t_project
+        LEFT JOIN t_member_launch_info as launch ON launch.memberid = t_project.memberid
+    WHERE `status`= #{keyword}
+  </select>
   <!-- List<Project> selectProjectByKeyword(String keyword);-->
   <select id="selectProjectByKeyword" resultType="com.atguigu.crowd.entity.ProjectTabVO">
     select
@@ -154,8 +168,8 @@
     money like concat("%",#{keyword},"%") OR
     `day` like concat("%",#{keyword},"%") OR
     createdate like concat("%",#{keyword},"%")
-    ORDER BY `status`
   </select>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.ProjectExample" >
     select
     <if test="distinct" >

@@ -1,4 +1,4 @@
-<%--
+admin-main.jsp<%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2021/2/16
@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 
-    <%@ include file="/WEB-INF/include-head.jsp" %>
+<%@ include file="/WEB-INF/include-head.jsp" %>
 
 <body>
 <%@ include file="/WEB-INF/include-nav.jsp" %>
@@ -25,30 +25,63 @@
             <h1 class="page-header">控制面板</h1>
 
             <div class="row placeholders">
+
                 <secutiry:authorize access="hasRole('经理')">
                     <div class="col-xs-6 col-sm-3 placeholder">
-                        <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+                        <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="图片加载失败">
                         <h4>Label</h4>
                         <span class="text-muted">经理可点击</span>
                     </div>
                 </secutiry:authorize>
+
                 <security:authorize access="hasRole('部长')">
                     <div class="col-xs-6 col-sm-3 placeholder">
-                        <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+                        <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="图片加载失败">
                         <h4>Label</h4>
                         <span class="text-muted">部长可点击</span>
                     </div>
                 </security:authorize>
+
                 <div class="col-xs-6 col-sm-3 placeholder">
-                    <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-                    <h4>Label</h4>
-                    <span class="text-muted">Something else</span>
+                    <a href="admin/get/page.html">
+                        <img src="img/label-1.jpg" class="img-responsive" alt="图片加载失败" width="200px">
+                        <h4>管理员维护</h4>
+                        <span class="text-muted">Administrator maintenance</span>
+                    </a>
                 </div>
+
                 <div class="col-xs-6 col-sm-3 placeholder">
-                    <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-                    <h4>Label</h4>
-                    <span class="text-muted">Something else</span>
+                    <a href="role/to/page.html">
+                        <img src="img/label-2.jpg" class="img-responsive" alt="图片加载失败" width="200px">
+                        <h4>角色维护</h4>
+                        <span class="text-muted">Role maintenance</span>
+                    </a>
                 </div>
+
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <a href="menu/to/page.html">
+                        <img src="img/label-3.jpg" class="img-responsive" alt="图片加载失败" width="200px">
+                        <h4>菜单维护</h4>
+                        <span class="text-muted">Menu maintenance</span>
+                    </a>
+                </div>
+
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <a href="member/to/page.html">
+                        <img src="img/label-4.jpg" class="img-responsive" alt="图片加载失败" width="200px">
+                        <h4>实名认证审核</h4>
+                        <span class="text-muted">Real-name certification audit</span>
+                    </a>
+                </div>
+
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <a href="project/to/page.html">
+                        <img src="img/label-5.jpg" class="img-responsive" alt="图片加载失败" width="200px">
+                        <h4>项目审核</h4>
+                        <span class="text-muted">Project review</span>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>

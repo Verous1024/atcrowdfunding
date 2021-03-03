@@ -8,7 +8,7 @@ function generatePage() {
 function getPageInfoRemote() {
 
     var ajaxResult = $.ajax({
-        url: "project/get/page/info.json",
+        url: "verify/get/page/info.json",
         data: {
             "pageNum": window.pageNum,
             "pageSize": window.pageSize,
@@ -51,57 +51,73 @@ function getPageInfoRemote() {
 
 //填充表格
 function fillTableBody(pageInfo) {
-    $("#projectPageBody").empty(); //表格体清空
+    $("#verifyPageBody").empty(); //表格体清空
     $("#Pagination").empty(); //分页条清空
 
     //判断pageInfo是否有效
     if (pageInfo == null || pageInfo == undefined || pageInfo.list == null || pageInfo.list.length == 0) {
-        $("#projectPageBody").append("<tr><td colspan='4'> 抱歉！没有查询到您搜索的数据！</td></tr>"); //在rolePageBody中展示
+        $("#verifyPageBody").append("<tr><td colspan='4'> 抱歉！没有查询到您搜索的数据！</td></tr>"); //在rolePageBody中展示
         return;
     }
 
     //使用pageInfo填充表格 list是pageInfo用来存储数据的地方
     for (var i = 0; i < pageInfo.list.length; i++) {
-        var project = pageInfo.list[i];
+        var member = pageInfo.list[i];
 
-        var projectId = project.id;
-        var projectName = project.projectName;
-        var launchMember = project.launchMember;
-        var money = project.money;
-        var day = project.day;
-        var createdate = project.createdate;
-        var status = project.status;
+        var memberId = member.id;
+        var loginacct = member.loginacct;
+        var phonenum = member.phonenum;
+        var realname = member.realname;
+        var cardnum = member.cardnum;
+        var usertype = member.usertype;
+        var accttype = member.accttype;
+        var authstatus = member.authstatus;
 
         var td1 = "<td>" + (i + 1) + "</td>"; //角色名序号
-        var td2 = "<td><input projectId='" + projectId + "' type='checkbox' class='itemBox'></td>"; //复选框，携带roleId属性值，自定义
-        var td3 = "<td>" + projectName +"</td>";  //角色名
-        var td4 = "<td>" + launchMember + "</td>";
-        var td5 = "<td>" + money + "</td>";
-        var td6 = "<td>" + day + "</td>";
-        var td7 = "<td>" + createdate + "</td>";
-        var td8;
-        if (status == 0) {
-            td8 = "<td class='warning'>" + "待审核" + "</td>";
-        } else if (status == 1) {
-            td8 = "<td class='info'>" + "众筹中" + "</td>";
-        } else if (status == 2) {
-            td8 = "<td class='danger'>" + "众筹失败" + "</td>";
-        } else if (status == 3) {
-            td8 = "<td class='success'>" + "众筹成功" + "</td>";
-        } else if (status == 4) {
-            td8 = "<td class='danger'>" + "审核失败" + "</td>";
-        }else if (status == 5) {
-            td8 = "<td class='danger'>" + "项目异常被暂停" + "</td>";
+        var td3 = "<td>" + loginacct +"</td>";  //角色名
+        var td4 = "<td>" + phonenum + "</td>";
+        var td5 = "<td>" + realname + "</td>";
+        var td6 = "<td>" + cardnum + "</td>";
+        var td7;
+        if (usertype == 0) {
+            td7 = "<td>" + "个人用户" + "</td>";
+        } else if (usertype == 1) {
+            td7 = "<td>" + "企业用户" + "</td>";
         }
 
-        var checkBtn = "<button projectId='" + projectId + "' type='button' class='btn btn-success btn-xs lookBtn'><i class=' glyphicon glyphicon-eye-open'></i></button>";
+        var td8;
+        if (accttype == 0) {
+            td8 = "<td >" + "企业认证" + "</td>";
+        } else if (accttype == 1) {
+            td8 = "<td >" + "个体认证" + "</td>";
+        } else if (accttype == 2) {
+            td8 = "<td >" + "个人认证" + "</td>";
+        } else if (accttype == 3) {
+            td8 = "<td >" + "政府认证" + "</td>";
+        }
+
+        var td9;
+        if (authstatus == 0) {
+            td9 = "<td class='info'>" + "未实名认证" + "</td>";
+        } else if (authstatus == 1) {
+            td9 = "<td class='warning'>" + "实名认证申请中" + "</td>";
+        } else if (authstatus == 2) {
+            td9 = "<td class='success'>" + "已实名认证" + "</td>";
+        } else if (authstatus == 3) {
+            td9 = "<td class='danger'>" + "实名认证申请失败" + "</td>";
+        } else if (authstatus == 4) {
+            td9 = "<td class='danger'>" + "账号异常，已冻结" + "</td>";
+        }
+
+
+        var checkBtn = "<button memberId='" + memberId + "' type='button' class='btn btn-success btn-xs lookBtn'><i class=' glyphicon glyphicon-eye-open'></i></button>";
         /* 自定义属性 roleId， 自定义cllas标签 pencilBtn*//*
         var pencilBtn = "<button projectId='" + projectId + "' type='button' class='btn btn-primary btn-xs pencilBtn'><i class=' glyphicon glyphicon-pencil'></i></button>";
         var removeBtn = "<button projectId='" + projectId + "' type='button' class='btn btn-danger btn-xs removeBtn'><i class=' glyphicon glyphicon-remove'></i></button>";*/
 
-        var td9 = "<td>" + checkBtn + "</td>"; //按钮组 ，也需要携带roleId属性值，自定义
-        var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + "</tr>"; //组合为一行的表格
-        $("#projectPageBody").append(tr); //添加到库中
+        var td10 = "<td>" + checkBtn + "</td>"; //按钮组 ，也需要携带roleId属性值，自定义
+        var tr = "<tr>" + td1 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + td10+ "</tr>"; //组合为一行的表格
+        $("#verifyPageBody").append(tr); //添加到库中
     }
 
     generateNavigator(pageInfo); //填充完表格后，生成分页条

@@ -133,7 +133,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="updateRoleBtn" type="button" class="btn btn-primary">审核通过！</button>
+                <button status="1" type="button" class="btn btn-primary reviewBtn">审核通过！</button>
+                <button status="3" type="button" class="btn btn-danger reviewBtn">审核失败！</button>
+                <button status="5" type="button" class="btn btn-info reviewBtn">项目异常暂停项目！</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

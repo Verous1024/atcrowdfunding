@@ -30,8 +30,7 @@
         $("#projectPageBody").on("click", ".lookBtn", function () {
 
             //获取当前角色的id,并存放在全局上，方便后面执行更新按钮时获取该值
-            var projectId = $(this).attr("projectId");
-            alert("projectId=" + projectId);
+            window.projectId = $(this).attr("projectId");
             //获取需要回显的数据
             $.ajax({
                 url: "project/get/detail/project.json",
@@ -44,7 +43,6 @@
                     //回显--填充数据
                     console.log(response);
                     var data = response.data;
-                    alert(data);
                     $("#projectName").empty().val(data.projectName);
                     $("#projectDescription").empty().val(data.projectDescription);
                     $("#money").empty().val(data.money);
@@ -117,14 +115,46 @@
                         case(0):$("#authstatus").empty().val("未实名认证");break;
                         case(1):$("#authstatus").empty().val("实名认证申请中");break;
                         case(2):$("#authstatus").empty().val("已实名认证");break;
+                        case(3):$("#authstatus").empty().val("实名认证申请失败");break;
+                        case(4):$("#authstatus").empty().val("账号异常，冻结账号");break;
                     }
 
                     $("#lookModal").modal("show");
                 }
             })
-
-
         });
+
+        //审核通过
+        $(".reviewBtn").click(function(){
+            var aggreestatus = $(this).attr("status");
+            $.ajax({
+                url:"project/do/examination/pass.json",
+                data:{
+                    "projectId":window.projectId,
+                    "status":aggreestatus
+                },
+                type:"post",
+                dataType:"json",
+                success:function (response) {
+                   var result = response.result;
+                    if (result == "SUCCESS") {
+                        switch (aggreestatus) {
+                            case 1: layer.msg("审核通过申请成功！");
+                            case 3: layer.msg("审核失败申请成功！");
+                            case 4: layer.msg("项目异常，申请中止成功！");
+                        }
+                        $("#lookModal").modal("hide");
+                        generatePage();
+                    }else{
+                        layer.msg("请求失败！请重新尝试");
+                        $("#lookModal").modal("hide");
+                    }
+                },
+                error:function (response) {
+                    layer.msg(response.message);
+                }
+            })
+        })
 
     })
 </script>

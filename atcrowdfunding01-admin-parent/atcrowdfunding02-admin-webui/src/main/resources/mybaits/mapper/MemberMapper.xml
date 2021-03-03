@@ -76,6 +76,19 @@
     id, loginacct, userpswd, username, email, phoneNum, authstatus, usertype, realname, 
     cardnum, accttype
   </sql>
+
+  <!--List<Member> selectMemberByKeyword(String keyword);-->
+  <select id="selectMemberByKeyword" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_member
+    where
+    loginacct like concat("%",#{keyword},"%") or
+    phoneNum like concat("%",#{keyword},"%") or
+    realname like concat("%",#{keyword},"%") or
+    cardnum like concat("%",#{keyword},"%")
+  </select>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.MemberExample" >
     select
     <if test="distinct" >

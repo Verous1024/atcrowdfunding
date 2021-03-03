@@ -33,5 +33,7 @@ public interface ProjectMapper {
 
     List<ProjectTabVO> selectProjectByKeyword(@Param("keyword") String keyword);
 
+    List<ProjectTabVO> selectProjectByStatus(@Param("keyword") Integer keyword);
+
     ProjectDetailVO selectGetDetailProject(Integer id);
 }
