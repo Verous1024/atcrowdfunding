@@ -112,6 +112,20 @@
 
             ///点击支持超链接之前，检查是否有disabe的属性
             $(".supportBtn").click(function () {
+                var authStatus = [[${detailProjectVO.status}]] ; /*认证状态*/
+                if (authStatus == 0) {
+                    layer.msg("项目还未众筹开始！暂不支持众筹！");
+                    return false;
+                }else if(authStatus == 2){
+                    layer.msg("项目已结束众筹！暂不支持众筹！");
+                    return false;
+                }else if(authStatus == 3){
+                    layer.msg("项目审核未通过！暂不支持众筹！");
+                    return false;
+                }else if(authStatus == 4){
+                    layer.msg("项目出现异常，已被终止众筹！暂不支持众筹！");
+                    return false;
+                }
                 return !$(this).hasClass("cuowu");
             });
         })
@@ -127,12 +141,13 @@
     <div th:replace="include::navCrowd"></div>
 
     <div th:if="${#strings.isEmpty(detailProjectVO)}"> 查询项目详情信息失败</div>
+    <!--页体-->
     <div th:if="${not #strings.isEmpty(detailProjectVO)}">
 
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    <div class="jumbotron nofollow" style="    padding-top: 10px;">
+                    <div class="jumbotron nofollow" style="padding-top: 10px;">
                         <h3 th:text="${detailProjectVO.projectName}">酷驰触控龙头，智享厨房黑科技</h3>
                         <div style="float:left;width:70%;" th:text="${detailProjectVO.projectDesc}">
                             智能时代，酷驰触控厨房龙头，让煮妇解放双手，触发更多烹饪灵感，让美味信手拈来。
@@ -214,7 +229,6 @@
                                                     <p style="font-size:12px"
                                                        th:text="${detailProjectVO.memberLauchInfoVO.descriptionDetail}">
                                                         酷驰是一家年轻的厨卫科技公司，我们有一支朝气蓬勃，有激情、有想法、敢实践的团队。
-
                                                     </p>
                                                     <p style="font-size:12px">
                                                         客服电话:[[${detailProjectVO.memberLauchInfoVO.serviceNum}]]
@@ -298,7 +312,7 @@
                 </div>
             </div>
         </div>
-    </div> <!--页体-->
+    </div>
 
 </div>
 
@@ -344,10 +358,10 @@
                                 <p th:if="${return.freight==0}">配送费用：全国包邮</p>
                                 <p th:if="${return.freight!=0}">配送费用：[[${return.freight}]]</p>
                                 <p>预计发放时间：项目筹款成功后的[[${return.returnDate}]]天内</p>
-                                <a th:if="${return.count - return.supproterCount >0 }" type="button" class="btn  btn-warning btn-lg "
+                                <a th:if="${return.count - return.supproterCount >0 }" type="button" class="btn btn-warning btn-lg supportBtn"
                                    th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
                                 </a>
-                                <a th:if="${return.count - return.supproterCount <=0 }" type="button" class="btn  btn-warning btn-lg " disabled="true"
+                                <a th:if="${return.count - return.supproterCount <=0 }" type="button" class="btn btn-warning btn-lg supportBtn cuowu " disabled="true"
                                    th:href="'http://localhost:80/order/confirm/return/info/'+${detailProjectVO.projectId}+'/'+${return.returnId}">支持
                                 </a>
                                 <br><br>

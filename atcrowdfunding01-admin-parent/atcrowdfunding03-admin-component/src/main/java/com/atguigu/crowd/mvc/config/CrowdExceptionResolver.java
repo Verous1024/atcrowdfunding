@@ -8,6 +8,7 @@ import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import com.google.gson.Gson;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,10 +39,11 @@ public class CrowdExceptionResolver {
         return commonResolve(viewName, exception, request, response);
     }
 
-    @ExceptionHandler(value =Exception.class)
-    public ModelAndView resolveAccessForbiddenExcepiton(Exception exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ModelAndView resolveAccessForbiddenExcepiton(AccessDeniedException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String viewName = "system-error";
-        return commonResolve(viewName, exception, request, response);
+        AccessDeniedException accessDeniedException = new AccessDeniedException(CrowdConstant.MESSAGE_ACCESS_DENIED);
+        return commonResolve(viewName, accessDeniedException, request, response);
     }
 
 
@@ -91,6 +93,7 @@ public class CrowdExceptionResolver {
         //4、非AJAX请求，即普通请求抛出了空指针异常，按下面流程处理
         //创建ModelAn，存储异常信息，存储需要转发的页面
         ModelAndView modelAndView = new ModelAndView();
+        System.out.println("异常名字"+exception.getClass().getName());
         modelAndView.addObject(CrowdConstant.ATTR_NAME_EXCEPTION, exception);
         modelAndView.setViewName(viewName);
 

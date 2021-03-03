@@ -5,6 +5,7 @@ import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.service.api.AdminService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class AdminHandler {
     @Autowired
     AdminService adminService;
 
+    @PreAuthorize("hasAuthority('user:save')")
     @RequestMapping("/admin/update.html")
     public String update(Admin admin,
                          @RequestParam("pageNum") Integer pageNum,
@@ -37,6 +39,7 @@ public class AdminHandler {
         }
     }
 
+    @PreAuthorize("hasAuthority('user:save')")
     @RequestMapping("/admin/to/edit/page.html")
     public String toEditPage(
             @RequestParam("adminId") Integer adminId,
@@ -55,12 +58,14 @@ public class AdminHandler {
         return adminService.verifyLoginAcct(loginAcct);
     }
 
+    @PreAuthorize("hasAuthority('user:save')")
     @RequestMapping("/admin/save.html")
     public String save(Admin admin) {
         adminService.saveAdmin(admin);
         return "redirect:/admin/get/page.html?pageNum=" + Integer.MAX_VALUE;
     }
 
+    @PreAuthorize("hasAuthority('user:delete')")
     @RequestMapping("/admin/remove/{adminId}/{pageNum}/{keyword}.html")
     public String remove(
             @PathVariable("adminId") Integer adminId,
@@ -73,7 +78,7 @@ public class AdminHandler {
         return "redirect:/admin/get/page.html?pageNum=" + pageNum + "&keyword=" + keyword;
     }
 
-    //@PreAuthorize("hasRole('经理')")
+    @PreAuthorize("hasAuthority('user:get')")
     @RequestMapping("/admin/get/page.html")
     public String getPageInfo(
             @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,

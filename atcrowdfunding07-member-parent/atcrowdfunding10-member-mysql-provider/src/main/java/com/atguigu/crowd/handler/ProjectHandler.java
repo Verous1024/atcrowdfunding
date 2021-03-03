@@ -131,7 +131,6 @@ public class ProjectHandler {
         }
     }
 
-
     //获取所有的值:
     @RequestMapping("/get/all/project/with/type")
     ResultEntity<List<ProjectPO>> getAllProjectWithType(

@@ -76,6 +76,19 @@
     id, loginacct, userpswd, username, email, phoneNum, authstatus, usertype, realname, 
     cardnum, accttype
   </sql>
+  <!--void insertMyQua(@Param("memberId") Integer memberId,@Param("detailPicturePathList") List<String> detailPicturePathList); -->
+  <insert id="insertMyQua" parameterType="string">
+    insert into t_member_qualification_info(memberid,qualification)
+    values
+    <foreach collection="detailPicturePathList" item="pic" separator=",">
+      (#{memberId},#{pic})
+    </foreach>
+  </insert>
+  <!--void deleteMyQua(Integer memberId);-->
+  <delete id="deleteMyQua">
+    delete from t_member_qualification_info
+    where memberid = #{memberId}
+  </delete>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.po.MemberPOExample" >
     select
     <if test="distinct" >

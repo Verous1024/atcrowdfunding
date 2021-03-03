@@ -85,4 +85,9 @@ public class MemberServiceImpl implements MemberService {
         member.setAuthstatus(status);
         memberMapper.updateByPrimaryKeySelective(member);
     }
+
+    @Override
+    public List<String> getPic(Integer memberId) {
+      return  memberMapper.selectMemberPic(memberId);
+    }
 }

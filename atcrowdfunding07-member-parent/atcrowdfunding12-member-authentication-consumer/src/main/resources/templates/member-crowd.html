@@ -118,6 +118,8 @@
                             <span th:if="${session.loginMember.authstatus==0}" id="applyBtn" class="label label-danger" style="cursor:pointer;">未实名认证</span>
                             <span th:if="${session.loginMember.authstatus==1}" id="applyBtn" class="label label-info" style="cursor:pointer;">实名认证申请中</span>
                             <span th:if="${session.loginMember.authstatus==2}" id="applyBtn" class="label label-success" style="cursor:pointer;">已完成实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==3}" id="applyBtn" class="label label-danger" style="cursor:pointer;">实名认证审核未通过</span>
+                            <span th:if="${session.loginMember.authstatus==4}" id="applyBtn" class="label label-danger" style="cursor:pointer;">账号异常，已被冻结</span>
                         </div>
                     </div>
                 </div>
@@ -258,15 +260,15 @@
                                                             </p>
                                                             <br>
                                                             <div class="progress" style="margin-bottom: 4px;">
-                                                                <div th:if="${focus.status==2}" class="progress-bar  progress-bar-success" role="progressbar"
-                                                                     th:aria-valuenow="${focus.percentage}"  aria-valuenow="40"
-                                                                     aria-valuemin="0" aria-valuemax="100" style="width: 40%" th:style="'width: '+${focus.percentage}+'%'">
-                                                                    <span >众筹成功</span>
-                                                                </div>
                                                                 <div th:if="${focus.status==1}" class="progress-bar progress-bar-info" role="progressbar"
                                                                      th:aria-valuenow="${focus.percentage}"  aria-valuenow="40"
                                                                      aria-valuemin="0" aria-valuemax="100" style="width: 40%" th:style="'width: '+${focus.percentage}+'%'">
                                                                     <span >众筹中</span>
+                                                                </div>
+                                                                <div th:if="${focus.status==2}" class="progress-bar  progress-bar-success" role="progressbar"
+                                                                     th:aria-valuenow="${focus.percentage}"  aria-valuenow="40"
+                                                                     aria-valuemin="0" aria-valuemax="100" style="width: 40%" th:style="'width: '+${focus.percentage}+'%'">
+                                                                    <span >众筹成功</span>
                                                                 </div>
                                                                 <div th:if="${focus.status==3}" class="progress-bar progress-bar-danger" role="progressbar"
                                                                      th:aria-valuenow="${focus.percentage}"  aria-valuenow="40"
@@ -347,6 +349,7 @@
                                                 <td th:if="${project.status==2}" style="vertical-align:middle;" class="success">众筹成功</td>
                                                 <td th:if="${project.status==3}" style="vertical-align:middle;" class="warning">众筹失败</td>
                                                 <td th:if="${project.status==4}" style="vertical-align:middle;" class="danger">审核未通过</td>
+                                                <td th:if="${project.status==5}" style="vertical-align:middle;" class="danger">项目异常被冻结</td>
                                                 <td  style="vertical-align:middle;">
                                                     <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                                                         <a th:href="'http://localhost/project/supporter/project/return/' + ${project.id}" type="button" class="btn btn-default">支持预览</a>

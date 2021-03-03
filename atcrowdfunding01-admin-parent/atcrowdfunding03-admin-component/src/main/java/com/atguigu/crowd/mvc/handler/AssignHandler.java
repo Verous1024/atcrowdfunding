@@ -7,6 +7,7 @@ import com.atguigu.crowd.service.api.AuthService;
 import com.atguigu.crowd.service.api.RoleService;
 import com.atguigu.crowd.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class AssignHandler {
     @Autowired
     AuthService authService;
 
+    @PreAuthorize("hasAuthority('assign:do')")
     @ResponseBody
     @RequestMapping("assign/do/role/assign/auth.json")
     public ResultEntity<String> saveRoleAuthRelathinship(
@@ -41,6 +43,7 @@ public class AssignHandler {
         return ResultEntity.successWithoutData();
     }
 
+    @PreAuthorize("hasAuthority('assign:do')")
     @ResponseBody
     @RequestMapping("/assign/get/assigned/auth/id/by/role/id.json")
     public ResultEntity<List<Integer>> getAssignedIdByRoleId(
@@ -49,6 +52,7 @@ public class AssignHandler {
         return ResultEntity.successWithData(roleIdList);
     }
 
+    @PreAuthorize("hasAuthority('assign:do')")
     @ResponseBody
     @RequestMapping("/assign/get/all/auth.json")
     public ResultEntity<List<Auth>> getAllAuth() {
@@ -58,7 +62,7 @@ public class AssignHandler {
         return ResultEntity.successWithData(authList);
     }
 
-
+    @PreAuthorize("hasAuthority('assign:do')")
     @RequestMapping(value = "/assign/do/role/assign.html", method = RequestMethod.POST)
     public String saveAdminRoleRelationship(
             @RequestParam("adminId") Integer adminId,
@@ -72,6 +76,7 @@ public class AssignHandler {
         return "redirect:/admin/get/page.html?pageNum=" + pageNum + "&keyword=" + keyword;
     }
 
+    @PreAuthorize("hasAuthority('assign:do')")
     @RequestMapping("/assign/to/assign/role/page.html")
     public String toAssignRolePage(
             @RequestParam("adminId") Integer adminId,

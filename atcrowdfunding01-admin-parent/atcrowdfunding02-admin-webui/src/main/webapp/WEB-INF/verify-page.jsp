@@ -38,7 +38,7 @@
                 success: function (response) {
                     //回显--填充数据
                     console.log(response);
-                    var data = response.data;
+                    var data = response.data.member;
                     $("#loginacct").empty().val(data.loginacct);
                     $("#username").empty().val(data.username);
                     $("#email").empty().val(data.email);
@@ -63,6 +63,21 @@
                         case(3):$("#authstatus").empty().val("实名认证申请失败");break;
                         case(4):$("#authstatus").empty().val("账号异常，冻结账号");break;
                     }
+
+                    $("#detailPicturePath").empty();
+                    var detailPicturePath = response.data.detailPicturePath;
+                    for(var i=0;i<detailPicturePath.length;i++){
+                        var detailPicPath = detailPicturePath[i];
+                        var num = i+1;
+                        var imgHtml = "<div class='form-group'>\n" +
+                            "                             <label for='descPicPath' class='col-sm-2 control-label'>资质图片"+num+"</label>\n" +
+                            "                             <div class='col-sm-10'>\n" +
+                            "                                 <img width='500px' src='"+detailPicPath+"' alt='加载失败！'>\n" +
+                            "                             </div>\n" +
+                            "                         </div>"
+                        $("#detailPicturePath").append(imgHtml);
+                    }
+
                     $("#lookModal").modal("show");
                 },
                 error: function(reponse){

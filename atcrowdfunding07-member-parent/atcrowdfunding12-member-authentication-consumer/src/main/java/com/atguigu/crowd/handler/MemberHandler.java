@@ -2,6 +2,7 @@ package com.atguigu.crowd.handler;
 
 import com.atguigu.crowd.api.MySQLRemoteService;
 import com.atguigu.crowd.api.RedisRemoteService;
+import com.atguigu.crowd.config.OSSProperties;
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.entity.po.ProjectPO;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +53,9 @@ public class MemberHandler {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private OSSProperties ossProperties;
 
     private Logger logger = LoggerFactory.getLogger(MemberHandler.class);
 
@@ -187,9 +193,15 @@ public class MemberHandler {
 
     @ResponseBody
     @RequestMapping("/do/verifiy")
-    public ResultEntity<String> doVerifiy(MemberPO memberPO, @RequestParam("code") String code, HttpSession session) {
+    public ResultEntity<String> doVerifiy(
+            MemberPO memberPO,
+            @RequestParam("code") String code,
+            //接收上传的详情图片
+           @RequestParam("detailPictureList") List<MultipartFile> detailPictureList,
+            HttpSession session) throws IOException {
         logger.info(memberPO.toString());
         logger.info(code);
+        logger.info(detailPictureList.toString());
         memberPO.setAuthstatus(1);
         //省份证检查
         ResultEntity<String> resultEntity = CrowdUtil.sendCardByShortMessage(memberPO.getCardnum(), memberPO.getRealname());
@@ -197,6 +209,42 @@ public class MemberHandler {
             return ResultEntity.failed("身份证号码不匹配！").setCodeWithRe("400");
         }
         logger.info("身份通过！");
+        //二、上传详情图片
+        // 1.创建一个用来存放详情图片路径的集合
+        List<String> detailPicturePathList = new ArrayList<String>();
+        // 2.检查 detailPictureList是否有效
+        if (detailPictureList != null || detailPictureList.size() != 0) {
+            // 3.遍历 detailPictureList集合
+            for (MultipartFile detailPicture : detailPictureList) {
+                // 4.当前 detailPicture是否为空
+                if (detailPicture.isEmpty()) {
+                    // 5.检测到详情图片中单个文件为空也是回去显示错误消息
+                    return ResultEntity.failed("照片为空！");
+                }
+                // 6.执行上传
+                ResultEntity<String> detailUploadResultEntity = CrowdUtil.uploadFileToOss(
+                        ossProperties.getEndPoint(),
+                        ossProperties.getAccessKeyId(),
+                        ossProperties.getAccessKeySecert(),
+                        detailPicture.getInputStream(),
+                        ossProperties.getBucketName(),
+                        ossProperties.getBucketDomain(),
+                        detailPicture.getOriginalFilename());
+                // 7.检查上传结果
+                String detailUploadResult = detailUploadResultEntity.getResult();
+                if (ResultEntity.SUCCESS.equals(detailUploadResult)) {
+                    String detailPicturePath = detailUploadResultEntity.getData();
+                    // 8.收集刚刚上传的图片的访问路径
+                    detailPicturePathList.add(detailPicturePath);
+                } else {
+                    // 9.如果上传失败则返回到表单页面并显示错误消息
+                    return ResultEntity.failed("服务器上传失败！");
+                }
+            }
+            MemberPO loginMember = (MemberPO) session.getAttribute("loginMember");
+            // 10.将存放了详情图片访问路径的集合存放到t_member_qualification_info数据库中
+            ResultEntity<String> saveMemberResult = mySQLRemoteService.saveMemberQualification(detailPicturePathList, loginMember.getId());
+        }
         //验证码检查
         String key = CrowdConstant.REDIS_CODE_PREFIX + memberPO.getEmail();
         ResultEntity<String> saveCodeResultEntity = redisRemoteService.getRedisStringValueByKeyRemote(key);
@@ -225,6 +273,7 @@ public class MemberHandler {
         } else {
             return ResultEntity.failed("服务器异常").setCodeWithRe("300");
         }
+
     }
 
 
@@ -312,7 +361,10 @@ public class MemberHandler {
             return ResultEntity.failed(CrowdConstant.MESSAGE_LOGIN_FAILED).setCodeWithRe("200");
             //200表示密码错误
         }
-
+        //用户存在，但是账号异常
+        if (memberPO.getAuthstatus() == 4) {
+            return ResultEntity.failed("账号异常，已被冻结！").setCodeWithRe("400"); //400账号异常
+        }
         MemberLoginVO memberLoginVO = new MemberLoginVO(memberPO.getId(), memberPO.getUsername(), memberPO.getEmail());
 
         session.setAttribute(CrowdConstant.ATTR_NAME_LOGIN_MEMBER, memberPO); //这里被我修改了

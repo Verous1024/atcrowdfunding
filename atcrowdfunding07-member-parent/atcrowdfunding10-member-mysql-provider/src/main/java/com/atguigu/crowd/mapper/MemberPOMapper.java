@@ -28,4 +28,8 @@ public interface MemberPOMapper {
     int updateByPrimaryKeySelective(MemberPO record);
 
     int updateByPrimaryKey(MemberPO record);
+
+    void deleteMyQua(Integer memberId);
+
+    void insertMyQua(@Param("memberId") Integer memberId,@Param("detailPicturePathList") List<String> detailPicturePathList);
 }

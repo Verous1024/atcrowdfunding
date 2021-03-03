@@ -3,6 +3,8 @@ package com.atguigu.crowd.service.api;
 import com.atguigu.crowd.entity.Member;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * Descriptions:
  *
@@ -15,4 +17,6 @@ public interface MemberService {
     Member getMember(Integer memberId);
 
     void doExaminationPass(Integer memberId, Integer status);
+
+    List<String> getPic(Integer memberId);
 }

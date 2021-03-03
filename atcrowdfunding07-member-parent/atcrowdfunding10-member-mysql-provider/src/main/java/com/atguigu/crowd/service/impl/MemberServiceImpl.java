@@ -58,4 +58,16 @@ public class MemberServiceImpl implements MemberService {
         logger.info(loginMember.toString());
         memberPOMapper.updateByPrimaryKeySelective(loginMember);
     }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class,readOnly = false)
+    @Override
+    public void deleteMyQua(Integer memberId) {
+        memberPOMapper.deleteMyQua(memberId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class,readOnly = false)
+    @Override
+    public void insertMyQua(Integer memberId, List<String> detailPicturePathList) {
+        memberPOMapper.insertMyQua(memberId, detailPicturePathList);
+    }
 }

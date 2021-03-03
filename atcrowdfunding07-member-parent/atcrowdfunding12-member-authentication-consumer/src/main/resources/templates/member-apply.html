@@ -120,11 +120,18 @@
 
             //发送请求
             $("#saveBtn").click(function () {
+               var form = document.getElementById("form1");
+                var formData = new FormData(form);//FormData构造器接收的是一个form的DOM对象
                 $.ajax({
                     url: "/do/verifiy",
                     type: "post",
-                    data:$("#form1").serialize(),
+                    data:formData,
                     dataType:"json",
+                    async: true,
+                    //要想用jquery的ajax来提交FormData数据,
+                    //则必须要把这两项设为false
+                    processData: false,
+                    contentType: false,
                     success:function (response) {
                         var result = response.result;
                         if (result == "SUCCESS") {
@@ -148,6 +155,25 @@
                     }
                 })
             });
+
+            $("#uploadDetailBtn").click(function () {
+                $("[name=detailPictureList]").click();
+            });
+            $("[name=detailPictureList]").change(function (event) {
+                $("#showDetailPicture").empty();
+                //获取用户选中的文件
+                var files = event.target.files;
+                //回去URL对象那个
+                var url = window.url || window.webkitURL;
+                //调用url对象的createObjectURL方法获取当前选中的文件系统的路径
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var path = url.createObjectURL(file);
+                    var imgHtml = "<div class='col-sm-5'>" + "<img src='" + path + "' class='img-responsive'/><br/>" + "</div>";
+                    //使用path修改img标签的src属性
+                    $("#showDetailPicture").append(imgHtml);
+                }
+            });
         })
     </script>
 </head>
@@ -160,7 +186,7 @@
         <h1>实名认证 - 申请</h1>
     </div>
 
-    <form id="form1" role="form" style="margin-top:20px;">
+    <form id="form1" role="form" style="margin-top:20px;" enctype="multipart/form-data">
         <input name="usertype" hidden="hidden" th:value="${userType}"/>
         <input name="accttype" hidden="hidden" th:value="${acctType}"/>
         <div class="form-group">
@@ -181,9 +207,18 @@
     <hr>
     <div  style="margin-top:20px;">
         <div class="form-group">
-            <label for="file">选择资质文件(个人实名认证无需上传!)</label>
-            <input id="file" type="file" class="form-control">
-            <br>
+            <label class="col-sm-12 control-label">资质文件</label>
+            <div class="col-sm-12">
+                <input type="file" multiple="multiple" name="detailPictureList"
+                       style="display: none;"/>
+                <button id="uploadDetailBtn" type="button" style="margin-bottom:20px"
+                        class="btn btn-primary btn-lg active" data-toggle="tooltip"
+                        data-placement="top"
+                        title="选择资质文件(个人实名认证无需上传!)">上传图片
+                </button>
+                <label class="control-label">支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：宽740px</label>
+                <div id="showDetailPicture"></div>
+            </div>
         </div>
     </div>
     <hr>
@@ -193,9 +228,7 @@
             <span id="emailSpan" style="margin-left:20px;color:#FF0000"></span>
             <input name="email" type="text" class="form-control" id="email" placeholder="请输入用于接收验证码的邮箱地址"
                    th:value="${session.loginMember.email}">
-            <button id="sendBtn" type="button" class="btn btn-primary" style="margin-top: 10px;">发送验证码
-            </button>
-
+            <button id="sendBtn" type="button" class="btn btn-primary" style="margin-top: 10px;">发送验证码</button>
         </div>
     </div>
     <hr>

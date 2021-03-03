@@ -143,6 +143,8 @@
                             <span th:if="${session.loginMember.authstatus==0}" id="applyBtn" class="label label-danger" style="cursor:pointer;">未实名认证</span>
                             <span th:if="${session.loginMember.authstatus==1}" id="applyBtn" class="label label-info" style="cursor:pointer;">实名认证申请中</span>
                             <span th:if="${session.loginMember.authstatus==2}" id="applyBtn" class="label label-success" style="cursor:pointer;">已完成实名认证</span>
+                            <span th:if="${session.loginMember.authstatus==3}" id="applyBtn" class="label label-danger" style="cursor:pointer;">实名认证审核未通过</span>
+                            <span th:if="${session.loginMember.authstatus==4}" id="applyBtn" class="label label-danger" style="cursor:pointer;">账号异常，已被冻结</span>
                         </div>
                     </div>
                 </div>

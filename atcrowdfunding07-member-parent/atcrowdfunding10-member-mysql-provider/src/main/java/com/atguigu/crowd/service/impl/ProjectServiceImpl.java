@@ -113,7 +113,10 @@ public class ProjectServiceImpl implements ProjectService {
                 detailProjectVO.setStatusText("众筹成功");
                 break;
             case 3:
-                detailProjectVO.setStatusText("已关闭");
+                detailProjectVO.setStatusText("审核失败");
+                break;
+            case 4:
+                detailProjectVO.setStatusText("项目异常，已被冻结");
                 break;
             default:
                 break;

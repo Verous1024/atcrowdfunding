@@ -27,7 +27,6 @@ public class PortalHandler {
     @RequestMapping("/")
     public String showPortalPage(Model model){
         //从数据库完成实际页面数据的加载
-
         ResultEntity<List<PortalTypeVO>> potalTypeProjectDataRemote = mySQLRemoteService.getPortalTypeProjectDataRemote();
         ResultEntity<List<VipProtalProjectVO>> vipProjectDataRemote = mySQLRemoteService.getVipProjectDataRemote();
         List<VipProtalProjectVO> vip1 = new ArrayList<VipProtalProjectVO > ();

@@ -25,7 +25,6 @@ public interface MySQLRemoteService {
     @RequestMapping("/get/project/detail/remote/{projectId}")
     ResultEntity<DetailProjectVO> getDetailProjectVORemote(@PathVariable("projectId") Integer projectId);
 
-
     @RequestMapping("/get/memberpo/by/login/acct/remote")
     ResultEntity<MemberPO> getMemberPOByLoginAcctRemote(@RequestParam("loginacct") String loginacct);
 
@@ -100,4 +99,7 @@ public interface MySQLRemoteService {
 
     @RequestMapping("/get/my/lanuch/info")
     ResultEntity<MemberLauchInfoVO> getMyLanuchInfo(@RequestParam("memberId")Integer memberId);
+
+    @RequestMapping("/save/member/qualification")
+    ResultEntity<String> saveMemberQualification(@RequestParam("detailPicturePathList")List<String> detailPicturePathList,@RequestParam("memberId")Integer memberId);
 }

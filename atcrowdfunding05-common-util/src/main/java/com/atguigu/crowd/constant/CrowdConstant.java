@@ -18,7 +18,7 @@ public class CrowdConstant {
     public static final String MESSAGE_ACCESS_FORBIDEN = "请登陆以后再访问！";
     public static final String MESSAGE_STRING_INVALIDATE = "请不要传入空字符串！";
     public static final String MESSAGE_SYSTEM_ERROR_LOGIN_NOT_UNIQUE = "账号异常！账号非唯一账号";
-    public static final String MESSAGE_ACCESS_DENIED = "抱歉！您无权访问这些资源！请联系管理员授予权限";
+    public static final String MESSAGE_ACCESS_DENIED = "抱歉！您无权访问这些资源！请联系Super管理员授予权限";
     public static final String MESSAGE_CODE_NOT_EXISTS = "验证码已过期!请重新发送！";
     public static final String MESSAGE_CODE_INVALID = "验证码不正确，请重新输入！";
     public static final String MESSAGE_UNIVERSAL_ERROR_INFORMATION = "服务器出现故障！维修小哥正在抢修中！";

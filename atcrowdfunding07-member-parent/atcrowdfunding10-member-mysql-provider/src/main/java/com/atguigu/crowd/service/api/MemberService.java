@@ -2,6 +2,8 @@ package com.atguigu.crowd.service.api;
 
 import com.atguigu.crowd.entity.po.MemberPO;
 
+import java.util.List;
+
 /**
  * Descriptions:
  *
@@ -14,4 +16,8 @@ public interface MemberService {
     void saveMember(MemberPO memberPO);
 
     void updateMember(MemberPO loginMember);
+
+    void deleteMyQua(Integer memberId);
+
+    void insertMyQua(Integer memberId, List<String> detailPicturePathList);
 }

@@ -77,6 +77,13 @@
     cardnum, accttype
   </sql>
 
+  <!--    List<String> selectMemberPic(Integer memberId);-->
+  <select id="selectMemberPic" resultType="string">
+    select qualification
+    from t_member_qualification_info
+    where memberid = #{memberId}
+  </select>
+
   <!--List<Member> selectMemberByKeyword(String keyword);-->
   <select id="selectMemberByKeyword" resultMap="BaseResultMap">
     select

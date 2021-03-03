@@ -6,6 +6,7 @@ import com.atguigu.crowd.service.api.ProjectService;
 import com.atguigu.crowd.util.ResultEntity;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ public class ProjectHandler {
     @Autowired
     private ProjectService projectService;
 
+    @PreAuthorize("hasAuthority('project:pass')")
     @ResponseBody
     @RequestMapping("/project/do/examination/pass.json")
     public ResultEntity<String> doExaminationPass(
@@ -37,6 +39,7 @@ public class ProjectHandler {
 
     }
 
+    @PreAuthorize("hasAuthority('project:get')")
     @ResponseBody
     @RequestMapping("/project/get/detail/project.json")
     public ResultEntity<ProjectDetailVO> getProjectDetailVO(
@@ -45,6 +48,7 @@ public class ProjectHandler {
         return ResultEntity.successWithData(myProjectDetailVO);
     }
 
+    @PreAuthorize("hasAuthority('project:get')")
     @ResponseBody
     @RequestMapping("/project/get/page/info.json")
     public ResultEntity<PageInfo<ProjectTabVO>> getPageInfo(

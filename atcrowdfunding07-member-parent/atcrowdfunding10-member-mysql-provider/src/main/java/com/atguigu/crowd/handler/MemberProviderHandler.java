@@ -4,12 +4,16 @@ import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.entity.po.MemberPO;
 import com.atguigu.crowd.service.api.MemberService;
 import com.atguigu.crowd.util.ResultEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Descriptions:
@@ -22,6 +26,24 @@ public class MemberProviderHandler {
 
     @Autowired
     private MemberService memberService;
+
+    private Logger logger = LoggerFactory.getLogger(MemberProviderHandler.class);
+
+    @RequestMapping("/save/member/qualification")
+    public ResultEntity<String> saveMemberQualification(@RequestParam("detailPicturePathList") List<String> detailPicturePathList,@RequestParam("memberId")Integer memberId){
+        logger.info(detailPicturePathList.get(0));
+        logger.info(detailPicturePathList.size()+"");
+        try {
+            //先删除所有关于该member的文件
+            memberService.deleteMyQua(memberId);
+            //然后再保存
+            memberService.insertMyQua(memberId,detailPicturePathList);
+            return ResultEntity.successWithoutData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.failed(e.getMessage());
+        }
+    }
 
     @RequestMapping("/update/member")
     public ResultEntity<String> updateMember(@RequestBody MemberPO loginMember){

@@ -30,4 +30,6 @@ public interface MemberMapper {
     int updateByPrimaryKey(Member record);
 
     List<Member> selectMemberByKeyword(String keyword);
+
+    List<String> selectMemberPic(Integer memberId);
 }
